@@ -1,0 +1,13 @@
+# Trash files from IDE
+.idea
+.vs
+
+# Trash files from Unreal Engine
+Binaries
+Intermediate
+Saved
+Build
+
+# We should not push the assets
+Content/Assets
+
