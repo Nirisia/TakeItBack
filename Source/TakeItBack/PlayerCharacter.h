@@ -34,9 +34,32 @@ class TAKEITBACK_API APlayerCharacter : public ABaseCharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="State")
+	bool bIsAxe;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="State")
+	bool bCanAttack;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="State")
+	bool bIsJumping;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="State")
+	bool bIsBlocking;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AWeapon* Weapon2;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int AtkCount;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UAnimMontage* ChangeWeaponAnim;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<UAnimMontage*> AxeAttacksAnim;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<UAnimMontage*> SwordAttacksAnim;
+	
 	protected:
 
 	/** Called for forwards/backward input */
