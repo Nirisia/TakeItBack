@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "BaseCharacter.h"
-#include "Weapon.h"
+#include "Sword.h"
+#include "Axe.h"
 #include "PlayerCharacter.generated.h"
 
 /**
@@ -47,7 +48,11 @@ class TAKEITBACK_API APlayerCharacter : public ABaseCharacter
 	bool bIsBlocking;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	AWeapon* Weapon2;
+	ASword* Sword;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AAxe* Axe;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int AtkCount;
 
@@ -80,8 +85,10 @@ class TAKEITBACK_API APlayerCharacter : public ABaseCharacter
 	*/
 	void LookUpAtRate(float Rate);
 	void ChangeWeapon();
-	void Dash();
-	void Block();
+	void Attack() override;
+	void SpecialAttack();
+	void Defense();
+	void StopDefense();
 	
 	protected:
 	// APawn interface

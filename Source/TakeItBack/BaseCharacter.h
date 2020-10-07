@@ -15,9 +15,6 @@ class TAKEITBACK_API ABaseCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	AWeapon* Weapon;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int MaxLife;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -42,8 +39,7 @@ public:
 	virtual void Attack();
 	virtual void TakeDamage(AWeapon* AttackingWeapon);
 	void SetWeaponCollision(bool bGenerateOverlap);
-	void SetPlayerMobility(bool bCanMove);
-
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -54,5 +50,4 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 };

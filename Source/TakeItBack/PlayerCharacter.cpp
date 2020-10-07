@@ -88,12 +88,22 @@ void APlayerCharacter::ChangeWeapon()
 {
 }
 
-void APlayerCharacter::Dash()
+void APlayerCharacter::Attack()
 {
 }
 
-void APlayerCharacter::Block()
+void APlayerCharacter::SpecialAttack()
 {
+}
+
+void APlayerCharacter::Defense()
+{
+	bIsBlocking = true;
+}
+
+void APlayerCharacter::StopDefense()
+{
+	bIsBlocking = false;
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -113,4 +123,10 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAxis("TurnRate", this, &APlayerCharacter::TurnAtRate);
     PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
     PlayerInputComponent->BindAxis("LookUpRate", this, &APlayerCharacter::LookUpAtRate);
+
+    PlayerInputComponent->BindAction("Defense", IE_Pressed, this, &APlayerCharacter::Defense);
+    PlayerInputComponent->BindAction("Defense", IE_Released, this, &APlayerCharacter::StopDefense);
+
+    PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerCharacter::Attack);
+    PlayerInputComponent->BindAction("SpecialAttack", IE_Pressed, this, &APlayerCharacter::SpecialAttack);
 }
