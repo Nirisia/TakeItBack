@@ -37,7 +37,7 @@ public:
 	
 	ABaseCharacter();
 	virtual void Attack();
-	virtual void TakeDamage(AWeapon* AttackingWeapon);
+	virtual void MyTakeDamage(AWeapon* AttackingWeapon);
 	void SetWeaponCollision(bool bGenerateOverlap);
 	
 protected:

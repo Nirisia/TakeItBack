@@ -3,9 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "BaseCharacter.h"
-#include "Sword.h"
-#include "Axe.h"
 #include "PlayerCharacter.generated.h"
 
 /**
@@ -47,11 +46,11 @@ class TAKEITBACK_API APlayerCharacter : public ABaseCharacter
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="State")
 	bool bIsBlocking;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	ASword* Sword;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	AWeapon* Sword;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	AAxe* Axe;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	AWeapon* Axe;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int AtkCount;
