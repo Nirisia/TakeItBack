@@ -9,12 +9,14 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Sword.h"
+#include "Axe.h"
 
 APlayerCharacter::APlayerCharacter()
 {
     // Set size for collision capsule
     GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-
+    
     // set our turn rates for input
     BaseTurnRate = 45.f;
     BaseLookUpRate = 45.f;
@@ -88,20 +90,42 @@ void APlayerCharacter::ChangeWeapon()
 {
 }
 
-void APlayerCharacter::Dash()
+void APlayerCharacter::Attack()
 {
 }
 
-void APlayerCharacter::Block()
+void APlayerCharacter::SpecialAttack()
 {
+}
+
+void APlayerCharacter::Defense()
+{
+	bIsBlocking = true;
+}
+
+void APlayerCharacter::StopDefense()
+{
+	bIsBlocking = false;
+}
+
+void APlayerCharacter::Jump()
+{
+    ACharacter::Jump();
+    bIsJumping = true;
+}
+
+void APlayerCharacter::StopJumping()
+{
+    ACharacter::StopJumping();
+    bIsJumping = false;
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     // Set up gameplay key bindings
     check(PlayerInputComponent);
-    PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-    PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+    PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::Jump);
+    PlayerInputComponent->BindAction("Jump", IE_Released, this, &APlayerCharacter::StopJumping);
 
     PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
@@ -113,4 +137,10 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAxis("TurnRate", this, &APlayerCharacter::TurnAtRate);
     PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
     PlayerInputComponent->BindAxis("LookUpRate", this, &APlayerCharacter::LookUpAtRate);
+
+    PlayerInputComponent->BindAction("Defense", IE_Pressed, this, &APlayerCharacter::Defense);
+    PlayerInputComponent->BindAction("Defense", IE_Released, this, &APlayerCharacter::StopDefense);
+
+    PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerCharacter::Attack);
+    PlayerInputComponent->BindAction("SpecialAttack", IE_Pressed, this, &APlayerCharacter::SpecialAttack);
 }

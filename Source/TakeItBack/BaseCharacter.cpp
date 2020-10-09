@@ -15,7 +15,7 @@ void ABaseCharacter::Attack()
 	bIsAttacking = true;
 }
 
-void ABaseCharacter::TakeDamage(AWeapon* AttackingWeapon)
+void ABaseCharacter::MyTakeDamage(AWeapon* AttackingWeapon)
 {
 	bImpact = true;
 	CurrentLife -= AttackingWeapon->Damage;
@@ -26,10 +26,6 @@ void ABaseCharacter::TakeDamage(AWeapon* AttackingWeapon)
 }
 
 void ABaseCharacter::SetWeaponCollision(bool bGenerateOverlap)
-{
-}
-
-void ABaseCharacter::SetPlayerMobility(bool bCanMove)
 {
 }
 
