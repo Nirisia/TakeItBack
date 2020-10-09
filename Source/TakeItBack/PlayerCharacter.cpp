@@ -108,12 +108,24 @@ void APlayerCharacter::StopDefense()
 	bIsBlocking = false;
 }
 
+void APlayerCharacter::Jump()
+{
+    ACharacter::Jump();
+    bIsJumping = true;
+}
+
+void APlayerCharacter::StopJumping()
+{
+    ACharacter::StopJumping();
+    bIsJumping = false;
+}
+
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     // Set up gameplay key bindings
     check(PlayerInputComponent);
-    PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-    PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+    PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::Jump);
+    PlayerInputComponent->BindAction("Jump", IE_Released, this, &APlayerCharacter::StopJumping);
 
     PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);

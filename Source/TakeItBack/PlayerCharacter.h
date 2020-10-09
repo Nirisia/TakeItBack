@@ -88,6 +88,8 @@ class TAKEITBACK_API APlayerCharacter : public ABaseCharacter
 	void SpecialAttack();
 	void Defense();
 	void StopDefense();
+	void Jump() override;
+	void StopJumping() override;
 	
 	protected:
 	// APawn interface
