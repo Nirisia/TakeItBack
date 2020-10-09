@@ -88,10 +88,35 @@ void APlayerCharacter::LookUpAtRate(float Rate)
 
 void APlayerCharacter::ChangeWeapon()
 {
+    bCanAttack = false;
+    AtkCount = 0;
+    PlayAnimMontage(ChangeWeaponAnim);
 }
 
 void APlayerCharacter::Attack()
 {
+    if(bCanAttack == true)
+    {
+        bCanAttack = false;
+        if(bIsAxe == true)
+        {
+            PlayAnimMontage(AxeAttacksAnim[AtkCount]);
+        }
+        else
+        {
+            PlayAnimMontage(SwordAttacksAnim[AtkCount]);
+        }
+        if(AtkCount >= 4)
+        {
+            AtkCount = 0;
+            bCanAttack = true;
+        }
+        else
+        {
+            AtkCount++;
+            bCanAttack = true;
+        } 
+    }
 }
 
 void APlayerCharacter::SpecialAttack()
@@ -100,12 +125,10 @@ void APlayerCharacter::SpecialAttack()
 
 void APlayerCharacter::Defense()
 {
-	bIsBlocking = true;
 }
 
 void APlayerCharacter::StopDefense()
 {
-	bIsBlocking = false;
 }
 
 void APlayerCharacter::Jump()
@@ -143,4 +166,5 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
     PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerCharacter::Attack);
     PlayerInputComponent->BindAction("SpecialAttack", IE_Pressed, this, &APlayerCharacter::SpecialAttack);
+    PlayerInputComponent->BindAction("ChangeWeapon", IE_Pressed, this, &APlayerCharacter::ChangeWeapon);
 }

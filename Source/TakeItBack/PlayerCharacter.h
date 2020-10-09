@@ -35,16 +35,16 @@ class TAKEITBACK_API APlayerCharacter : public ABaseCharacter
 	float BaseLookUpRate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="State")
-	bool bIsAxe;
+	bool bIsAxe = true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="State")
-	bool bCanAttack;
+	bool bCanAttack = true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="State")
-	bool bIsJumping;
+	bool bIsJumping = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="State")
-	bool bIsBlocking;
+	bool bIsBlocking = false;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
 	AWeapon* Sword;
@@ -57,6 +57,9 @@ class TAKEITBACK_API APlayerCharacter : public ABaseCharacter
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UAnimMontage* ChangeWeaponAnim;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UAnimMontage* RollAnim;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<UAnimMontage*> AxeAttacksAnim;
