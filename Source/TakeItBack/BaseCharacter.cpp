@@ -3,6 +3,10 @@
 
 #include "BaseCharacter.h"
 
+#include "GameFramework/CharacterMovementComponent.h"
+
+
+
 // Sets default values
 ABaseCharacter::ABaseCharacter()
 {
@@ -26,6 +30,11 @@ void ABaseCharacter::MyTakeDamage(AWeapon* AttackingWeapon)
 }
 
 void ABaseCharacter::SetWeaponCollision(bool bGenerateOverlap)
+{
+	SetWeaponCollisionEvent(bGenerateOverlap);
+}
+
+void ABaseCharacter::SetWeaponCollisionEvent_Implementation(bool bGenerateOverlap)
 {
 }
 

@@ -2,40 +2,31 @@
 
 
 #include "PlayerCharacter.h"
-#include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Sword.h"
-#include "Axe.h"
 
-APlayerCharacter::APlayerCharacter()
+APlayerCharacter::APlayerCharacter() : Super()
 {
     // Set size for collision capsule
-    GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-    
-    // set our turn rates for input
-    BaseTurnRate = 45.f;
-    BaseLookUpRate = 45.f;
+    GetCapsuleComponent()->InitCapsuleSize(42.f, 86.0f);
 
+    
     // Don't rotate when the controller rotates. Let that just affect the camera.
     bUseControllerRotationPitch = false;
     bUseControllerRotationYaw = false;
     bUseControllerRotationRoll = false;
 
-    // Configure character movement
-    GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
-    GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
-    GetCharacterMovement()->JumpZVelocity = 600.f;
-    GetCharacterMovement()->AirControl = 0.2f;
+    // set our turn rates for input
+    BaseTurnRate = 45.f;
+    BaseLookUpRate = 45.f;
 
     // Create a camera boom (pulls in towards the player if there is a collision)
     CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
     CameraBoom->SetupAttachment(RootComponent);
-    CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
     CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
     // Create a follow camera
@@ -45,6 +36,24 @@ APlayerCharacter::APlayerCharacter()
 
     // Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
     // are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+}
+
+void APlayerCharacter::BeginPlay()
+{
+    Super::BeginPlay();
+    
+    CameraBoom->TargetArmLength = 400.f; // The camera follows at this distance behind the character
+    // Configure character movement
+    GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
+    GetCharacterMovement()->RotationRate = FRotator(0.0f, RotationSpeed, 0.0f); // ...at this rotation rate
+    GetCharacterMovement()->JumpZVelocity = JumpSpeed;
+    GetCharacterMovement()->AirControl = AirControl;
+    GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+    
+    CameraBoom->TargetArmLength = CameraOffset.Size();
+    CameraBoom->SocketOffset = FVector(0.0f, 0.f, CameraOffset.Z);
+
+    FollowCamera->SetRelativeRotation(FRotator(CameraAngle, 0.f, 0.f));
 }
 
 void APlayerCharacter::MoveForward(float Value)
@@ -83,41 +92,58 @@ void APlayerCharacter::TurnAtRate(float Rate)
 
 void APlayerCharacter::LookUpAtRate(float Rate)
 {
-    AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+    AddControllerPitchInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
 }
 
-void APlayerCharacter::ChangeWeapon()
+void APlayerCharacter::ChangeWeapon_Implementation()
 {
-    bCanAttack = false;
-    AtkCount = 0;
-    PlayAnimMontage(ChangeWeaponAnim);
+    if (bCanChangeWeapon)
+    {
+        bCanChangeWeapon = false;
+        bCanAttack = false;
+        AtkCount = 0;
+        PlayAnimMontage(ChangeWeaponAnim, ChangeWeaponSpeed);
+    }
+
 }
 
 void APlayerCharacter::Attack()
 {
     if(bCanAttack == true)
     {
+        bCanChangeWeapon = false;
         bCanAttack = false;
         if(bIsAxe == true)
         {
-            PlayAnimMontage(AxeAttacksAnim[AtkCount]);
+            PlayAnimMontage(AxeAttacksAnim[AtkCount], AtkSpeed);
         }
         else
         {
-            PlayAnimMontage(SwordAttacksAnim[AtkCount]);
+            PlayAnimMontage(SwordAttacksAnim[AtkCount], AtkSpeed);
         }
         if(AtkCount >= 4)
         {
             AtkCount = 0;
-            bCanAttack = true;
         }
         else
         {
             AtkCount++;
-            bCanAttack = true;
         } 
     }
 }
+
+void APlayerCharacter::ValidateAttack()
+{
+    bCanAttack = true;
+}
+
+void APlayerCharacter::ResetCombo()
+{
+    AtkCount = 0;
+    bCanAttack = true;
+    bCanChangeWeapon = true;
+}
+
 
 void APlayerCharacter::SpecialAttack()
 {
@@ -129,18 +155,6 @@ void APlayerCharacter::Defense()
 
 void APlayerCharacter::StopDefense()
 {
-}
-
-void APlayerCharacter::Jump()
-{
-    ACharacter::Jump();
-    bIsJumping = true;
-}
-
-void APlayerCharacter::StopJumping()
-{
-    ACharacter::StopJumping();
-    bIsJumping = false;
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

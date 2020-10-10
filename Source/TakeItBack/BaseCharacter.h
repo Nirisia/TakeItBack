@@ -14,31 +14,53 @@ class TAKEITBACK_API ABaseCharacter : public ACharacter
 
 public:
 	// Sets default values for this character's properties
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	/** Max Life of the Character */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Characteristics")
 	int MaxLife;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
 	int CurrentLife;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int WalkSpeed;
+	/** Walkspeed of the Character, in meters per seconds */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Characteristics")
+	float WalkSpeed = 600.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float AtkSpeed;
+	/** Initial Velocity of the Character when jumping, in meters per seconds. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Characteristics")
+	float JumpSpeed = 600.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="State")
+	/** Air Control of the Character. It's a percentage of the default WalkSpeed */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Characteristics")
+	float AirControl = 0.2f;
+
+	/** Maximum rotation speed of the character */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Characteristics")
+	float RotationSpeed = 540.f;
+
+	/** Speed of the Attack Animation, in percentage. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Characteristics")
+	float AtkSpeed = 1.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
 	bool bImpact = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="State")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
 	bool bIsDead = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="State")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
 	bool bIsAttacking = false;
 	
 	ABaseCharacter();
+
+	UFUNCTION(BlueprintCallable)
 	virtual void Attack();
+	UFUNCTION(BlueprintCallable)
 	virtual void MyTakeDamage(AWeapon* AttackingWeapon);
+	UFUNCTION(BlueprintCallable)
 	void SetWeaponCollision(bool bGenerateOverlap);
+
+	UFUNCTION(BlueprintNativeEvent)
+	void SetWeaponCollisionEvent(bool bGenerateOverlap);
 	
 protected:
 	// Called when the game starts or when spawned

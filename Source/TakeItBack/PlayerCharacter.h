@@ -26,33 +26,49 @@ class TAKEITBACK_API APlayerCharacter : public ABaseCharacter
 	public:
 	APlayerCharacter();
 
+
+protected:
+	virtual void BeginPlay() override;
+public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Camera")
 	float BaseTurnRate;
 
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Camera")
 	float BaseLookUpRate;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="State")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
 	bool bIsAxe = true;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="State")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
 	bool bCanAttack = true;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="State")
-	bool bIsJumping = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
+	bool bCanChangeWeapon = true;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="State")
+	/** Speed of the ChangeWeapon Animation, in percentage. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Characteristics")
+	float ChangeWeaponSpeed = 1.0f;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
 	bool bIsBlocking = false;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
-	AWeapon* Sword;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
-	AWeapon* Axe;
+	/** Offset of the camera. Automatically set the CameraBoom length and offset */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
+	FVector CameraOffset = FVector(400.f, 0.f, 200.f);
+
+	/** Pitch rotation of the Camera */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
+	float CameraAngle = -20;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	// AWeapon* Sword;
+	//
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	// AWeapon* Axe;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int AtkCount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -86,13 +102,25 @@ class TAKEITBACK_API APlayerCharacter : public ABaseCharacter
 	* @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
 	*/
 	void LookUpAtRate(float Rate);
+	
+	UFUNCTION(BlueprintNativeEvent)
 	void ChangeWeapon();
-	void Attack() override;
+	
+	virtual void Attack() override;
+	
+	UFUNCTION(BlueprintCallable)
+	void ValidateAttack();
+	
+	UFUNCTION(BlueprintCallable)
+	void ResetCombo();
+
+	UFUNCTION()
 	void SpecialAttack();
+
+	UFUNCTION()
 	void Defense();
+	UFUNCTION()
 	void StopDefense();
-	void Jump() override;
-	void StopJumping() override;
 	
 	protected:
 	// APawn interface
