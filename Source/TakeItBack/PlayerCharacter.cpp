@@ -8,12 +8,17 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Axe.h"
+#include "Sword.h"
 
 APlayerCharacter::APlayerCharacter() : Super()
 {
     // Set size for collision capsule
     GetCapsuleComponent()->InitCapsuleSize(42.f, 86.0f);
 
+    Axe = CreateDefaultSubobject<UAxe>(TEXT("Axe"));
+    Sword = CreateDefaultSubobject<USword>(TEXT("Sword"));
+    
     
     // Don't rotate when the controller rotates. Let that just affect the camera.
     bUseControllerRotationPitch = false;
@@ -116,10 +121,12 @@ void APlayerCharacter::Attack()
         if(bIsAxe == true)
         {
             PlayAnimMontage(AxeAttacksAnim[AtkCount], AtkSpeed);
+            Axe->LightAttack();
         }
         else
         {
             PlayAnimMontage(SwordAttacksAnim[AtkCount], AtkSpeed);
+            Sword->LightAttack();
         }
         if(AtkCount >= 4)
         {

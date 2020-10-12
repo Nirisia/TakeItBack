@@ -3,13 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
+#include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
-#include "GameFramework/Actor.h"
 #include "Weapon.generated.h"
 
-UCLASS()
-class TAKEITBACK_API AWeapon : public AActor
+
+
+UCLASS(meta=(BlueprintSpawnableComponent), Blueprintable)
+class TAKEITBACK_API UWeapon : public UActorComponent
 {
 	GENERATED_BODY()
 	
@@ -36,8 +37,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Stats")
 	float LosePower;
 	
-	AWeapon();
+	UWeapon();
+	
+	UFUNCTION(BlueprintCallable)
 	virtual void LightAttack();
+	
 	virtual void BasicAttack();
 	virtual void SpecialAttack();
 	void LoadPower(int InflictedDamage);
@@ -47,4 +51,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+public:
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
+		FActorComponentTickFunction* ThisTickFunction) override;
 };

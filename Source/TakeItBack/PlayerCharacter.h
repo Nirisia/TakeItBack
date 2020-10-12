@@ -62,11 +62,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
 	float CameraAngle = -20;
 	
-	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
-	// AWeapon* Sword;
-	//
-	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
-	// AWeapon* Axe;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	class USword* Sword;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	class UAxe* Axe;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int AtkCount;

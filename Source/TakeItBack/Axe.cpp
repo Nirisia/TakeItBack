@@ -2,19 +2,21 @@
 
 
 #include "Axe.h"
+#include "Engine.h"
 
-AAxe::AAxe()
+UAxe::UAxe()
 {
 }
 
-void AAxe::LightAttack()
+void UAxe::LightAttack()
+{
+    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("AxeAttack"));
+}
+
+void UAxe::BasicAttack()
 {
 }
 
-void AAxe::BasicAttack()
-{
-}
-
-void AAxe::SpecialAttack()
+void UAxe::SpecialAttack()
 {
 }

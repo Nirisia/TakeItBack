@@ -10,11 +10,12 @@
  * 
  */
 UCLASS()
-class TAKEITBACK_API AAxe : public AWeapon
+class TAKEITBACK_API UAxe : public UWeapon
 {
 	GENERATED_BODY()
 
-	AAxe();
+	UAxe();
+	public:
 	virtual void LightAttack() override;
 	virtual void BasicAttack() override;
 	virtual void SpecialAttack() override;

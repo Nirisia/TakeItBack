@@ -19,7 +19,7 @@ void ABaseCharacter::Attack()
 	bIsAttacking = true;
 }
 
-void ABaseCharacter::MyTakeDamage(AWeapon* AttackingWeapon)
+void ABaseCharacter::MyTakeDamage(UWeapon* AttackingWeapon)
 {
 	bImpact = true;
 	CurrentLife -= AttackingWeapon->Damage;

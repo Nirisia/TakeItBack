@@ -2,25 +2,27 @@
 
 
 #include "Weapon.h"
+#include "Components/BoxComponent.h"
+
 
 // Sets default values
-AWeapon::AWeapon()
+UWeapon::UWeapon()
 {
 }
 
-void AWeapon::LightAttack()
+void UWeapon::LightAttack()
 {
 }
 
-void AWeapon::BasicAttack()
+void UWeapon::BasicAttack()
 {
 }
 
-void AWeapon::SpecialAttack()
+void UWeapon::SpecialAttack()
 {
 }
 
-void AWeapon::LoadPower(int InflictedDamage)
+void UWeapon::LoadPower(int InflictedDamage)
 {
 	Power += InflictedDamage * WinPower;
 
@@ -30,7 +32,7 @@ void AWeapon::LoadPower(int InflictedDamage)
 	}
 }
 
-void AWeapon::UnloadPower(int DamageTaken)
+void UWeapon::UnloadPower(int DamageTaken)
 {
 	Power -= DamageTaken * LosePower;
 
@@ -41,10 +43,16 @@ void AWeapon::UnloadPower(int DamageTaken)
 }
 
 // Called when the game starts or when spawned
-void AWeapon::BeginPlay()
+void UWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void UWeapon::TickComponent(float DeltaTime, ELevelTick TickType,
+	FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
 
