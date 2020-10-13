@@ -6,23 +6,19 @@
 
 
 // Sets default values
-UWeapon::UWeapon()
+AWeapon::AWeapon()
 {
 }
 
-void UWeapon::LightAttack()
+void AWeapon::LightAttack()
 {
 }
 
-void UWeapon::BasicAttack()
+void AWeapon::SpecialAttack()
 {
 }
 
-void UWeapon::SpecialAttack()
-{
-}
-
-void UWeapon::LoadPower(int InflictedDamage)
+void AWeapon::LoadPower(int InflictedDamage)
 {
 	Power += InflictedDamage * WinPower;
 
@@ -32,7 +28,7 @@ void UWeapon::LoadPower(int InflictedDamage)
 	}
 }
 
-void UWeapon::UnloadPower(int DamageTaken)
+void AWeapon::UnloadPower(int DamageTaken)
 {
 	Power -= DamageTaken * LosePower;
 
@@ -43,16 +39,15 @@ void UWeapon::UnloadPower(int DamageTaken)
 }
 
 // Called when the game starts or when spawned
-void UWeapon::BeginPlay()
+void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-void UWeapon::TickComponent(float DeltaTime, ELevelTick TickType,
-	FActorComponentTickFunction* ThisTickFunction)
+void AWeapon::Tick(float DeltaTime)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	Super::Tick(DeltaTime);
 }
 
 

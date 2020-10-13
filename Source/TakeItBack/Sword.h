@@ -10,13 +10,17 @@
  * 
  */
 UCLASS()
-class TAKEITBACK_API USword : public UWeapon
+class TAKEITBACK_API ASword : public AWeapon
 {
 	GENERATED_BODY()
 
-	USword();
+	ASword();
 	public:
 	virtual void LightAttack() override;
-	virtual void BasicAttack() override;
+
+	UFUNCTION(BlueprintCallable)
 	virtual void SpecialAttack() override;
+
+	UFUNCTION(BlueprintNativeEvent)
+	void ShieldMeteor();
 };

@@ -22,6 +22,13 @@ class TAKEITBACK_API APlayerCharacter : public ABaseCharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon", meta = 
+	(AllowPrivateAccess = "true"))
+	class UChildActorComponent* Sword1;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon", meta = (AllowPrivateAccess = "true"))
+	class UChildActorComponent* Axe1;
 	
 	public:
 	APlayerCharacter();
@@ -61,12 +68,6 @@ public:
 	/** Pitch rotation of the Camera */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
 	float CameraAngle = -20;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
-	class USword* Sword;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
-	class UAxe* Axe;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int AtkCount;

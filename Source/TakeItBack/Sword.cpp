@@ -4,20 +4,22 @@
 #include "Sword.h"
 #include "Engine.h"
 
-USword::USword()
+ASword::ASword()
 {
 }
 
-void USword::LightAttack()
+void ASword::LightAttack()
 {
     GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("SwordAttack"));
 
 }
 
-void USword::BasicAttack()
+void ASword::SpecialAttack()
 {
+    ShieldMeteor();
 }
 
-void USword::SpecialAttack()
+void ASword::ShieldMeteor_Implementation()
 {
+    
 }

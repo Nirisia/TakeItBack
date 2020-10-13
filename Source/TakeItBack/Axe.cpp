@@ -4,19 +4,15 @@
 #include "Axe.h"
 #include "Engine.h"
 
-UAxe::UAxe()
+AAxe::AAxe()
 {
 }
 
-void UAxe::LightAttack()
+void AAxe::LightAttack()
 {
     GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("AxeAttack"));
 }
 
-void UAxe::BasicAttack()
-{
-}
-
-void UAxe::SpecialAttack()
+void AAxe::SpecialAttack()
 {
 }

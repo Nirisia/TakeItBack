@@ -55,7 +55,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void Attack();
 	UFUNCTION(BlueprintCallable)
-	virtual void MyTakeDamage(UWeapon* AttackingWeapon);
+	virtual void MyTakeDamage(AWeapon* AttackingWeapon);
 	UFUNCTION(BlueprintCallable)
 	void SetWeaponCollision(bool bGenerateOverlap);
 

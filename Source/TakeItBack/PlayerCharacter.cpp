@@ -16,9 +16,12 @@ APlayerCharacter::APlayerCharacter() : Super()
     // Set size for collision capsule
     GetCapsuleComponent()->InitCapsuleSize(42.f, 86.0f);
 
-    Axe = CreateDefaultSubobject<UAxe>(TEXT("Axe"));
-    Sword = CreateDefaultSubobject<USword>(TEXT("Sword"));
+    Axe1 = CreateDefaultSubobject<UChildActorComponent>(TEXT("Axe"));
+    Axe1->SetChildActorClass(AWeapon::StaticClass());
     
+    Sword1 = CreateDefaultSubobject<UChildActorComponent>(TEXT("Sword"));
+    Sword1->SetChildActorClass(AWeapon::StaticClass());
+
     
     // Don't rotate when the controller rotates. Let that just affect the camera.
     bUseControllerRotationPitch = false;
@@ -121,12 +124,12 @@ void APlayerCharacter::Attack()
         if(bIsAxe == true)
         {
             PlayAnimMontage(AxeAttacksAnim[AtkCount], AtkSpeed);
-            Axe->LightAttack();
+            Cast<AWeapon>(Axe1->GetChildActor())->LightAttack();
         }
         else
         {
             PlayAnimMontage(SwordAttacksAnim[AtkCount], AtkSpeed);
-            Sword->LightAttack();
+            Cast<AWeapon>(Sword1->GetChildActor())->LightAttack();
         }
         if(AtkCount >= 4)
         {
