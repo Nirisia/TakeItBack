@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Weapon.h"
+
 #include "Sword.generated.h"
 
 /**
@@ -14,13 +15,20 @@ class TAKEITBACK_API ASword : public AWeapon
 {
 	GENERATED_BODY()
 
+	UPROPERTY()
+	bool bIsShieldMeteorActive;
+
+	UPROPERTY()
+	bool bIsLaunched;
+	
 	ASword();
 	public:
 	virtual void LightAttack() override;
-
-	UFUNCTION(BlueprintCallable)
 	virtual void SpecialAttack() override;
 
 	UFUNCTION(BlueprintNativeEvent)
 	void ShieldMeteor();
+
+public:
+	virtual void Tick(float DeltaTime) override;
 };

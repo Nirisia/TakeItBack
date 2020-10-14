@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 
+
 #include "Engine/StaticMesh.h"
 #include "Weapon.generated.h"
 
@@ -36,14 +37,32 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Stats")
 	float LosePower;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Mesh")
+	class UStaticMeshComponent* MeshComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Mesh")
+	class UBoxComponent* BoxComponent;
+
+	UPROPERTY()
+	class ABaseCharacter* OwnerCharacter;
 	
 	AWeapon();
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void LightAttack();
+	
+	UFUNCTION(BlueprintCallable)
 	virtual void SpecialAttack();
+	
+	UFUNCTION(BlueprintCallable)
 	void LoadPower(int InflictedDamage);
+	
+	UFUNCTION(BlueprintCallable)
 	void UnloadPower(int DamageTaken);
+
+	UFUNCTION()
+	void SetWeaponCollision(bool bGenerateOverlap);
 
 protected:
 	// Called when the game starts or when spawned

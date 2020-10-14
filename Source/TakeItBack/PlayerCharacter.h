@@ -23,12 +23,22 @@ class TAKEITBACK_API APlayerCharacter : public ABaseCharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
+public:
+	UCameraComponent* GetFollowCamera() const
+	{
+		return FollowCamera;
+	}
+
+private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon", meta = 
 	(AllowPrivateAccess = "true"))
-	class UChildActorComponent* Sword1;
+	class UChildActorComponent* Sword;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon", meta = (AllowPrivateAccess = "true"))
-	class UChildActorComponent* Axe1;
+	class UChildActorComponent* Axe;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon", meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* Shield;
 	
 	public:
 	APlayerCharacter();
@@ -52,6 +62,9 @@ public:
 	bool bCanAttack = true;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
+	bool bCanSpecialAttack = true;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
 	bool bCanChangeWeapon = true;
 
 	/** Speed of the ChangeWeapon Animation, in percentage. */
@@ -71,6 +84,9 @@ public:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int AtkCount;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class USphereComponent* SphereComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UAnimMontage* ChangeWeaponAnim;
@@ -104,8 +120,11 @@ public:
 	*/
 	void LookUpAtRate(float Rate);
 	
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintCallable)
 	void ChangeWeapon();
+
+	UFUNCTION(BlueprintCallable)
+	void SwapMeshes();
 	
 	virtual void Attack() override;
 	
@@ -122,7 +141,9 @@ public:
 	void Defense();
 	UFUNCTION()
 	void StopDefense();
-	
+
+public:
+	virtual void SetWeaponCollision(bool bGenerateOverlap) override;
 	protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

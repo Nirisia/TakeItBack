@@ -31,11 +31,6 @@ void ABaseCharacter::MyTakeDamage(AWeapon* AttackingWeapon)
 
 void ABaseCharacter::SetWeaponCollision(bool bGenerateOverlap)
 {
-	SetWeaponCollisionEvent(bGenerateOverlap);
-}
-
-void ABaseCharacter::SetWeaponCollisionEvent_Implementation(bool bGenerateOverlap)
-{
 }
 
 // Called when the game starts or when spawned

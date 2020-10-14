@@ -4,6 +4,7 @@
 #include "PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/SphereComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
@@ -16,11 +17,23 @@ APlayerCharacter::APlayerCharacter() : Super()
     // Set size for collision capsule
     GetCapsuleComponent()->InitCapsuleSize(42.f, 86.0f);
 
-    Axe1 = CreateDefaultSubobject<UChildActorComponent>(TEXT("Axe"));
-    Axe1->SetChildActorClass(AWeapon::StaticClass());
+    Axe = CreateDefaultSubobject<UChildActorComponent>(TEXT("Axe"));
+    Axe->SetChildActorClass(AWeapon::StaticClass());
+    Axe->SetupAttachment(Cast<USceneComponent>(GetMesh()), "LeftWeaponShield");
     
-    Sword1 = CreateDefaultSubobject<UChildActorComponent>(TEXT("Sword"));
-    Sword1->SetChildActorClass(AWeapon::StaticClass());
+    Sword = CreateDefaultSubobject<UChildActorComponent>(TEXT("Sword"));
+    Sword->SetChildActorClass(AWeapon::StaticClass());
+    Sword->SetupAttachment(Cast<USceneComponent>(GetMesh()), "weaponPosition_r");
+    Sword->SetRelativeRotation(FRotator(0.f, 90.f, 90.f));
+
+    Shield = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Shield"));
+    Shield->SetupAttachment(Cast<USceneComponent>(GetMesh()), "backpackShield02");
+    Shield->SetRelativeRotation(FRotator(-90.f, 0.f, -90.f));
+
+    SphereComponent = CreateDefaultSubobject<USphereComponent>("SphereComponent");
+    SphereComponent->SetupAttachment(RootComponent);
+    SphereComponent->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
+    SphereComponent->SetGenerateOverlapEvents(false);
 
     
     // Don't rotate when the controller rotates. Let that just affect the camera.
@@ -103,16 +116,48 @@ void APlayerCharacter::LookUpAtRate(float Rate)
     AddControllerPitchInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
 }
 
-void APlayerCharacter::ChangeWeapon_Implementation()
+void APlayerCharacter::ChangeWeapon()
 {
     if (bCanChangeWeapon)
     {
         bCanChangeWeapon = false;
+        bCanSpecialAttack = false;
         bCanAttack = false;
         AtkCount = 0;
         PlayAnimMontage(ChangeWeaponAnim, ChangeWeaponSpeed);
     }
 
+}
+
+void APlayerCharacter::SwapMeshes()
+{
+    if(bIsAxe)
+    {
+        bIsAxe = false;
+        Axe->SetRelativeRotation(FRotator(0.f, 90.f, 90.f));
+        Axe->AttachToComponent(Axe->GetAttachParent(), FAttachmentTransformRules::KeepRelativeTransform, "weaponPosition_l");
+
+        Sword->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
+        Sword->AttachToComponent(Sword->GetAttachParent(), FAttachmentTransformRules::KeepRelativeTransform, "weaponShield_r");
+
+        Shield->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
+        Shield->AttachToComponent(Shield->GetAttachParent(), FAttachmentTransformRules::KeepRelativeTransform, "weaponShield_l");
+    }
+    else
+    {
+        bIsAxe = true;
+        Axe->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
+        Axe->AttachToComponent(Axe->GetAttachParent(), FAttachmentTransformRules::KeepRelativeTransform, "weaponShield_l");
+
+        Sword->SetRelativeRotation(FRotator(0.f, 90.f, 90.f));
+        Sword->AttachToComponent(Sword->GetAttachParent(), FAttachmentTransformRules::KeepRelativeTransform, "weaponPosition_r");
+
+        Shield->SetRelativeRotation(FRotator(-90.f, 0.f, -90.f));
+        Shield->AttachToComponent(Shield->GetAttachParent(), FAttachmentTransformRules::KeepRelativeTransform, "backpackShield02");
+    }
+    bCanAttack = true;
+    bCanChangeWeapon = true;
+    bCanSpecialAttack = true;
 }
 
 void APlayerCharacter::Attack()
@@ -121,15 +166,16 @@ void APlayerCharacter::Attack()
     {
         bCanChangeWeapon = false;
         bCanAttack = false;
+        bCanSpecialAttack = false;
         if(bIsAxe == true)
         {
             PlayAnimMontage(AxeAttacksAnim[AtkCount], AtkSpeed);
-            Cast<AWeapon>(Axe1->GetChildActor())->LightAttack();
+            Cast<AWeapon>(Axe->GetChildActor())->LightAttack();
         }
         else
         {
             PlayAnimMontage(SwordAttacksAnim[AtkCount], AtkSpeed);
-            Cast<AWeapon>(Sword1->GetChildActor())->LightAttack();
+            Cast<AWeapon>(Sword->GetChildActor())->LightAttack();
         }
         if(AtkCount >= 4)
         {
@@ -151,12 +197,24 @@ void APlayerCharacter::ResetCombo()
 {
     AtkCount = 0;
     bCanAttack = true;
+    bCanSpecialAttack = true;
     bCanChangeWeapon = true;
 }
 
 
 void APlayerCharacter::SpecialAttack()
 {
+    if (bCanSpecialAttack)
+    {
+        if (bIsAxe)
+        {
+            Cast<AWeapon>(Axe->GetChildActor())->SpecialAttack();
+        }
+        else
+        {
+            Cast<AWeapon>(Sword->GetChildActor())->SpecialAttack();
+        }
+    }
 }
 
 void APlayerCharacter::Defense()
@@ -165,6 +223,18 @@ void APlayerCharacter::Defense()
 
 void APlayerCharacter::StopDefense()
 {
+}
+
+void APlayerCharacter::SetWeaponCollision(bool bGenerateOverlap)
+{
+    if (bIsAxe)
+    {
+        Cast<AWeapon>(Axe->GetChildActor())->SetWeaponCollision(bGenerateOverlap);
+    }
+    else
+    {
+        Cast<AWeapon>(Sword->GetChildActor())->SetWeaponCollision(bGenerateOverlap);
+    }
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

@@ -3,11 +3,23 @@
 
 #include "Weapon.h"
 #include "Components/BoxComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "BaseCharacter.h"
 
 
 // Sets default values
 AWeapon::AWeapon()
 {
+	PrimaryActorTick.bCanEverTick = true;
+
+	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
+	MeshComponent->SetupAttachment(RootComponent);
+	MeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
+	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
+	BoxComponent->SetupAttachment(MeshComponent);
+	BoxComponent->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
+	BoxComponent->SetGenerateOverlapEvents(false);
+
 }
 
 void AWeapon::LightAttack()
@@ -38,11 +50,16 @@ void AWeapon::UnloadPower(int DamageTaken)
 	}
 }
 
+void AWeapon::SetWeaponCollision(bool bGenerateOverlap)
+{
+	BoxComponent->SetGenerateOverlapEvents(bGenerateOverlap);
+}
+
 // Called when the game starts or when spawned
 void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	OwnerCharacter = Cast<ABaseCharacter>(GetParentActor());
 }
 
 void AWeapon::Tick(float DeltaTime)

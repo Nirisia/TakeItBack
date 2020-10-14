@@ -54,13 +54,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void Attack();
+	
 	UFUNCTION(BlueprintCallable)
 	virtual void MyTakeDamage(AWeapon* AttackingWeapon);
+	
 	UFUNCTION(BlueprintCallable)
-	void SetWeaponCollision(bool bGenerateOverlap);
-
-	UFUNCTION(BlueprintNativeEvent)
-	void SetWeaponCollisionEvent(bool bGenerateOverlap);
+	virtual void SetWeaponCollision(bool bGenerateOverlap);
 	
 protected:
 	// Called when the game starts or when spawned
