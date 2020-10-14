@@ -7,6 +7,7 @@
 #include "BaseCharacter.h"
 #include "Engine.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "EnemyCharacter.h"
 
 AAxe::AAxe()
 {
@@ -20,6 +21,22 @@ void AAxe::LightAttack()
 void AAxe::SpecialAttack()
 {
     FireStorm();
+    Power = 0;
+    Damage *= DamageBonus;
+}
+
+void AAxe::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+    if (OtherActor->ActorHasTag("Enemy"))
+    {
+        AEnemyCharacter* Enemy = Cast<AEnemyCharacter>(OtherActor);
+        if(Enemy != nullptr)
+        {
+             Enemy->MyTakeDamage(Damage);
+             LoadPower(Damage);
+        }  
+    }   
 }
 
 void AAxe::Tick(float DeltaTime)

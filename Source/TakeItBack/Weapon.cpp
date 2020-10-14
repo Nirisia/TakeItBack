@@ -55,11 +55,19 @@ void AWeapon::SetWeaponCollision(bool bGenerateOverlap)
 	BoxComponent->SetGenerateOverlapEvents(bGenerateOverlap);
 }
 
+void AWeapon::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex,
+	bool bFromSweep, const FHitResult& SweepResult)
+{
+	
+}
+
 // Called when the game starts or when spawned
 void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 	OwnerCharacter = Cast<ABaseCharacter>(GetParentActor());
+
+	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AWeapon::OnOverlap);
 }
 
 void AWeapon::Tick(float DeltaTime)

@@ -18,7 +18,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Characteristics")
 	int MaxLife;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Characteristics")
 	int CurrentLife;
 
 	/** Walkspeed of the Character, in meters per seconds */
@@ -56,7 +56,7 @@ public:
 	virtual void Attack();
 	
 	UFUNCTION(BlueprintCallable)
-	virtual void MyTakeDamage(AWeapon* AttackingWeapon);
+	virtual void MyTakeDamage(int Damage);
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void SetWeaponCollision(bool bGenerateOverlap);

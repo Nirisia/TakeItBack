@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
 #include "BaseCharacter.h"
 #include "PlayerCharacter.generated.h"
 
@@ -30,8 +29,7 @@ public:
 	}
 
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon", meta = 
-	(AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon", meta = (AllowPrivateAccess = "true"))
 	class UChildActorComponent* Sword;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon", meta = (AllowPrivateAccess = "true"))

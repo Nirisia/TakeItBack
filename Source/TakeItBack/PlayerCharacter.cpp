@@ -170,12 +170,12 @@ void APlayerCharacter::Attack()
         if(bIsAxe == true)
         {
             PlayAnimMontage(AxeAttacksAnim[AtkCount], AtkSpeed);
-            Cast<AWeapon>(Axe->GetChildActor())->LightAttack();
+            //Cast<AWeapon>(Axe->GetChildActor())->LightAttack();
         }
         else
         {
             PlayAnimMontage(SwordAttacksAnim[AtkCount], AtkSpeed);
-            Cast<AWeapon>(Sword->GetChildActor())->LightAttack();
+            //Cast<AWeapon>(Sword->GetChildActor())->LightAttack();
         }
         if(AtkCount >= 4)
         {
@@ -208,11 +208,17 @@ void APlayerCharacter::SpecialAttack()
     {
         if (bIsAxe)
         {
-            Cast<AWeapon>(Axe->GetChildActor())->SpecialAttack();
+            if (Cast<AWeapon>(Axe->GetChildActor())->Power == Cast<AWeapon>(Axe->GetChildActor())->MaxPower)
+            {
+                Cast<AWeapon>(Axe->GetChildActor())->SpecialAttack();
+            }  
         }
         else
         {
-            Cast<AWeapon>(Sword->GetChildActor())->SpecialAttack();
+            if (Cast<AWeapon>(Sword->GetChildActor())->Power == Cast<AWeapon>(Sword->GetChildActor())->MaxPower)
+            {
+                Cast<AWeapon>(Sword->GetChildActor())->SpecialAttack();
+            }  
         }
     }
 }

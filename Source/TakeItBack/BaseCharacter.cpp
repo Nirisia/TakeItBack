@@ -2,7 +2,7 @@
 
 
 #include "BaseCharacter.h"
-
+#include "Engine.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 
@@ -19,13 +19,14 @@ void ABaseCharacter::Attack()
 	bIsAttacking = true;
 }
 
-void ABaseCharacter::MyTakeDamage(AWeapon* AttackingWeapon)
+void ABaseCharacter::MyTakeDamage(int Damage)
 {
 	bImpact = true;
-	CurrentLife -= AttackingWeapon->Damage;
+	CurrentLife -= Damage;
 	if(CurrentLife <= 0)
 	{
 		bIsDead = true;
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 }
 
