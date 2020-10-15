@@ -11,6 +11,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Axe.h"
 #include "Sword.h"
+#include "Engine/Engine.h"
 
 APlayerCharacter::APlayerCharacter() : Super()
 {
@@ -20,7 +21,7 @@ APlayerCharacter::APlayerCharacter() : Super()
     Axe = CreateDefaultSubobject<UChildActorComponent>(TEXT("Axe"));
     Axe->SetChildActorClass(AWeapon::StaticClass());
     Axe->SetupAttachment(Cast<USceneComponent>(GetMesh()), "LeftWeaponShield");
-    
+
     Sword = CreateDefaultSubobject<UChildActorComponent>(TEXT("Sword"));
     Sword->SetChildActorClass(AWeapon::StaticClass());
     Sword->SetupAttachment(Cast<USceneComponent>(GetMesh()), "weaponPosition_r");
@@ -35,7 +36,7 @@ APlayerCharacter::APlayerCharacter() : Super()
     SphereComponent->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
     SphereComponent->SetGenerateOverlapEvents(false);
 
-    
+
     // Don't rotate when the controller rotates. Let that just affect the camera.
     bUseControllerRotationPitch = false;
     bUseControllerRotationYaw = false;
@@ -52,7 +53,8 @@ APlayerCharacter::APlayerCharacter() : Super()
 
     // Create a follow camera
     FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-    FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
+    FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+    // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
     FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
     // Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
@@ -62,7 +64,7 @@ APlayerCharacter::APlayerCharacter() : Super()
 void APlayerCharacter::BeginPlay()
 {
     Super::BeginPlay();
-    
+
     CameraBoom->TargetArmLength = 400.f; // The camera follows at this distance behind the character
     // Configure character movement
     GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
@@ -70,7 +72,7 @@ void APlayerCharacter::BeginPlay()
     GetCharacterMovement()->JumpZVelocity = JumpSpeed;
     GetCharacterMovement()->AirControl = AirControl;
     GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
-    
+
     CameraBoom->TargetArmLength = CameraOffset.Size();
     CameraBoom->SocketOffset = FVector(0.0f, 0.f, CameraOffset.Z);
 
@@ -93,12 +95,12 @@ void APlayerCharacter::MoveForward(float Value)
 
 void APlayerCharacter::MoveRight(float Value)
 {
-    if ( (Controller != NULL) && (Value != 0.0f) )
+    if ((Controller != NULL) && (Value != 0.0f))
     {
         // find out which way is right
         const FRotator Rotation = Controller->GetControlRotation();
         const FRotator YawRotation(0, Rotation.Yaw, 0);
-	
+
         // get right vector 
         const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
         // add movement in that direction
@@ -123,37 +125,42 @@ void APlayerCharacter::ChangeWeapon()
         bCanChangeWeapon = false;
         bCanSpecialAttack = false;
         bCanAttack = false;
-        AtkCount = 0;
+
         PlayAnimMontage(ChangeWeaponAnim, ChangeWeaponSpeed);
     }
-
 }
 
 void APlayerCharacter::SwapMeshes()
 {
-    if(bIsAxe)
+    if (bIsAxe)
     {
         bIsAxe = false;
         Axe->SetRelativeRotation(FRotator(0.f, 90.f, 90.f));
-        Axe->AttachToComponent(Axe->GetAttachParent(), FAttachmentTransformRules::KeepRelativeTransform, "weaponPosition_l");
+        Axe->AttachToComponent(Axe->GetAttachParent(), FAttachmentTransformRules::KeepRelativeTransform,
+                               "weaponPosition_l");
 
         Sword->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
-        Sword->AttachToComponent(Sword->GetAttachParent(), FAttachmentTransformRules::KeepRelativeTransform, "weaponShield_r");
+        Sword->AttachToComponent(Sword->GetAttachParent(), FAttachmentTransformRules::KeepRelativeTransform,
+                                 "weaponShield_r");
 
         Shield->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
-        Shield->AttachToComponent(Shield->GetAttachParent(), FAttachmentTransformRules::KeepRelativeTransform, "weaponShield_l");
+        Shield->AttachToComponent(Shield->GetAttachParent(), FAttachmentTransformRules::KeepRelativeTransform,
+                                  "weaponShield_l");
     }
     else
     {
         bIsAxe = true;
         Axe->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
-        Axe->AttachToComponent(Axe->GetAttachParent(), FAttachmentTransformRules::KeepRelativeTransform, "weaponShield_l");
+        Axe->AttachToComponent(Axe->GetAttachParent(), FAttachmentTransformRules::KeepRelativeTransform,
+                               "weaponShield_l");
 
         Sword->SetRelativeRotation(FRotator(0.f, 90.f, 90.f));
-        Sword->AttachToComponent(Sword->GetAttachParent(), FAttachmentTransformRules::KeepRelativeTransform, "weaponPosition_r");
+        Sword->AttachToComponent(Sword->GetAttachParent(), FAttachmentTransformRules::KeepRelativeTransform,
+                                 "weaponPosition_r");
 
         Shield->SetRelativeRotation(FRotator(-90.f, 0.f, -90.f));
-        Shield->AttachToComponent(Shield->GetAttachParent(), FAttachmentTransformRules::KeepRelativeTransform, "backpackShield02");
+        Shield->AttachToComponent(Shield->GetAttachParent(), FAttachmentTransformRules::KeepRelativeTransform,
+                                  "backpackShield02");
     }
     bCanAttack = true;
     bCanChangeWeapon = true;
@@ -162,29 +169,12 @@ void APlayerCharacter::SwapMeshes()
 
 void APlayerCharacter::Attack()
 {
-    if(bCanAttack == true)
+    if (bCanAttack == true)
     {
         bCanChangeWeapon = false;
         bCanAttack = false;
         bCanSpecialAttack = false;
-        if(bIsAxe == true)
-        {
-            PlayAnimMontage(AxeAttacksAnim[AtkCount], AtkSpeed);
-            //Cast<AWeapon>(Axe->GetChildActor())->LightAttack();
-        }
-        else
-        {
-            PlayAnimMontage(SwordAttacksAnim[AtkCount], AtkSpeed);
-            //Cast<AWeapon>(Sword->GetChildActor())->LightAttack();
-        }
-        if(AtkCount >= 4)
-        {
-            AtkCount = 0;
-        }
-        else
-        {
-            AtkCount++;
-        } 
+        GetCurrentWeapon()->LightAttack();
     }
 }
 
@@ -195,7 +185,7 @@ void APlayerCharacter::ValidateAttack()
 
 void APlayerCharacter::ResetCombo()
 {
-    AtkCount = 0;
+    GetCurrentWeapon()->ResetCombo();
     bCanAttack = true;
     bCanSpecialAttack = true;
     bCanChangeWeapon = true;
@@ -204,22 +194,9 @@ void APlayerCharacter::ResetCombo()
 
 void APlayerCharacter::SpecialAttack()
 {
-    if (bCanSpecialAttack)
+    if (bCanSpecialAttack && GetCurrentWeapon()->Power == GetCurrentWeapon()->MaxPower)
     {
-        if (bIsAxe)
-        {
-            if (Cast<AWeapon>(Axe->GetChildActor())->Power == Cast<AWeapon>(Axe->GetChildActor())->MaxPower)
-            {
-                Cast<AWeapon>(Axe->GetChildActor())->SpecialAttack();
-            }  
-        }
-        else
-        {
-            if (Cast<AWeapon>(Sword->GetChildActor())->Power == Cast<AWeapon>(Sword->GetChildActor())->MaxPower)
-            {
-                Cast<AWeapon>(Sword->GetChildActor())->SpecialAttack();
-            }  
-        }
+        GetCurrentWeapon()->SpecialAttack();
     }
 }
 
@@ -231,16 +208,18 @@ void APlayerCharacter::StopDefense()
 {
 }
 
+AWeapon* APlayerCharacter::GetCurrentWeapon()
+{
+    if (bIsAxe == true)
+    {
+        return Cast<AWeapon>(Axe->GetChildActor());
+    }
+    return Cast<AWeapon>(Sword->GetChildActor());
+}
+
 void APlayerCharacter::SetWeaponCollision(bool bGenerateOverlap)
 {
-    if (bIsAxe)
-    {
-        Cast<AWeapon>(Axe->GetChildActor())->SetWeaponCollision(bGenerateOverlap);
-    }
-    else
-    {
-        Cast<AWeapon>(Sword->GetChildActor())->SetWeaponCollision(bGenerateOverlap);
-    }
+    GetCurrentWeapon()->SetWeaponCollision(bGenerateOverlap);
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

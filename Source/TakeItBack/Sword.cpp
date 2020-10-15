@@ -11,11 +11,6 @@ ASword::ASword() : Super()
 {
 }
 
-void ASword::LightAttack()
-{
-    GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("SwordAttack"));
-}
-
 void ASword::SpecialAttack()
 {
     ShieldMeteor();

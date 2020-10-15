@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "BaseCharacter.h"
 #include "PlayerCharacter.generated.h"
 
@@ -81,22 +80,10 @@ public:
 	float CameraAngle = -20;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	int AtkCount;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class USphereComponent* SphereComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UAnimMontage* ChangeWeaponAnim;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UAnimMontage* RollAnim;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<UAnimMontage*> AxeAttacksAnim;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<UAnimMontage*> SwordAttacksAnim;
 	
 	protected:
 
@@ -139,6 +126,9 @@ public:
 	void Defense();
 	UFUNCTION()
 	void StopDefense();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	AWeapon* GetCurrentWeapon();
 
 public:
 	virtual void SetWeaponCollision(bool bGenerateOverlap) override;

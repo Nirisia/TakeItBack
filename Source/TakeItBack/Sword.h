@@ -23,7 +23,6 @@ class TAKEITBACK_API ASword : public AWeapon
 	
 	ASword();
 	public:
-	virtual void LightAttack() override;
 	virtual void SpecialAttack() override;
 	virtual void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
 

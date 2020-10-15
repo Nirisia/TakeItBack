@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "BaseCharacter.h"
+#include "PlayerCharacter.h"
 
 
 // Sets default values
@@ -24,6 +25,13 @@ AWeapon::AWeapon()
 
 void AWeapon::LightAttack()
 {
+	if(AtkCount >= AttacksAnim.Num())
+	{
+		AtkCount = 0;
+	}
+	
+	Cast<APlayerCharacter>(GetParentActor())->PlayAnimMontage(AttacksAnim[AtkCount], AtkSpeed);
+	AtkCount++;
 }
 
 void AWeapon::SpecialAttack()
@@ -55,8 +63,13 @@ void AWeapon::SetWeaponCollision(bool bGenerateOverlap)
 	BoxComponent->SetGenerateOverlapEvents(bGenerateOverlap);
 }
 
+void AWeapon::ResetCombo()
+{
+	AtkCount = 0;
+}
+
 void AWeapon::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex,
-	bool bFromSweep, const FHitResult& SweepResult)
+                        bool bFromSweep, const FHitResult& SweepResult)
 {
 	
 }
@@ -74,5 +87,3 @@ void AWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
-
-

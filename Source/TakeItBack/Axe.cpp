@@ -13,11 +13,6 @@ AAxe::AAxe()
 {
 }
 
-void AAxe::LightAttack()
-{
-    GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("AxeAttack"));
-}
-
 void AAxe::SpecialAttack()
 {
     FireStorm();
