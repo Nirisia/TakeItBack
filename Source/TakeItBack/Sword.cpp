@@ -85,6 +85,12 @@ void ASword::ShieldMeteor_Implementation()
             bIsShieldMeteorActive = false;
             bIsLaunched = true;
             Power = 0;
+
+            i++;
+            if(i < 8)
+            {
+                AtkSpeed *= SpeedBonus;
+            }     
         }
         else if (!PlayerCharacter->GetCharacterMovement()->IsFalling())
         {

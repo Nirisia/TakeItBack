@@ -29,6 +29,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Stats")
 	int Damage;
 
+	UPROPERTY()
+	int i = 0; //Iteration for passive bonus
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Stats")
 	float AtkSpeed = 1.f;
 

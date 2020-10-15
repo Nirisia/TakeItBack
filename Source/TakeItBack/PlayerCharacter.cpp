@@ -202,6 +202,9 @@ void APlayerCharacter::SpecialAttack()
 
 void APlayerCharacter::Defense()
 {
+    bCanChangeWeapon = false;
+    bCanAttack = false;
+    
 }
 
 void APlayerCharacter::StopDefense()

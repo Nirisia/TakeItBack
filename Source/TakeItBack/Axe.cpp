@@ -17,7 +17,12 @@ void AAxe::SpecialAttack()
 {
     FireStorm();
     Power = 0;
-    Damage *= DamageBonus;
+
+    i++;
+    if(i < 8)
+    {
+        Damage *= DamageBonus;
+    }  
 }
 
 void AAxe::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
@@ -29,7 +34,10 @@ void AAxe::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActo
         if(Enemy != nullptr)
         {
              Enemy->MyTakeDamage(Damage);
-             LoadPower(Damage);
+            if(bIsFireStormActive == false)
+            {
+                LoadPower(Damage);
+            }       
         }  
     }   
 }
