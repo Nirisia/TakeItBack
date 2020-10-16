@@ -37,6 +37,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Characteristics")
 	float RotationSpeed = 540.f;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
+	bool bCanAttack = true;
+
 	/** Speed of the Attack Animation, in percentage. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Characteristics")
 	float AtkSpeed = 1.f;
@@ -46,9 +49,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
 	bool bIsDead = false;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
-	bool bIsAttacking = false;
 	
 	ABaseCharacter();
 
@@ -56,7 +56,7 @@ public:
 	virtual void Attack();
 	
 	UFUNCTION(BlueprintCallable)
-	virtual void MyTakeDamage(int Damage);
+	virtual int MyTakeDamage(int Damage);
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void SetWeaponCollision(bool bGenerateOverlap);

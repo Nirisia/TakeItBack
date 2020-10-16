@@ -14,9 +14,6 @@ UCLASS(meta=(BlueprintSpawnableComponent), Blueprintable)
 class TAKEITBACK_API AWeapon : public AActor
 {
 	GENERATED_BODY()
-
-	UPROPERTY()
-	int AtkCount = 0;
 	
 public:	
 	// Sets default values for this actor's properties
@@ -29,8 +26,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Stats")
 	int Damage;
 
-	UPROPERTY()
-	int i = 0; //Iteration for passive bonus
+	/* */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
+	int BonusStack = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
+	bool bIsSpecialAttackActive = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Stats")
 	float AtkSpeed = 1.f;
@@ -55,9 +56,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Animations")
 	TArray<class UAnimMontage*> AttacksAnim;
-
-	UPROPERTY()
-	class ABaseCharacter* OwnerCharacter;
 	
 	AWeapon();
 	
@@ -66,25 +64,41 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void SpecialAttack();
+
+	UFUNCTION(BlueprintCallable)
+	virtual void Defense();
+
+	UFUNCTION(BlueprintCallable)
+	virtual void StopDefense();
 	
 	UFUNCTION(BlueprintCallable)
-	void LoadPower(int InflictedDamage);
+	virtual void LoadPower(int InflictedDamage);
 	
 	UFUNCTION(BlueprintCallable)
-	void UnloadPower(int DamageTaken);
+	virtual void UnloadPower(int DamageTaken);
 
 	UFUNCTION(BlueprintCallable)
 	void SetWeaponCollision(bool bGenerateOverlap);
 
+
+	
 	UFUNCTION(BlueprintCallable)
 	void ResetCombo();
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	class ABaseCharacter* GetParentCharacter();
+
 	UFUNCTION()
-	virtual void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	virtual void AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* 
+	OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool 
+	bFromSweep, const FHitResult& SweepResult);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	UPROPERTY()
+	int AtkCount = 0;
 
 public:
 	virtual void Tick(float DeltaTime) override;

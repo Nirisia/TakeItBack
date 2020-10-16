@@ -17,38 +17,52 @@ void AAxe::SpecialAttack()
 {
     FireStorm();
     Power = 0;
-
-    i++;
-    if(i < 8)
+    
+    if(BonusStack < 8)
     {
-        Damage *= DamageBonus;
+        BonusStack++;
     }  
 }
 
-void AAxe::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AAxe::Defense()
+{
+    if (!GetParentCharacter()->GetCharacterMovement()->IsFalling())
+    {
+        Super::Defense();
+        Roll(); 
+    }
+}
+
+void AAxe::AttackCollision(UPrimitiveComponent* OverlappedComponent,
+    AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
+    bool bFromSweep, const FHitResult& SweepResult)
 {
     if (OtherActor->ActorHasTag("Enemy"))
     {
-        AEnemyCharacter* Enemy = Cast<AEnemyCharacter>(OtherActor);
-        if(Enemy != nullptr)
+        ABaseCharacter* Enemy = Cast<ABaseCharacter>(OtherActor);
+        if (Enemy != nullptr)
         {
-             Enemy->MyTakeDamage(Damage);
-            if(bIsFireStormActive == false)
-            {
-                LoadPower(Damage);
-            }       
-        }  
-    }   
+            Cast<APlayerController>(GetParentCharacter()->GetController())->PlayDynamicForceFeedback(
+                    0.2f, 0.3f, false, true, false, true);
+            
+            LoadPower(Enemy->MyTakeDamage(Damage + BonusStack * DamageBonus *
+             Damage));
+        }
+    }
+}
+
+void AAxe::Roll_Implementation()
+{
+    
 }
 
 void AAxe::Tick(float DeltaTime)
 {
-    if (bIsFireStormActive)
+    if (bIsSpecialAttackActive)
     {
         if (ElapsedTime > 3.0f)
         {
-            APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter);
+            APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
 
             auto PlayerCharacterMovement = PlayerCharacter->GetCharacterMovement();
 
@@ -69,10 +83,10 @@ void AAxe::Tick(float DeltaTime)
 
             SetWeaponCollision(false);
 
-            bIsFireStormActive = false;
+            bIsSpecialAttackActive = false;
         }
         
-        OwnerCharacter->AddActorWorldRotation(FRotator(0.f, 3 * 360.f * DeltaTime, 0.f ));
+        GetParentCharacter()->AddActorWorldRotation(FRotator(0.f, 3 * 360.f * DeltaTime, 0.f ));
         
         ElapsedTime += DeltaTime;
     }
@@ -80,17 +94,17 @@ void AAxe::Tick(float DeltaTime)
 
 void AAxe::FireStorm_Implementation()
 {
-    if (!bIsFireStormActive)
+    if (!bIsSpecialAttackActive)
     {
         ElapsedTime = 0.f;
-        APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter);
+        APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
         auto PlayerCharacterMovement = PlayerCharacter->GetCharacterMovement();
 
         MeshComponent->SetRelativeRotation(FRotator(-80.f, -180.f, 0.f));
         
         PlayerCharacterMovement->MaxWalkSpeed = 150.f;
         PlayerCharacterMovement->RotationRate = FRotator(0.0f, 0.0f, 0.0f);
-        auto PlayerController = Cast<APlayerController>(OwnerCharacter->GetController());
+        auto PlayerController = Cast<APlayerController>(GetParentCharacter()->GetController());
         ForceFeedbackHandle = PlayerController->PlayDynamicForceFeedback(1.0f, -1.f, true, true, true, true);
 
         PlayerCharacter->bCanAttack = false;
@@ -99,6 +113,6 @@ void AAxe::FireStorm_Implementation()
 
         SetWeaponCollision(true);
         
-        bIsFireStormActive = true;   
+        bIsSpecialAttackActive = true;   
     }
 }

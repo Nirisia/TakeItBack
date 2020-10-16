@@ -202,13 +202,12 @@ void APlayerCharacter::SpecialAttack()
 
 void APlayerCharacter::Defense()
 {
-    bCanChangeWeapon = false;
-    bCanAttack = false;
-    
+    GetCurrentWeapon()->Defense();   
 }
 
 void APlayerCharacter::StopDefense()
 {
+    GetCurrentWeapon()->StopDefense();
 }
 
 AWeapon* APlayerCharacter::GetCurrentWeapon()
@@ -244,7 +243,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAxis("LookUpRate", this, &APlayerCharacter::LookUpAtRate);
 
     PlayerInputComponent->BindAction("Defense", IE_Pressed, this, &APlayerCharacter::Defense);
-    PlayerInputComponent->BindAction("Defense", IE_Released, this, &APlayerCharacter::StopDefense);
+    //PlayerInputComponent->BindAction("Defense", IE_Released, this, &APlayerCharacter::StopDefense);
 
     PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerCharacter::Attack);
     PlayerInputComponent->BindAction("SpecialAttack", IE_Pressed, this, &APlayerCharacter::SpecialAttack);

@@ -16,18 +16,29 @@ ABaseCharacter::ABaseCharacter()
 
 void ABaseCharacter::Attack()
 {
-	bIsAttacking = true;
+	
 }
 
-void ABaseCharacter::MyTakeDamage(int Damage)
+int ABaseCharacter::MyTakeDamage(int Damage)
 {
-	bImpact = true;
-	CurrentLife -= Damage;
-	if(CurrentLife <= 0)
+	if (CurrentLife > 0)
 	{
-		bIsDead = true;
-		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		bImpact = true;
+		CurrentLife -= Damage;
+		if(CurrentLife <= 0)
+		{
+			bIsDead = true;
+			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			//Die()
+			return Damage + CurrentLife;
+		}
+		return Damage;
 	}
+	else
+	{
+		return 0;	
+	}
+
 }
 
 void ABaseCharacter::SetWeaponCollision(bool bGenerateOverlap)

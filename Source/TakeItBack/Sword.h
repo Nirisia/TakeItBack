@@ -16,19 +16,20 @@ class TAKEITBACK_API ASword : public AWeapon
 	GENERATED_BODY()
 
 	UPROPERTY()
-	bool bIsShieldMeteorActive;
-
-	UPROPERTY()
 	bool bIsLaunched;
 	
 	ASword();
 	public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Animations")
+	class UAnimMontage* ShieldAnim;
+
+	virtual void LightAttack() override;
 	virtual void SpecialAttack() override;
-	virtual void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
+	virtual void Defense() override;
 
 	UFUNCTION(BlueprintNativeEvent)
 	void ShieldMeteor();
 
-public:
 	virtual void Tick(float DeltaTime) override;
 };

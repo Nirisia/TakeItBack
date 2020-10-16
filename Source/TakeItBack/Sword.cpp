@@ -11,36 +11,41 @@ ASword::ASword() : Super()
 {
 }
 
+void ASword::LightAttack()
+{
+    if (AtkCount >= AttacksAnim.Num())
+    {
+        AtkCount = 0;
+    }
+
+    GetParentCharacter()->PlayAnimMontage(AttacksAnim[AtkCount], AtkSpeed + 
+    BonusStack * SpeedBonus * AtkSpeed);
+    AtkCount++;
+}
+
 void ASword::SpecialAttack()
 {
     ShieldMeteor();
 }
 
-void ASword::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ASword::Defense()
 {
-    if (OtherActor->ActorHasTag("Enemy"))
-    {
-        AEnemyCharacter* Enemy = Cast<AEnemyCharacter>(OtherActor);
-        if (Enemy != nullptr)
-        {
-            Enemy->MyTakeDamage(Damage);
-            LoadPower(Damage);
-        } 
-    }   
+    Super::Defense();
+    GetParentCharacter()->GetCharacterMovement()->MaxWalkSpeed = 0.f;
+    GetParentCharacter()->PlayAnimMontage(ShieldAnim);
 }
 
 void ASword::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter);
+    APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
     if (PlayerCharacter)
     {
-        if (!OwnerCharacter->GetCharacterMovement()->IsFalling())
+        if (!GetParentCharacter()->GetCharacterMovement()->IsFalling())
         {
             if (bIsLaunched)
             {
-                Cast<APlayerController>(OwnerCharacter->GetController())->PlayDynamicForceFeedback(
+                Cast<APlayerController>(GetParentCharacter()->GetController())->PlayDynamicForceFeedback(
                     1.0f, 0.5f, true, true, true, true);
                 bIsLaunched = false;
                 PlayerCharacter->bCanAttack = true;
@@ -49,10 +54,10 @@ void ASword::Tick(float DeltaTime)
             }
             else
             {
-                bIsShieldMeteorActive = false;
+                bIsSpecialAttackActive = false;
             }
         }
-        else if (bIsShieldMeteorActive && PlayerCharacter->GetVelocity().Z > 0)
+        else if (bIsSpecialAttackActive && PlayerCharacter->GetVelocity().Z > 0)
         {
             UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.5f);
             PlayerCharacter->GetFollowCamera()->SetFieldOfView(80.f);
@@ -61,7 +66,7 @@ void ASword::Tick(float DeltaTime)
         {
             UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
             PlayerCharacter->GetFollowCamera()->SetFieldOfView(90.f);
-            bIsShieldMeteorActive = false;
+            bIsSpecialAttackActive = false;
             PlayerCharacter->bCanAttack = true;
             PlayerCharacter->bCanChangeWeapon = true;
         }
@@ -70,9 +75,9 @@ void ASword::Tick(float DeltaTime)
 
 void ASword::ShieldMeteor_Implementation()
 {
-    if (APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(OwnerCharacter))
+    if (APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter()))
     {
-        if (!bIsLaunched && bIsShieldMeteorActive)
+        if (!bIsLaunched && bIsSpecialAttackActive)
         {
             FVector LaunchVelocity = PlayerCharacter->GetFollowCamera()->GetForwardVector();
             if (LaunchVelocity.Z > 0)
@@ -82,22 +87,23 @@ void ASword::ShieldMeteor_Implementation()
             LaunchVelocity *= 1000;
             PlayerCharacter->LaunchCharacter(LaunchVelocity, true, true);
             PlayerCharacter->SphereComponent->SetGenerateOverlapEvents(true);
-            bIsShieldMeteorActive = false;
+            bIsSpecialAttackActive = false;
             bIsLaunched = true;
             Power = 0;
 
-            i++;
-            if(i < 8)
+            if(BonusStack < 8)
             {
-                AtkSpeed *= SpeedBonus;
+                BonusStack++;
             }     
         }
         else if (!PlayerCharacter->GetCharacterMovement()->IsFalling())
         {
+            Cast<APlayerController>(GetParentCharacter()->GetController())->PlayDynamicForceFeedback(
+                    0.05f, 0.3f, false, true, false, true);
             PlayerCharacter->LaunchCharacter(FVector(0.f, 0.f, 1000.f), true, true);
             PlayerCharacter->bCanAttack = false;
             PlayerCharacter->bCanChangeWeapon = false;
-            bIsShieldMeteorActive = true;
+            bIsSpecialAttackActive = true;
         }
     }
 }

@@ -56,10 +56,10 @@ public:
 	bool bIsAxe = true;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
-	bool bCanAttack = true;
+	bool bCanSpecialAttack = true;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
-	bool bCanSpecialAttack = true;
+	bool bCanDefend = true;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
 	bool bCanChangeWeapon = true;
@@ -68,8 +68,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Characteristics")
 	float ChangeWeaponSpeed = 1.0f;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
-	bool bIsBlocking = false;
+
 
 	/** Offset of the camera. Automatically set the CameraBoom length and offset */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
@@ -119,12 +118,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ResetCombo();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SpecialAttack();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void Defense();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void StopDefense();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
