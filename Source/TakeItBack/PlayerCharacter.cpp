@@ -19,11 +19,9 @@ APlayerCharacter::APlayerCharacter() : Super()
     GetCapsuleComponent()->InitCapsuleSize(42.f, 86.0f);
 
     Axe = CreateDefaultSubobject<UChildActorComponent>(TEXT("Axe"));
-    Axe->SetChildActorClass(AWeapon::StaticClass());
     Axe->SetupAttachment(Cast<USceneComponent>(GetMesh()), "LeftWeaponShield");
 
     Sword = CreateDefaultSubobject<UChildActorComponent>(TEXT("Sword"));
-    Sword->SetChildActorClass(AWeapon::StaticClass());
     Sword->SetupAttachment(Cast<USceneComponent>(GetMesh()), "weaponPosition_r");
     Sword->SetRelativeRotation(FRotator(0.f, 90.f, 90.f));
 

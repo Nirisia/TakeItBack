@@ -18,8 +18,8 @@ class TAKEITBACK_API ASword : public AWeapon
 	UPROPERTY()
 	bool bIsLaunched;
 	
-	ASword();
 	public:
+	ASword();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Animations")
 	class UAnimMontage* ShieldAnim;
@@ -30,6 +30,8 @@ class TAKEITBACK_API ASword : public AWeapon
 
 	UFUNCTION(BlueprintNativeEvent)
 	void ShieldMeteor();
+	
+	
 
 	virtual void Tick(float DeltaTime) override;
 };

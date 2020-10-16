@@ -9,7 +9,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "EnemyCharacter.h"
 
-AAxe::AAxe()
+AAxe::AAxe() : Super()
 {
 }
 

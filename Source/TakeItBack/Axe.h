@@ -21,8 +21,8 @@ class TAKEITBACK_API AAxe : public AWeapon
 
 	FDynamicForceFeedbackHandle ForceFeedbackHandle;
 
-	AAxe();
 	public:
+	AAxe();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Animations")
 	class UAnimMontage* RollAnim;
