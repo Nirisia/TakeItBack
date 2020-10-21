@@ -44,6 +44,14 @@ void AAxe::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* Oth
                 0.2f, 0.3f, false, true, false, true);
 
             LoadPower(Enemy->MyTakeDamage(Damage + BonusStack * DamageBonus * Damage));
+            if (Enemy->bIsDead)
+            {
+                USkeletalMeshComponent* EnemyMesh = Enemy->GetMesh();
+                FVector Direction = Enemy->GetActorLocation() - GetParentCharacter()->GetActorLocation();
+                Direction.Z *= -1;
+                Direction.Normalize();
+                EnemyMesh->AddImpulseToAllBodiesBelow(Direction * 500, EnemyMesh->GetBoneName(0), true);
+            }
         }
     }
 }

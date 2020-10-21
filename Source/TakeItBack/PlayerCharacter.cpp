@@ -29,11 +29,6 @@ APlayerCharacter::APlayerCharacter() : Super()
     Shield->SetupAttachment(Cast<USceneComponent>(GetMesh()), "backpackShield02");
     Shield->SetRelativeRotation(FRotator(-90.f, 0.f, -90.f));
 
-    SphereComponent = CreateDefaultSubobject<USphereComponent>("SphereComponent");
-    SphereComponent->SetupAttachment(RootComponent);
-    SphereComponent->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
-    SphereComponent->SetGenerateOverlapEvents(false);
-
 
     // Don't rotate when the controller rotates. Let that just affect the camera.
     bUseControllerRotationPitch = false;

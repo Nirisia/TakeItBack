@@ -28,7 +28,9 @@ int ABaseCharacter::MyTakeDamage(int Damage)
 		if(CurrentLife <= 0)
 		{
 			bIsDead = true;
-			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
+			GetMesh()->SetCollisionProfileName("Ragdoll");
+			GetMesh()->SetAllBodiesSimulatePhysics(true);
 			//Die()
 			return Damage + CurrentLife;
 		}

@@ -5,7 +5,7 @@
 #include "BaseCharacter.h"
 #include "Engine.h"
 #include "PlayerCharacter.h"
-#include "EnemyCharacter.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 ASword::ASword() : Super() {}
 
@@ -52,8 +52,7 @@ void ASword::ShieldMeteorLaunch()
     PlayerCharacter->GetFollowCamera()->SetFieldOfView(90.f);
     PlayerCharacter->GetCharacterMovement()->GravityScale = 1.f;
     PlayerCharacter->GetCharacterMovement()->AirControl = 0.05f;
-    
-    PlayerCharacter->SphereComponent->SetGenerateOverlapEvents(true);
+
     bIsSpecialAttackActive = false;
     bIsLaunched = true;
     PlayerCharacter->bCanAttack = true;
@@ -109,9 +108,42 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
         {
             if (ElapsedTime < MaxAirTime)
             {
-                PlayerCharacter->GetCharacterMovement()->GravityScale = 0.25f / 10;
+                PlayerCharacter->GetCharacterMovement()->GravityScale = 0.25f / 3;
                 UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.25f);
                 PlayerCharacter->GetFollowCamera()->SetFieldOfView(80.f);
+
+                FPredictProjectilePathParams PredictParams;
+
+                PredictParams.StartLocation = PlayerCharacter->GetActorLocation();
+
+                FVector LaunchVelocity = PlayerCharacter->GetFollowCamera()->GetForwardVector();
+                if (LaunchVelocity.Z > 0)
+                {
+                    LaunchVelocity.Z = 0;
+                }
+                LaunchVelocity *= 1000;
+
+                TArray<AActor*> ActorsToIgnore;
+                ActorsToIgnore.Add(PlayerCharacter);
+
+                PredictParams.LaunchVelocity = LaunchVelocity;
+                PredictParams.TraceChannel = ECC_WorldDynamic;
+                PredictParams.TraceChannel = ECC_WorldStatic;
+                PredictParams.bTraceWithChannel = true;
+                PredictParams.bTraceWithCollision = true;
+                PredictParams.ActorsToIgnore = ActorsToIgnore;
+                PredictParams.DrawDebugType = EDrawDebugTrace::ForOneFrame;
+
+                FPredictProjectilePathResult PredictResult;
+
+
+                UGameplayStatics::PredictProjectilePath();//GetWorld(), PredictParams, PredictResult);
+
+                DrawDebugSphere(GetWorld(), PredictResult.HitResult.Location,
+                    100, 12, FColor::Red,
+                    false, 0, 1, 10);
+
+
                 ElapsedTime += DeltaTime / 0.25f;
             }
             else
@@ -124,7 +156,35 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
     {
         Cast<APlayerController>(GetParentCharacter()->GetController())->PlayDynamicForceFeedback(
             1.0f, 0.5f, true, true, true, true);
+
+        TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+        ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
+
+        TArray<AActor*> ActorsToIgnore;
+        ActorsToIgnore.Add(PlayerCharacter);
+
+        TArray<class AActor*> OutActors;
+
+        UKismetSystemLibrary::SphereOverlapActors(GetWorld(), PlayerCharacter->GetActorLocation(), 150, ObjectTypes,
+                                                  nullptr, ActorsToIgnore, OutActors);
+
+        for (int i = 0; i < OutActors.Num(); i++)
+        {
+            ABaseCharacter* Enemy = Cast<ABaseCharacter>(OutActors[i]);
+            if (Enemy)
+            {
+                Enemy->MyTakeDamage(100);
+                if (Enemy->bIsDead)
+                {
+                    USkeletalMeshComponent* EnemyMesh = Enemy->GetMesh();
+                    FVector Direction = Enemy->GetActorLocation() - PlayerCharacter->GetActorLocation();
+                    Direction.Z *= -1;
+                    Direction.Normalize();
+                    EnemyMesh->AddImpulseToAllBodiesBelow(Direction * 1000, EnemyMesh->GetBoneName(0), true);
+                }
+            }
+        }
+
         bIsLaunched = false;
-        PlayerCharacter->SphereComponent->SetGenerateOverlapEvents(false);
     }
 }
