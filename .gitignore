@@ -10,4 +10,5 @@ Build
 
 # We should not push the assets
 Content/Assets
+Content/Assets.zip
 
