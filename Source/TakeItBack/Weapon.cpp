@@ -14,8 +14,7 @@ AWeapon::AWeapon()
 {
     PrimaryActorTick.bCanEverTick = true;
 
-    MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(
-        TEXT("MeshComponent"));
+    MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
     MeshComponent->SetupAttachment(RootComponent);
     MeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
     BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
@@ -60,9 +59,9 @@ void AWeapon::StopDefense()
         PlayerCharacter->bCanSpecialAttack = true;
         PlayerCharacter->bCanChangeWeapon = true;
     }
-    GetParentCharacter()->bCanAttack = true;
-    GetParentCharacter()->GetCharacterMovement()->MaxWalkSpeed =
-        GetParentCharacter()->WalkSpeed;
+    PlayerCharacter->bCanAttack = true;
+    PlayerCharacter->GetCharacterMovement()->MaxWalkSpeed = GetParentCharacter()->WalkSpeed;
+    PlayerCharacter->GetCharacterMovement()->RotationRate = FRotator(0.f, PlayerCharacter->RotationSpeed, 0.f);
 }
 
 void AWeapon::LoadPower(int InflictedDamage)
@@ -93,10 +92,9 @@ void AWeapon::SetWeaponCollision(bool bGenerateOverlap)
     BoxComponent->SetGenerateOverlapEvents(bGenerateOverlap);
 }
 
-void AWeapon::AttackCollision(UPrimitiveComponent* OverlappedComponent,
-                        AActor* OtherActor, UPrimitiveComponent* OtherComp,
-                        int32 OtherBodyIndex, bool bFromSweep,
-                        const FHitResult& SweepResult)
+void AWeapon::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+                              UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+                              const FHitResult& SweepResult)
 {
     if (OtherActor->ActorHasTag("Enemy"))
     {
@@ -104,8 +102,8 @@ void AWeapon::AttackCollision(UPrimitiveComponent* OverlappedComponent,
         if (Enemy != nullptr)
         {
             Cast<APlayerController>(GetParentCharacter()->GetController())->PlayDynamicForceFeedback(
-                    0.2f, 0.3f, false, true, false, true);
-            
+                0.2f, 0.3f, false, true, false, true);
+
             LoadPower(Enemy->MyTakeDamage(Damage));
         }
     }
