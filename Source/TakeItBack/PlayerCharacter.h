@@ -43,6 +43,7 @@ private:
 
 protected:
 	virtual void BeginPlay() override;
+	
 public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Camera")
@@ -67,8 +68,6 @@ public:
 	/** Speed of the ChangeWeapon Animation, in percentage. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Characteristics")
 	float ChangeWeaponSpeed = 1.0f;
-	
-
 
 	/** Offset of the camera. Automatically set the CameraBoom length and offset */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
@@ -83,9 +82,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UAnimMontage* ChangeWeaponAnim;
-	
-	protected:
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool keys = false;
+	
+protected:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
 
@@ -131,7 +132,11 @@ public:
 
 public:
 	virtual void SetWeaponCollision(bool bGenerateOverlap) override;
-	protected:
+
+	UFUNCTION(BlueprintCallable)
+	void Heal(float HealPercent);
+	
+protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
