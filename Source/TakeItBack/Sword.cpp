@@ -30,9 +30,13 @@ void ASword::SpecialAttack()
 
 void ASword::Defense()
 {
-    Super::Defense();
-    GetParentCharacter()->GetCharacterMovement()->MaxWalkSpeed = 0.f;
-    GetParentCharacter()->PlayAnimMontage(ShieldAnim);
+    APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
+    if (PlayerCharacter->bCanDefend)
+    {
+        Super::Defense();
+        GetParentCharacter()->GetCharacterMovement()->MaxWalkSpeed = 0.f;
+        GetParentCharacter()->PlayAnimMontage(ShieldAnim);
+    }
 }
 
 void ASword::Tick(float DeltaTime)
@@ -50,6 +54,7 @@ void ASword::Tick(float DeltaTime)
                 bIsLaunched = false;
                 PlayerCharacter->bCanAttack = true;
                 PlayerCharacter->bCanChangeWeapon = true;
+                PlayerCharacter->bCanDefend = true;
                 PlayerCharacter->SphereComponent->SetGenerateOverlapEvents(false);
             }
             else
@@ -69,6 +74,7 @@ void ASword::Tick(float DeltaTime)
             bIsSpecialAttackActive = false;
             PlayerCharacter->bCanAttack = true;
             PlayerCharacter->bCanChangeWeapon = true;
+            PlayerCharacter->bCanDefend = true;
         }
     }
 }
@@ -103,6 +109,7 @@ void ASword::ShieldMeteor_Implementation()
             PlayerCharacter->LaunchCharacter(FVector(0.f, 0.f, 1000.f), true, true);
             PlayerCharacter->bCanAttack = false;
             PlayerCharacter->bCanChangeWeapon = false;
+            PlayerCharacter->bCanDefend = false;
             bIsSpecialAttackActive = true;
         }
     }

@@ -53,7 +53,7 @@ void AWeapon::Defense()
 
 void AWeapon::StopDefense()
 {
-    auto PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
+    const auto PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
     if (PlayerCharacter)
     {
         PlayerCharacter->bCanDefend = true;

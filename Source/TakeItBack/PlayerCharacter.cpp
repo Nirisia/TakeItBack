@@ -66,10 +66,10 @@ void APlayerCharacter::BeginPlay()
     CameraBoom->TargetArmLength = 400.f; // The camera follows at this distance behind the character
     // Configure character movement
     GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
-    GetCharacterMovement()->RotationRate = FRotator(0.0f, RotationSpeed, 0.0f); // ...at this rotation rate
     GetCharacterMovement()->JumpZVelocity = JumpSpeed;
     GetCharacterMovement()->AirControl = AirControl;
     GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+    GetCharacterMovement()->RotationRate = FRotator(0.0f, RotationSpeed, 0.0f); // ...at this rotation rate
 
     CameraBoom->TargetArmLength = CameraOffset.Size();
     CameraBoom->SocketOffset = FVector(0.0f, 0.f, CameraOffset.Z);
@@ -120,6 +120,7 @@ void APlayerCharacter::ChangeWeapon()
 {
     if (bCanChangeWeapon)
     {
+        bCanDefend = false;
         bCanChangeWeapon = false;
         bCanSpecialAttack = false;
         bCanAttack = false;
@@ -161,6 +162,7 @@ void APlayerCharacter::SwapMeshes()
                                   "backpackShield02");
     }
     bCanAttack = true;
+    bCanDefend = true;
     bCanChangeWeapon = true;
     bCanSpecialAttack = true;
 }
@@ -169,15 +171,20 @@ void APlayerCharacter::Attack()
 {
     if (bCanAttack == true)
     {
+        bCanDefend = false;
         bCanChangeWeapon = false;
         bCanAttack = false;
         bCanSpecialAttack = false;
         GetCurrentWeapon()->LightAttack();
+
+        GetCharacterMovement()->MaxWalkSpeed = 0.7f * WalkSpeed;
+        GetCharacterMovement()->RotationRate = FRotator(0.f, 0.2f * RotationSpeed,0.f);
     }
 }
 
 void APlayerCharacter::ValidateAttack()
 {
+    //GetCharacterMovement()->RotationRate = FRotator(0.f, RotationSpeed, 0.f);
     bCanAttack = true;
 }
 
@@ -185,8 +192,12 @@ void APlayerCharacter::ResetCombo()
 {
     GetCurrentWeapon()->ResetCombo();
     bCanAttack = true;
+    bCanDefend = true;
     bCanSpecialAttack = true;
     bCanChangeWeapon = true;
+    
+    GetCharacterMovement()->RotationRate = FRotator(0.f, RotationSpeed, 0.f);
+    GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 }
 
 

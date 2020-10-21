@@ -9,33 +9,31 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "EnemyCharacter.h"
 
-AAxe::AAxe() : Super()
-{
-}
+AAxe::AAxe() : Super() {}
 
 void AAxe::SpecialAttack()
 {
     FireStorm();
     Power = 0;
-    
-    if(BonusStack < 8)
+
+    if (BonusStack < 8)
     {
         BonusStack++;
-    }  
+    }
 }
 
 void AAxe::Defense()
 {
-    if (!GetParentCharacter()->GetCharacterMovement()->IsFalling())
+    APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
+    if (PlayerCharacter->bCanDefend && !PlayerCharacter->GetCharacterMovement()->IsFalling())
     {
         Super::Defense();
-        Roll(); 
+        Roll();
     }
 }
 
-void AAxe::AttackCollision(UPrimitiveComponent* OverlappedComponent,
-    AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
-    bool bFromSweep, const FHitResult& SweepResult)
+void AAxe::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+                           int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
     if (OtherActor->ActorHasTag("Enemy"))
     {
@@ -43,16 +41,42 @@ void AAxe::AttackCollision(UPrimitiveComponent* OverlappedComponent,
         if (Enemy != nullptr)
         {
             Cast<APlayerController>(GetParentCharacter()->GetController())->PlayDynamicForceFeedback(
-                    0.2f, 0.3f, false, true, false, true);
-            
-            LoadPower(Enemy->MyTakeDamage(Damage + BonusStack * DamageBonus *
-             Damage));
+                0.2f, 0.3f, false, true, false, true);
+
+            LoadPower(Enemy->MyTakeDamage(Damage + BonusStack * DamageBonus * Damage));
         }
     }
 }
 
-void AAxe::Roll_Implementation()
+void AAxe::Roll_Implementation() {}
+
+void AAxe::RollStart()
 {
+    APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
+    UCharacterMovementComponent* PlayerMovement = PlayerCharacter->GetCharacterMovement();
+    PlayerMovement->MaxWalkSpeed = 0;
+    PlayerMovement->RotationRate = (FRotator(0));
+    PlayerCharacter->PlayAnimMontage(RollAnim);
+}
+
+void AAxe::RollTick(float Speed)
+{
+    APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
+    FVector NewSpeed = RollMaxSpeed * Speed * PlayerCharacter->GetActorForwardVector();
+    NewSpeed.Z += PlayerCharacter->GetVelocity().Z;
+    PlayerCharacter->GetCharacterMovement()->Velocity = NewSpeed;
+}
+
+void AAxe::RollEnd()
+{
+    APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
+    UCharacterMovementComponent* PlayerMovement = PlayerCharacter->GetCharacterMovement();
+    PlayerMovement->MaxWalkSpeed = PlayerCharacter->WalkSpeed;
+    PlayerMovement->RotationRate = FRotator(0.f, PlayerCharacter->RotationSpeed, 0.f);
+    PlayerCharacter->bCanAttack = true;
+    PlayerCharacter->bCanChangeWeapon = true;
+    PlayerCharacter->bCanSpecialAttack = true;
+    PlayerCharacter->bCanDefend = true;
     
 }
 
@@ -67,14 +91,14 @@ void AAxe::Tick(float DeltaTime)
             auto PlayerCharacterMovement = PlayerCharacter->GetCharacterMovement();
 
             auto PlayerController = Cast<APlayerController>(PlayerCharacter->GetController());
-            PlayerController->PlayDynamicForceFeedback(UKismetMathLibrary::Cos(ElapsedTime * UKismetMathLibrary::GetPI()), -1.f,
-                true, true, true, true,
+            PlayerController->PlayDynamicForceFeedback(
+                UKismetMathLibrary::Cos(ElapsedTime * UKismetMathLibrary::GetPI()), -1.f, true, true, true, true,
                 EDynamicForceFeedbackAction::Update, ForceFeedbackHandle);
-            
+
             PlayerCharacterMovement->MaxWalkSpeed = PlayerCharacter->WalkSpeed;
             PlayerCharacterMovement->RotationRate = FRotator(0.0f, PlayerCharacter->RotationSpeed, 0.0f);
 
-            
+            PlayerCharacter->bCanDefend = true;
             PlayerCharacter->bCanAttack = true;
             PlayerCharacter->bCanSpecialAttack = true;
             PlayerCharacter->bCanChangeWeapon = true;
@@ -85,9 +109,9 @@ void AAxe::Tick(float DeltaTime)
 
             bIsSpecialAttackActive = false;
         }
-        
-        GetParentCharacter()->AddActorWorldRotation(FRotator(0.f, 3 * 360.f * DeltaTime, 0.f ));
-        
+
+        GetParentCharacter()->AddActorWorldRotation(FRotator(0.f, 3 * 360.f * DeltaTime, 0.f));
+
         ElapsedTime += DeltaTime;
     }
 }
@@ -101,18 +125,19 @@ void AAxe::FireStorm_Implementation()
         auto PlayerCharacterMovement = PlayerCharacter->GetCharacterMovement();
 
         MeshComponent->SetRelativeRotation(FRotator(-80.f, -180.f, 0.f));
-        
+
         PlayerCharacterMovement->MaxWalkSpeed = 150.f;
         PlayerCharacterMovement->RotationRate = FRotator(0.0f, 0.0f, 0.0f);
         auto PlayerController = Cast<APlayerController>(GetParentCharacter()->GetController());
         ForceFeedbackHandle = PlayerController->PlayDynamicForceFeedback(1.0f, -1.f, true, true, true, true);
 
+        PlayerCharacter->bCanDefend = false;
         PlayerCharacter->bCanAttack = false;
         PlayerCharacter->bCanSpecialAttack = false;
         PlayerCharacter->bCanChangeWeapon = false;
 
         SetWeaponCollision(true);
-        
-        bIsSpecialAttackActive = true;   
+
+        bIsSpecialAttackActive = true;
     }
 }

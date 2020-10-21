@@ -45,5 +45,13 @@ class TAKEITBACK_API AAxe : public AWeapon
 	UFUNCTION(BlueprintNativeEvent)
 	void Roll();
 
+	UFUNCTION(BlueprintCallable)
+	void RollStart();
+	
+	UFUNCTION(BlueprintCallable)
+	void RollTick(float DeltaTime);
+
+	UFUNCTION(BlueprintCallable)
+	void RollEnd();
 	virtual void Tick(float DeltaTime) override;
 };
