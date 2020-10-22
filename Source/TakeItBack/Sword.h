@@ -17,6 +17,12 @@ class TAKEITBACK_API ASword : public AWeapon
 
 	UPROPERTY()
 	bool bIsLaunched;
+
+	UPROPERTY()
+	float ElapsedTime;
+
+	UPROPERTY()
+	float MaxAirTime = 4;
 	
 	public:
 	ASword();
@@ -30,7 +36,12 @@ class TAKEITBACK_API ASword : public AWeapon
 
 	UFUNCTION(BlueprintNativeEvent)
 	void ShieldMeteor();
-	
+
+	UFUNCTION(BlueprintNativeEvent)
+	void ShieldMeteorTick(float DeltaTime);
+
+	UFUNCTION()
+	void ShieldMeteorLaunch();
 	
 
 	virtual void Tick(float DeltaTime) override;
