@@ -80,7 +80,7 @@ void ASword::ShieldMeteor_Implementation()
 {
     if (APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter()))
     {
-        if (bIsSpecialAttackActive)
+        if (bIsSpecialAttackActive && ElapsedTime > 0.f)
         {
             ShieldMeteorLaunch();
         }
@@ -108,7 +108,7 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
         {
             if (ElapsedTime < MaxAirTime)
             {
-                PlayerCharacter->GetCharacterMovement()->GravityScale = 0.25f / 3;
+                PlayerCharacter->GetCharacterMovement()->GravityScale = 0.25f;
                 UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.25f);
                 PlayerCharacter->GetFollowCamera()->SetFieldOfView(80.f);
 
@@ -137,11 +137,11 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
                 FPredictProjectilePathResult PredictResult;
 
 
-                UGameplayStatics::PredictProjectilePath();//GetWorld(), PredictParams, PredictResult);
+                UGameplayStatics::PredictProjectilePath(GetWorld(), PredictParams, PredictResult);
 
                 DrawDebugSphere(GetWorld(), PredictResult.HitResult.Location,
                     100, 12, FColor::Red,
-                    false, 0, 1, 10);
+                    false, 0, 0, 10);
 
 
                 ElapsedTime += DeltaTime / 0.25f;
