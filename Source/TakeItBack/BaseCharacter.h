@@ -27,28 +27,33 @@ public:
 
 	/** Initial Velocity of the Character when jumping, in meters per seconds. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Characteristics")
-	float JumpSpeed = 600.f;
+	float JumpHeight = 200.f;
 
 	/** Air Control of the Character. It's a percentage of the default WalkSpeed */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Characteristics")
 	float AirControl = 0.2f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Characteristics")
+	float GravityScale = 1.0f;
+
 	/** Maximum rotation speed of the character */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Characteristics")
-	float RotationSpeed = 540.f;
+	FRotator RotationRate = FRotator(0.0f, 540.f, 0.0f);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
 	bool bCanAttack = true;
-
-	/** Speed of the Attack Animation, in percentage. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Characteristics")
-	float AtkSpeed = 1.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
 	bool bImpact = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
 	bool bIsDead = false;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="DataAssets", meta = (AllowPrivateAccess = "true"))
+	class UDA_BaseCharacter* CharacterData;
+
+	UFUNCTION(BlueprintCallable)
+    virtual void LoadDataAssets();
 	
 	ABaseCharacter();
 

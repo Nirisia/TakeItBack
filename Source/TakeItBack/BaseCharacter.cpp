@@ -2,16 +2,31 @@
 
 
 #include "BaseCharacter.h"
+
+#include "DA_BaseCharacter.h"
 #include "Engine.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
-
+void ABaseCharacter::LoadDataAssets()
+{
+	if (CharacterData)
+	{
+		JumpHeight = CharacterData->JumpHeight;
+		AirControl = CharacterData->AirControl;
+		WalkSpeed = CharacterData->WalkSpeed;
+		RotationRate = CharacterData->RotationRate;
+		GravityScale = CharacterData->GravityScale;
+	}
+}
 // Sets default values
 ABaseCharacter::ABaseCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	CharacterData = CreateDefaultSubobject<UDA_BaseCharacter>("CharacterData");
 }
 
 void ABaseCharacter::Attack()
@@ -51,6 +66,13 @@ void ABaseCharacter::SetWeaponCollision(bool bGenerateOverlap)
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	LoadDataAssets();
+	UCharacterMovementComponent* Movement = GetCharacterMovement();
+	Movement->JumpZVelocity = UKismetMathLibrary::Sqrt(-2 * JumpHeight * Movement->GetGravityZ());
+	Movement->AirControl = AirControl;
+	Movement->MaxWalkSpeed = WalkSpeed;
+	Movement->RotationRate = RotationRate;
+	Movement->GravityScale = GravityScale;
 }
 
 // Called every frame

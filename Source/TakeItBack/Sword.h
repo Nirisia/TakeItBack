@@ -20,15 +20,15 @@ class TAKEITBACK_API ASword : public AWeapon
 
 	UPROPERTY()
 	float ElapsedTime;
-
-	UPROPERTY()
-	float MaxAirTime = 4;
 	
 	public:
 	ASword();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Animations")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Animations")
 	class UAnimMontage* ShieldAnim;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Stats")
+	float MaxAirTime = 4;
 
 	virtual void LightAttack() override;
 	virtual void SpecialAttack() override;

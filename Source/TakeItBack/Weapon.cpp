@@ -60,8 +60,8 @@ void AWeapon::StopDefense()
         PlayerCharacter->bCanChangeWeapon = true;
     }
     PlayerCharacter->bCanAttack = true;
-    PlayerCharacter->GetCharacterMovement()->MaxWalkSpeed = GetParentCharacter()->WalkSpeed;
-    PlayerCharacter->GetCharacterMovement()->RotationRate = FRotator(0.f, PlayerCharacter->RotationSpeed, 0.f);
+    PlayerCharacter->GetCharacterMovement()->MaxWalkSpeed = PlayerCharacter->WalkSpeed;
+    PlayerCharacter->GetCharacterMovement()->RotationRate = PlayerCharacter->RotationRate;
 }
 
 void AWeapon::LoadPower(int InflictedDamage)

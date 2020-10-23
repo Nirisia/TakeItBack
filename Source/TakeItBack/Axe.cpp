@@ -80,7 +80,7 @@ void AAxe::RollEnd()
     APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
     UCharacterMovementComponent* PlayerMovement = PlayerCharacter->GetCharacterMovement();
     PlayerMovement->MaxWalkSpeed = PlayerCharacter->WalkSpeed;
-    PlayerMovement->RotationRate = FRotator(0.f, PlayerCharacter->RotationSpeed, 0.f);
+    PlayerMovement->RotationRate = PlayerCharacter->RotationRate;
     PlayerCharacter->bCanAttack = true;
     PlayerCharacter->bCanChangeWeapon = true;
     PlayerCharacter->bCanSpecialAttack = true;
@@ -104,7 +104,7 @@ void AAxe::Tick(float DeltaTime)
                 EDynamicForceFeedbackAction::Update, ForceFeedbackHandle);
 
             PlayerCharacterMovement->MaxWalkSpeed = PlayerCharacter->WalkSpeed;
-            PlayerCharacterMovement->RotationRate = FRotator(0.0f, PlayerCharacter->RotationSpeed, 0.0f);
+            PlayerCharacterMovement->RotationRate = PlayerCharacter->RotationRate;
 
             PlayerCharacter->bCanDefend = true;
             PlayerCharacter->bCanAttack = true;
