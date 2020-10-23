@@ -14,6 +14,14 @@ class TAKEITBACK_API AEnemyCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon", meta = (AllowPrivateAccess = "true"))
+    class UChildActorComponent* Weapon;
+	
 	public:
 	AEnemyCharacter();
+	virtual void SetWeaponCollision(bool bGenerateOverlap) override;
+	virtual void Attack() override;
+	
+	UFUNCTION(BlueprintCallable)
+    void ValidateAttack();
 };
