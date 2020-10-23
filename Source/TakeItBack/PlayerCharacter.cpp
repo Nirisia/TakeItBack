@@ -228,6 +228,16 @@ void APlayerCharacter::SetWeaponCollision(bool bGenerateOverlap)
     GetCurrentWeapon()->SetWeaponCollision(bGenerateOverlap);
 }
 
+void APlayerCharacter::Heal(float HealPercent)
+{
+    CurrentLife += MaxLife * HealPercent;
+        
+    if(CurrentLife > MaxLife)
+    {
+        CurrentLife = MaxLife;
+    }
+}
+
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     // Set up gameplay key bindings
