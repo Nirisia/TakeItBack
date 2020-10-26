@@ -2,6 +2,9 @@
 
 
 #include "PlayerCharacter.h"
+
+#include <string>
+
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
@@ -12,6 +15,33 @@
 #include "Axe.h"
 #include "Sword.h"
 #include "Engine/Engine.h"
+#include "Kismet/KismetMathLibrary.h"
+
+void APlayerCharacter::Tick(float DeltaTime)
+{
+
+    if (GetCharacterMovement()->IsFalling() || GetInputAxisValue("LookUpRate") || GetInputAxisValue("TurnRate"))
+    {
+        CameraElapsedTime = 0.f;
+    }
+    
+    if (CameraElapsedTime > 1.f)
+    {
+        float ratio = UKismetMathLibrary::SafeDivide(GetVelocity().Size(), WalkSpeed);
+        FVector CameraForward = FollowCamera->GetForwardVector();
+        CameraForward.Normalize();
+
+        FVector ActorForward = GetActorForwardVector();
+        ActorForward.Normalize();
+        
+        const FVector InputVector = FVector::CrossProduct(CameraForward, ActorForward);
+        AddControllerYawInput(InputVector.Z * ratio);
+    }
+    else
+    {
+        CameraElapsedTime += DeltaTime;
+    }
+}
 
 APlayerCharacter::APlayerCharacter() : Super()
 {

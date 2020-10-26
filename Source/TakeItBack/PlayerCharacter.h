@@ -36,9 +36,13 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon", meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* Shield;
-	
-	public:
-	
+
+	UPROPERTY()
+	float CameraElapsedTime;
+
+public:
+	virtual void Tick(float DeltaTime) override;
+
 	APlayerCharacter();
 
 
