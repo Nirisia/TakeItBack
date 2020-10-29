@@ -108,6 +108,7 @@ void AWeapon::LoadDataAssets()
         LosePower = WeaponData->LosePower;
         MeshComponent->SetStaticMesh(WeaponData->Mesh);
         BoxComponent->SetBoxExtent(WeaponData->BoxCollision.GetExtent());
+        AttacksAnim = WeaponData->AttacksAnim;
     }
 }
 
