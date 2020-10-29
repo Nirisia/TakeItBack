@@ -3,9 +3,31 @@
 
 #include "Sword.h"
 #include "BaseCharacter.h"
+#include "DA_Sword.h"
 #include "Engine.h"
 #include "PlayerCharacter.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
+
+void ASword::LoadDataAssets()
+{
+    Super::LoadDataAssets();
+    UDA_Sword* SwordData = Cast<UDA_Sword>(WeaponData);
+    if (SwordData)
+    {
+        LaunchSpeed = SwordData->LaunchSpeed;
+        MaxAirTime = SwordData->MaxAirTime;
+        MeteorShieldAirControl = SwordData->MeteorShieldAirControl;
+        MeteorShieldGravityScale = SwordData->MeteorShieldGravityScale;
+        MeteorShieldJumpHeight = SwordData->MeteorShieldJumpHeight;
+        APlayerCharacter* ParentPlayerCharacter = Cast<APlayerCharacter>(GetParentActor());
+        if (ParentPlayerCharacter)
+        {
+            ParentPlayerCharacter->SetShieldMesh(SwordData->ShieldMesh);
+        }
+        ShieldAnim = SwordData->ShieldAnim;
+    }
+}
 
 ASword::ASword() : Super() {}
 
@@ -16,7 +38,7 @@ void ASword::LightAttack()
         AtkCount = 0;
     }
 
-    GetParentCharacter()->PlayAnimMontage(AttacksAnim[AtkCount], AtkSpeed + BonusStack * SpeedBonus * AtkSpeed);
+    GetParentCharacter()->PlayAnimMontage(AttacksAnim[AtkCount], AtkSpeed + BonusStack * AtkSpeedBonus * AtkSpeed);
     AtkCount++;
 }
 
@@ -46,12 +68,12 @@ void ASword::ShieldMeteorLaunch()
     {
         LaunchVelocity.Z = 0;
     }
-    LaunchVelocity *= 1000;
+    LaunchVelocity *= LaunchSpeed;
     PlayerCharacter->LaunchCharacter(LaunchVelocity, true, true);
     UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.f);
     PlayerCharacter->GetFollowCamera()->SetFieldOfView(90.f);
-    PlayerCharacter->GetCharacterMovement()->GravityScale = 1.f;
-    PlayerCharacter->GetCharacterMovement()->AirControl = 0.05f;
+    PlayerCharacter->GetCharacterMovement()->GravityScale = PlayerCharacter->GravityScale;
+    PlayerCharacter->GetCharacterMovement()->AirControl = PlayerCharacter->AirControl;
 
     bIsSpecialAttackActive = false;
     bIsLaunched = true;
@@ -64,6 +86,13 @@ void ASword::ShieldMeteorLaunch()
     {
         BonusStack++;
     }
+}
+
+void ASword::BeginPlay()
+{
+    Super::BeginPlay();
+
+    LoadDataAssets();
 }
 
 void ASword::Tick(float DeltaTime)
@@ -88,8 +117,12 @@ void ASword::ShieldMeteor_Implementation()
         {
             Cast<APlayerController>(GetParentCharacter()->GetController())->PlayDynamicForceFeedback(
                 0.05f, 0.3f, false, true, false, true);
-            PlayerCharacter->LaunchCharacter(FVector(0.f, 0.f, 1000.f), true, true);
-            PlayerCharacter->GetCharacterMovement()->AirControl = 0.01f;
+
+            FVector LaunchVelocity = 	FVector(0.f);
+            LaunchVelocity.Z = UKismetMathLibrary::Sqrt(-2 * MeteorShieldJumpHeight * PlayerCharacter->GetCharacterMovement()->GetGravityZ());
+
+            PlayerCharacter->LaunchCharacter(LaunchVelocity, true, true);
+            PlayerCharacter->GetCharacterMovement()->AirControl = MeteorShieldAirControl;
             PlayerCharacter->bCanAttack = false;
             PlayerCharacter->bCanChangeWeapon = false;
             PlayerCharacter->bCanDefend = false;
@@ -108,7 +141,7 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
         {
             if (ElapsedTime < MaxAirTime)
             {
-                PlayerCharacter->GetCharacterMovement()->GravityScale = 0.25f;
+                PlayerCharacter->GetCharacterMovement()->GravityScale = MeteorShieldGravityScale;
                 UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.25f);
                 PlayerCharacter->GetFollowCamera()->SetFieldOfView(80.f);
 
@@ -121,7 +154,7 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
                 {
                     LaunchVelocity.Z = 0;
                 }
-                LaunchVelocity *= 1000;
+                LaunchVelocity *= LaunchSpeed;
 
                 TArray<AActor*> ActorsToIgnore;
                 ActorsToIgnore.Add(PlayerCharacter);

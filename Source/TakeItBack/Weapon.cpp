@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "BaseCharacter.h"
+#include "DA_Weapon.h"
 #include "PlayerCharacter.h"
 #include "Engine.h"
 
@@ -17,6 +18,8 @@ AWeapon::AWeapon()
     MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
     MeshComponent->SetupAttachment(RootComponent);
     MeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
+    SetRootComponent(MeshComponent);
+    
     BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
     BoxComponent->SetupAttachment(MeshComponent);
     BoxComponent->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
@@ -60,8 +63,8 @@ void AWeapon::StopDefense()
         PlayerCharacter->bCanChangeWeapon = true;
     }
     PlayerCharacter->bCanAttack = true;
-    PlayerCharacter->GetCharacterMovement()->MaxWalkSpeed = GetParentCharacter()->WalkSpeed;
-    PlayerCharacter->GetCharacterMovement()->RotationRate = FRotator(0.f, PlayerCharacter->RotationSpeed, 0.f);
+    PlayerCharacter->GetCharacterMovement()->MaxWalkSpeed = PlayerCharacter->WalkSpeed;
+    PlayerCharacter->GetCharacterMovement()->RotationRate = PlayerCharacter->RotationRate;
 }
 
 void AWeapon::LoadPower(int InflictedDamage)
@@ -90,6 +93,22 @@ void AWeapon::UnloadPower(int DamageTaken)
 void AWeapon::SetWeaponCollision(bool bGenerateOverlap)
 {
     BoxComponent->SetGenerateOverlapEvents(bGenerateOverlap);
+}
+
+void AWeapon::LoadDataAssets()
+{
+    if (WeaponData)
+    {
+        MaxPower = WeaponData->MaxPower;
+        Damage = WeaponData->Damage;
+        AtkSpeed = WeaponData->AtkSpeed;
+        AtkSpeedBonus = WeaponData->AtkSpeedBonus;
+        DamageBonus = WeaponData->DamageBonus;
+        WinPower = WeaponData->WinPower;
+        LosePower = WeaponData->LosePower;
+        MeshComponent->SetStaticMesh(WeaponData->Mesh);
+        BoxComponent->SetBoxExtent(WeaponData->BoxCollision.GetExtent());
+    }
 }
 
 void AWeapon::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -123,6 +142,7 @@ ABaseCharacter* AWeapon::GetParentCharacter()
 void AWeapon::BeginPlay()
 {
     Super::BeginPlay();
+    LoadDataAssets();
     BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AWeapon::AttackCollision);
 }
 

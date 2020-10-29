@@ -16,4 +16,8 @@ class TAKEITBACK_API AEnemyCharacter : public ABaseCharacter
 	
 	public:
 	AEnemyCharacter();
+
+
+protected:
+	virtual void BeginPlay() override;
 };

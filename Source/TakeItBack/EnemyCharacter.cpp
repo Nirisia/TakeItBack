@@ -8,3 +8,9 @@ AEnemyCharacter::AEnemyCharacter()
     MaxLife = 100;
     CurrentLife = 100;
 }
+
+void AEnemyCharacter::BeginPlay()
+{
+    Super::BeginPlay();
+    Super::LoadDataAssets();
+}

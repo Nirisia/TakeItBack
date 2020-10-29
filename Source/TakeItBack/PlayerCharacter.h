@@ -3,6 +3,8 @@
 #pragma once
 
 #include "BaseCharacter.h"
+#include "DA_Player.h"
+
 #include "PlayerCharacter.generated.h"
 
 /**
@@ -37,6 +39,8 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon", meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* Shield;
 
+	virtual void LoadDataAssets() override;	
+
 	UPROPERTY()
 	float CameraElapsedTime;
 
@@ -51,36 +55,34 @@ protected:
 	
 public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Camera")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float BaseTurnRate;
 
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Camera")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float BaseLookUpRate;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsAxe = true;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bCanSpecialAttack = true;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bCanDefend = true;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bCanChangeWeapon = true;
 
 	/** Speed of the ChangeWeapon Animation, in percentage. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Characteristics")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float ChangeWeaponSpeed = 1.0f;
 
-	/** Offset of the camera. Automatically set the CameraBoom length and offset */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
-	FVector CameraOffset = FVector(400.f, 0.f, 200.f);
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float AttackSpeedCoeff = 0.7f;
 
-	/** Pitch rotation of the Camera */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Camera")
-	float CameraAngle = -20;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int StackLimit = 8;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UAnimMontage* ChangeWeaponAnim;
@@ -139,6 +141,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void Heal(float HealPercent);
+	
+	UFUNCTION()
+	void SetShieldMesh(class UStaticMesh* ShieldMesh);
 	
 protected:
 	// APawn interface

@@ -5,6 +5,7 @@
 #include "PlayerCharacter.h"
 #include "CoreMinimal.h"
 #include "BaseCharacter.h"
+#include "DA_Axe.h"
 #include "Engine.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "EnemyCharacter.h"
@@ -64,6 +65,7 @@ void AAxe::RollStart()
     UCharacterMovementComponent* PlayerMovement = PlayerCharacter->GetCharacterMovement();
     PlayerMovement->MaxWalkSpeed = 0;
     PlayerMovement->RotationRate = (FRotator(0));
+    PlayerMovement->SetJumpAllowed(false);
     PlayerCharacter->PlayAnimMontage(RollAnim);
 }
 
@@ -75,12 +77,25 @@ void AAxe::RollTick(float Speed)
     PlayerCharacter->GetCharacterMovement()->Velocity = NewSpeed;
 }
 
+void AAxe::LoadDataAssets()
+{
+    Super::LoadDataAssets();
+    UDA_Axe* AxeData = Cast<UDA_Axe>(WeaponData);
+    if (AxeData)
+    {
+        FireStormTime = AxeData->FireStormTime;
+        FireStormTurnRate = AxeData->FireStormTurnRate;
+        FireStormWalkSpeedCoef = AxeData->FireStormWalkSpeedCoef;
+    }
+}
+
 void AAxe::RollEnd()
 {
     APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
     UCharacterMovementComponent* PlayerMovement = PlayerCharacter->GetCharacterMovement();
     PlayerMovement->MaxWalkSpeed = PlayerCharacter->WalkSpeed;
-    PlayerMovement->RotationRate = FRotator(0.f, PlayerCharacter->RotationSpeed, 0.f);
+    PlayerMovement->RotationRate = PlayerCharacter->RotationRate;
+    PlayerMovement->SetJumpAllowed(true);
     PlayerCharacter->bCanAttack = true;
     PlayerCharacter->bCanChangeWeapon = true;
     PlayerCharacter->bCanSpecialAttack = true;
@@ -92,7 +107,7 @@ void AAxe::Tick(float DeltaTime)
 {
     if (bIsSpecialAttackActive)
     {
-        if (ElapsedTime > 3.0f)
+        if (ElapsedTime > FireStormTime)
         {
             APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
 
@@ -104,7 +119,9 @@ void AAxe::Tick(float DeltaTime)
                 EDynamicForceFeedbackAction::Update, ForceFeedbackHandle);
 
             PlayerCharacterMovement->MaxWalkSpeed = PlayerCharacter->WalkSpeed;
-            PlayerCharacterMovement->RotationRate = FRotator(0.0f, PlayerCharacter->RotationSpeed, 0.0f);
+            PlayerCharacterMovement->RotationRate = PlayerCharacter->RotationRate;
+            PlayerCharacterMovement->SetJumpAllowed(true);
+
 
             PlayerCharacter->bCanDefend = true;
             PlayerCharacter->bCanAttack = true;
@@ -118,7 +135,7 @@ void AAxe::Tick(float DeltaTime)
             bIsSpecialAttackActive = false;
         }
 
-        GetParentCharacter()->AddActorWorldRotation(FRotator(0.f, 3 * 360.f * DeltaTime, 0.f));
+        GetParentCharacter()->AddActorWorldRotation(FRotator(0.f, FireStormTurnRate * DeltaTime, 0.f));
 
         ElapsedTime += DeltaTime;
     }
@@ -133,8 +150,9 @@ void AAxe::FireStorm_Implementation()
         auto PlayerCharacterMovement = PlayerCharacter->GetCharacterMovement();
 
         MeshComponent->SetRelativeRotation(FRotator(-80.f, -180.f, 0.f));
+        PlayerCharacterMovement->SetJumpAllowed(false);
 
-        PlayerCharacterMovement->MaxWalkSpeed = 150.f;
+        PlayerCharacterMovement->MaxWalkSpeed = FireStormWalkSpeedCoef * PlayerCharacter->WalkSpeed;
         PlayerCharacterMovement->RotationRate = FRotator(0.0f, 0.0f, 0.0f);
         auto PlayerController = Cast<APlayerController>(GetParentCharacter()->GetController());
         ForceFeedbackHandle = PlayerController->PlayDynamicForceFeedback(1.0f, -1.f, true, true, true, true);

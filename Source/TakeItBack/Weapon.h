@@ -15,46 +15,49 @@ class TAKEITBACK_API AWeapon : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
+public:
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="DataAssets", meta = (AllowPrivateAccess = "true"))
+	class UDA_Weapon* WeaponData;
+	
 	// Sets default values for this actor's properties
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Stats")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int MaxPower;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Stats")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int Power;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Stats")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int Damage;
 
-	/* */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int BonusStack = 0;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsSpecialAttackActive = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Stats")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float AtkSpeed = 1.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Stats")
-	float SpeedBonus;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float AtkSpeedBonus;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Stats")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float DamageBonus;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Stats")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float WinPower;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Stats")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float LosePower;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Mesh")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class UStaticMeshComponent* MeshComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Mesh")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class UBoxComponent* BoxComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Animations")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TArray<class UAnimMontage*> AttacksAnim;
 	
 	AWeapon();
@@ -80,7 +83,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetWeaponCollision(bool bGenerateOverlap);
 
-
+	UFUNCTION(BlueprintCallable)
+	virtual void LoadDataAssets();
 	
 	UFUNCTION(BlueprintCallable)
 	void ResetCombo();
@@ -92,13 +96,14 @@ public:
 	virtual void AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* 
 	OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool 
 	bFromSweep, const FHitResult& SweepResult);
+	
+		
+	UPROPERTY()
+	int AtkCount = 0;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
-	UPROPERTY()
-	int AtkCount = 0;
 
 public:
 	virtual void Tick(float DeltaTime) override;

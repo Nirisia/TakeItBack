@@ -3,17 +3,15 @@
 
 #include "PlayerCharacter.h"
 
-#include <string>
-
+#include "DA_Player.h"
+#include "Axe.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Components/SphereComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Axe.h"
-#include "Sword.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "Engine/Engine.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -40,6 +38,18 @@ void APlayerCharacter::Tick(float DeltaTime)
     else
     {
         CameraElapsedTime += DeltaTime;
+    }
+}
+
+void APlayerCharacter::LoadDataAssets()
+{
+    Super::LoadDataAssets();
+    UDA_Player* PlayerData = Cast<UDA_Player>(CharacterData);
+    if (PlayerData)
+    {
+        MaxLife = PlayerData->MaxLife;
+        ChangeWeaponSpeed = PlayerData->ChangeWeaponSpeed;
+        StackLimit = PlayerData->StackLimit;
     }
 }
 
@@ -88,18 +98,10 @@ void APlayerCharacter::BeginPlay()
 {
     Super::BeginPlay();
 
-    CameraBoom->TargetArmLength = 400.f; // The camera follows at this distance behind the character
+    LoadDataAssets();
+    
     // Configure character movement
     GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
-    GetCharacterMovement()->JumpZVelocity = JumpSpeed;
-    GetCharacterMovement()->AirControl = AirControl;
-    GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
-    GetCharacterMovement()->RotationRate = FRotator(0.0f, RotationSpeed, 0.0f); // ...at this rotation rate
-
-    CameraBoom->TargetArmLength = CameraOffset.Size();
-    CameraBoom->SocketOffset = FVector(0.0f, 0.f, CameraOffset.Z);
-
-    FollowCamera->SetRelativeRotation(FRotator(CameraAngle, 0.f, 0.f));
 }
 
 void APlayerCharacter::MoveForward(float Value)
@@ -202,8 +204,8 @@ void APlayerCharacter::Attack()
         bCanSpecialAttack = false;
         GetCurrentWeapon()->LightAttack();
 
-        GetCharacterMovement()->MaxWalkSpeed = 0.7f * WalkSpeed;
-        GetCharacterMovement()->RotationRate = FRotator(0.f, 0.2f * RotationSpeed,0.f);
+        GetCharacterMovement()->MaxWalkSpeed = AttackSpeedCoeff * WalkSpeed;
+        GetCharacterMovement()->RotationRate = RotationRate;
     }
 }
 
@@ -221,7 +223,7 @@ void APlayerCharacter::ResetCombo()
     bCanSpecialAttack = true;
     bCanChangeWeapon = true;
     
-    GetCharacterMovement()->RotationRate = FRotator(0.f, RotationSpeed, 0.f);
+    GetCharacterMovement()->RotationRate = RotationRate;
     GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 }
 
@@ -251,6 +253,11 @@ AWeapon* APlayerCharacter::GetCurrentWeapon()
         return Cast<AWeapon>(Axe->GetChildActor());
     }
     return Cast<AWeapon>(Sword->GetChildActor());
+}
+
+void APlayerCharacter::SetShieldMesh(UStaticMesh* ShieldMesh)
+{
+    Shield->SetStaticMesh(ShieldMesh);
 }
 
 void APlayerCharacter::SetWeaponCollision(bool bGenerateOverlap)
