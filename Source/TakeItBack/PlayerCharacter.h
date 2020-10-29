@@ -51,28 +51,31 @@ protected:
 	
 public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Camera")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float BaseTurnRate;
 
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Camera")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float BaseLookUpRate;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsAxe = true;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bCanSpecialAttack = true;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bCanDefend = true;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="State")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bCanChangeWeapon = true;
 
 	/** Speed of the ChangeWeapon Animation, in percentage. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Characteristics")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float ChangeWeaponSpeed = 1.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float AttackSpeedCoeff = 0.7f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int StackLimit = 8;
@@ -134,6 +137,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void Heal(float HealPercent);
+	
+	UFUNCTION()
+	void SetShieldMesh(class UStaticMesh* ShieldMesh);
 	
 protected:
 	// APawn interface

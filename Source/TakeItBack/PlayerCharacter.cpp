@@ -23,7 +23,6 @@ void APlayerCharacter::LoadDataAssets()
         MaxLife = PlayerData->MaxLife;
         ChangeWeaponSpeed = PlayerData->ChangeWeaponSpeed;
         StackLimit = PlayerData->StackLimit;
-        GetMesh()->SetSkeletalMesh(PlayerData->PlayerMesh); 
     }
 }
 
@@ -71,6 +70,8 @@ APlayerCharacter::APlayerCharacter() : Super()
 void APlayerCharacter::BeginPlay()
 {
     Super::BeginPlay();
+
+    LoadDataAssets();
     
     // Configure character movement
     GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
@@ -176,7 +177,7 @@ void APlayerCharacter::Attack()
         bCanSpecialAttack = false;
         GetCurrentWeapon()->LightAttack();
 
-        GetCharacterMovement()->MaxWalkSpeed = 0.7f * WalkSpeed;
+        GetCharacterMovement()->MaxWalkSpeed = AttackSpeedCoeff * WalkSpeed;
         GetCharacterMovement()->RotationRate = RotationRate;
     }
 }
@@ -225,6 +226,11 @@ AWeapon* APlayerCharacter::GetCurrentWeapon()
         return Cast<AWeapon>(Axe->GetChildActor());
     }
     return Cast<AWeapon>(Sword->GetChildActor());
+}
+
+void APlayerCharacter::SetShieldMesh(UStaticMesh* ShieldMesh)
+{
+    Shield->SetStaticMesh(ShieldMesh);
 }
 
 void APlayerCharacter::SetWeaponCollision(bool bGenerateOverlap)

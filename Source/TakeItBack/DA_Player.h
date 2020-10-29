@@ -25,8 +25,14 @@ class TAKEITBACK_API UDA_Player : public UDA_BaseCharacter
 	float ChangeWeaponSpeed = 1.0f;
 
 	UPROPERTY(EditAnywhere, Category="Stats")
+	float AttackSpeedCoeff = 0.7f;
+
+	UPROPERTY(EditAnywhere, Category="Stats")
 	int StackLimit = 8;
 
-	UPROPERTY(EditAnywhere, Category="Mesh")
-	class USkeletalMesh* PlayerMesh;
+	UPROPERTY(EditAnywhere, Category="Controls")
+	float BaseTurnRate = 45.f;
+
+	UPROPERTY(EditAnywhere, Category="Controls")
+	float BaseLookUpRate = 45.f;
 };

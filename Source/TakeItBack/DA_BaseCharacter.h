@@ -25,11 +25,11 @@ class TAKEITBACK_API UDA_BaseCharacter : public UDataAsset
 	float JumpHeight = 200.f;
 
 	UPROPERTY(EditAnywhere, Category="Movement")
-	float JumpTime = 1.f/3.f;
-
-	UPROPERTY(EditAnywhere, Category="Movement")
 	float AirControl = 0.2f;
 
 	UPROPERTY(EditAnywhere, Category="Movement")
 	float GravityScale = 1.f;
+
+	UPROPERTY(EditAnywhere, Category="Mesh")
+	class USkeletalMesh* CharacterMesh;
 };

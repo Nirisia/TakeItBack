@@ -14,7 +14,7 @@ class TAKEITBACK_API UDA_Weapon : public UDataAsset
 {
 	GENERATED_BODY()
 
-
+	public:
 	UPROPERTY(EditAnywhere, Category="Stats")
 	int MaxPower = 300;
 
@@ -25,7 +25,7 @@ class TAKEITBACK_API UDA_Weapon : public UDataAsset
 	float AtkSpeed = 1.f;
 
 	UPROPERTY(EditAnywhere, Category="Stats")
-	float SpeedBonus = 1.f;
+	float AtkSpeedBonus = 1.f;
 
 	UPROPERTY(EditAnywhere, Category="Stats")
 	float DamageBonus = 1.f;

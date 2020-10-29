@@ -18,6 +18,7 @@ void ABaseCharacter::LoadDataAssets()
 		WalkSpeed = CharacterData->WalkSpeed;
 		RotationRate = CharacterData->RotationRate;
 		GravityScale = CharacterData->GravityScale;
+		GetMesh()->SetSkeletalMesh(CharacterData->CharacterMesh); 
 	}
 }
 // Sets default values

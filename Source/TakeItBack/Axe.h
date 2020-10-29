@@ -29,6 +29,15 @@ class TAKEITBACK_API AAxe : public AWeapon
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float RollMaxSpeed = 1800.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float FireStormTime = 3.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float FireStormTurnRate = 3 * 360.f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float FireStormWalkSpeedCoef = 0.25f;
 	
 	virtual void SpecialAttack() override;
 
@@ -51,6 +60,7 @@ class TAKEITBACK_API AAxe : public AWeapon
 	UFUNCTION(BlueprintCallable)
 	void RollTick(float DeltaTime);
 
+	virtual void LoadDataAssets() override;
 	UFUNCTION(BlueprintCallable)
 	void RollEnd();
 	virtual void Tick(float DeltaTime) override;
