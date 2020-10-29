@@ -16,8 +16,16 @@ class TAKEITBACK_API AEnemyCharacter : public ABaseCharacter
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon", meta = (AllowPrivateAccess = "true"))
     class UChildActorComponent* Weapon;
+
+	
 	
 	public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+        float Timer = 0;
+           
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float AttackDelay = 2;
+	
 	AEnemyCharacter();
 	virtual void SetWeaponCollision(bool bGenerateOverlap) override;
 	virtual void Attack() override;

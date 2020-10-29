@@ -23,7 +23,10 @@ EBTNodeResult::Type UBTTAttack::ExecuteTask(UBehaviorTreeComponent& owner_comp, 
     auto const cont = Cast<AWarriorController>(owner_comp.GetAIOwner());
     AEnemyCharacter* Enemy = Cast<AEnemyCharacter>(cont->GetPawn());
 
-    Enemy->Attack();
+    if (cont->GetBlackboard()->GetValueAsFloat("DistanceToPlayer") < 150)
+    {
+        Enemy->Attack();
+    }
 
     FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);
     return EBTNodeResult::Succeeded;

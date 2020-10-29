@@ -17,20 +17,26 @@ class TAKEITBACK_API AWarriorController : public AAIController
 
 	AWarriorController(FObjectInitializer const& object_initializer = FObjectInitializer::Get());
 
+	public:
 	void BeginPlay() override;
 	void OnPossess(APawn* P) override;
 	void Tick(float DeltaSeconds) override;
 	class UBlackboardComponent* GetBlackboard() const;
 	virtual FRotator GetControlRotation() const override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UAISenseConfig_Sight* SightConfig;
+
+	UFUNCTION()
+    void OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus);
+	void SetupPerceptionSystem();
+
 	private:
 	UPROPERTY(EditInstanceOnly, BluePrintReadWrite, Category = "AI", meta = (AllowprivateAccess = "true"))
 	class UBehaviorTreeComponent* behavior_tree_component;
 
 	UPROPERTY(EditInstanceOnly, BluePrintReadWrite, Category = "AI", meta = (AllowprivateAccess = "true"))
-	class UBehaviorTree* btree;
+	class UBehaviorTree* Btree;
 
-	class UBlackboardComponent* blackboard;
-
-	class UAISenseConfig_Sight* sight_config;	
+	class UBlackboardComponent* Blackboard;
 };

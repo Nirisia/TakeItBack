@@ -36,6 +36,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon", meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* Shield;
+
+	class UAIPerceptionStimuliSourceComponent* Stimulus;
+	void SetupStimulus();
 	
 	public:
 	

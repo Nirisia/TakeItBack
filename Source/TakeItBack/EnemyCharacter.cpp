@@ -21,17 +21,16 @@ void AEnemyCharacter::SetWeaponCollision(bool bGenerateOverlap)
 
 void AEnemyCharacter::Attack()
 {
-    if (bCanAttack == true)
+    float TimeElapsed = GetWorld()->GetTimeSeconds() - Timer;
+    
+    if (bCanAttack == true && TimeElapsed >= AttackDelay)
     {
-        //bCanAttack = false;
-        if (Cast<AWeapon>(Weapon->GetChildActor())->AtkCount <= 1)
+        bCanAttack = false;
+        AWeapon* CurrentWeapon =  Cast<AWeapon>(Weapon->GetChildActor());
+        CurrentWeapon->LightAttack();
+        if(CurrentWeapon->AtkCount >= CurrentWeapon->AttacksAnim.Num())
         {
-            GEngine->AddOnScreenDebugMessage(0,1.0f,FColor::Yellow,FString::Printf(TEXT("%i"),Cast<AWeapon>(Weapon->GetChildActor())->AtkCount));
-            Cast<AWeapon>(Weapon->GetChildActor())->LightAttack();
-        }
-        else
-        {
-            Cast<AWeapon>(Weapon->GetChildActor())->AtkCount = 0;
+            Timer = GetWorld()->GetTimeSeconds();
         }
     }
 }
