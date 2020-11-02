@@ -32,8 +32,8 @@ void AWeapon::LightAttack()
     {
         AtkCount = 0;
     }
-
-    GetParentCharacter()->PlayAnimMontage(AttacksAnim[AtkCount], AtkSpeed);
+    if (AttacksAnim.Num() != 0)
+        GetParentCharacter()->PlayAnimMontage(AttacksAnim[AtkCount], AtkSpeed);
     AtkCount++;
 }
 
