@@ -9,6 +9,7 @@
 #include "Engine.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "EnemyCharacter.h"
+#include "Engine/Engine.h"
 
 AAxe::AAxe() : Super() {}
 
@@ -45,6 +46,7 @@ void AAxe::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* Oth
                 0.2f, 0.3f, false, true, false, true);
 
             LoadPower(Enemy->MyTakeDamage(Damage + BonusStack * DamageBonus * Damage));
+           
             if (Enemy->bIsDead)
             {
                 USkeletalMeshComponent* EnemyMesh = Enemy->GetMesh();

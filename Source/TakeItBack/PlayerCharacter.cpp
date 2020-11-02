@@ -13,6 +13,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/Engine.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Perception/AISense_Sight.h"
 #include "Kismet/KismetMathLibrary.h"
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -51,6 +53,13 @@ void APlayerCharacter::LoadDataAssets()
         ChangeWeaponSpeed = PlayerData->ChangeWeaponSpeed;
         StackLimit = PlayerData->StackLimit;
     }
+}
+
+void APlayerCharacter::SetupStimulus()
+{
+    Stimulus = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("Stimulus"));
+    Stimulus->RegisterForSense(TSubclassOf<UAISense_Sight>());
+    Stimulus->RegisterWithPerceptionSystem();
 }
 
 APlayerCharacter::APlayerCharacter() : Super()
@@ -92,6 +101,8 @@ APlayerCharacter::APlayerCharacter() : Super()
 
     // Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
     // are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
+    SetupStimulus();
 }
 
 void APlayerCharacter::BeginPlay()

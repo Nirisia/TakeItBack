@@ -47,6 +47,9 @@ private:
 public:
 	virtual void Tick(float DeltaTime) override;
 
+	class UAIPerceptionStimuliSourceComponent* Stimulus;
+	void SetupStimulus();
+	
 	APlayerCharacter();
 
 
