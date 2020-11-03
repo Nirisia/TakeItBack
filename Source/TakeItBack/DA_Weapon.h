@@ -39,9 +39,6 @@ class TAKEITBACK_API UDA_Weapon : public UDataAsset
 	UPROPERTY(EditAnywhere, Category="Mesh")
 	class UStaticMesh* Mesh;
 
-	UPROPERTY(EditAnywhere, Category="Mesh")
-	FBox BoxCollision;
-
 	UPROPERTY(EditAnywhere, Category="Animations")
 	TArray<class UAnimMontage*> AttacksAnim;
 };
