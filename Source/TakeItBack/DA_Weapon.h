@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "BaseCharacter.h"
 #include "Engine/DataAsset.h"
 #include "DA_Weapon.generated.h"
 
@@ -41,6 +43,9 @@ class TAKEITBACK_API UDA_Weapon : public UDataAsset
 
 	UPROPERTY(EditAnywhere, Category="Mesh")
 	class UStaticMesh* Mesh;
+
+	UPROPERTY(EditAnywhere, Category="Stats")
+	EWeaponResistance WeaponType;
 
 	/* Total combos are defined by the number of animations in this array */
 	UPROPERTY(EditAnywhere, Category="Animations")

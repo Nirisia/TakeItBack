@@ -5,10 +5,10 @@
 #include "CoreMinimal.h"
 
 
+
+#include "BaseCharacter.h"
 #include "Engine/StaticMesh.h"
 #include "Weapon.generated.h"
-
-
 
 UCLASS(meta=(BlueprintSpawnableComponent), Blueprintable)
 class TAKEITBACK_API AWeapon : public AActor
@@ -47,6 +47,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float WinPower;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	EWeaponResistance WeaponType;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class UStaticMeshComponent* MeshComponent;

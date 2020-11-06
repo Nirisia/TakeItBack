@@ -19,7 +19,9 @@ void ABaseCharacter::LoadDataAssets()
 		WalkSpeed = CharacterData->WalkSpeed;
 		RotationRate = CharacterData->RotationRate;
 		GravityScale = CharacterData->GravityScale;
-		GetMesh()->SetSkeletalMesh(CharacterData->CharacterMesh); 
+		GetMesh()->SetSkeletalMesh(CharacterData->CharacterMesh);
+		Resistance = CharacterData->Resistance;
+		ResistanceCoeff = CharacterData->ResistanceCoeff;
 	}
 }
 // Sets default values
@@ -27,16 +29,15 @@ ABaseCharacter::ABaseCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	CharacterData = CreateDefaultSubobject<UDA_BaseCharacter>("CharacterData");
 }
 
 void ABaseCharacter::Die()
 {
 	bIsDead = true;
-	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
-	GetMesh()->SetCollisionProfileName("Ragdoll");
-	GetMesh()->SetAllBodiesSimulatePhysics(true);
+	GetCharacterMovement()->MaxWalkSpeed = 0.f;
+	GetCharacterMovement()->RotationRate = FRotator(0);
+	GetCharacterMovement()->SetJumpAllowed(false);
+	bCanAttack = false;
 }
 
 void ABaseCharacter::Attack()
@@ -44,12 +45,19 @@ void ABaseCharacter::Attack()
 	
 }
 
-int ABaseCharacter::MyTakeDamage(int Damage)
+int ABaseCharacter::MyTakeDamage(int Damage, EWeaponResistance WeaponType)
 {
 	if (CurrentLife > 0)
 	{
 		bImpact = true;
-		CurrentLife -= Damage;
+		if (WeaponType == Resistance)
+		{
+			CurrentLife -= Damage * ResistanceCoeff;
+		}
+		else
+		{
+			CurrentLife -= Damage;
+		}
 		if(CurrentLife <= 0)
 		{
 			Die();
@@ -57,10 +65,7 @@ int ABaseCharacter::MyTakeDamage(int Damage)
 		}
 		return Damage;
 	}
-	else
-	{
-		return 0;	
-	}
+	return 0;	
 
 }
 
@@ -79,6 +84,8 @@ void ABaseCharacter::BeginPlay()
 	Movement->MaxWalkSpeed = WalkSpeed;
 	Movement->RotationRate = RotationRate;
 	Movement->GravityScale = GravityScale;
+
+	CurrentLife = MaxLife;
 }
 
 // Called every frame

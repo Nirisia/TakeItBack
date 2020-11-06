@@ -17,7 +17,7 @@ class TAKEITBACK_API AEnemyCharacter : public ABaseCharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon", meta = (AllowPrivateAccess = "true"))
     class UChildActorComponent* Weapon;
 
-	
+	EWeaponResistance Weakness;
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -40,4 +40,6 @@ protected:
 	UFUNCTION(BlueprintCallable)
     void ValidateAttack();
 
+public:
+	virtual void LoadDataAssets() override;
 };

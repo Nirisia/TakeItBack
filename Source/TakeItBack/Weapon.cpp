@@ -98,6 +98,7 @@ void AWeapon::LoadDataAssets()
         WinPower = WeaponData->WinPower;
         MeshComponent->SetStaticMesh(WeaponData->Mesh);
         AttacksAnim = WeaponData->AttacksAnim;
+        WeaponType = WeaponData->WeaponType;
     }
 }
 
@@ -105,15 +106,17 @@ void AWeapon::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* 
                               UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
                               const FHitResult& SweepResult)
 {
-    if (OtherActor->ActorHasTag("Enemy") || OtherActor->ActorHasTag("Player"))
+    if (OtherActor == GetParentActor()) return;
+    if (!bIsSpecialAttackActive)
     {
-        ABaseCharacter* Enemy = Cast<ABaseCharacter>(OtherActor);
-        if (IsValid(Enemy))
+        if (OtherActor->ActorHasTag("Enemy") || OtherActor->ActorHasTag("Player"))
         {
-            //Cast<APlayerController>(GetParentCharacter()->GetController())->PlayDynamicForceFeedback(
-              //  0.2f, 0.3f, false, true, false, true);
-
-            LoadPower(Enemy->MyTakeDamage(Damage) * WinPower);
+            ABaseCharacter* Enemy = Cast<ABaseCharacter>(OtherActor);
+            if (IsValid(Enemy))
+            {
+                LoadPower(Enemy->MyTakeDamage(Damage, WeaponType) * WinPower);
+                SetWeaponCollision(false);
+            }
         }
     }
     else if (OtherActor->ActorHasTag("Spawn"))
@@ -122,6 +125,7 @@ void AWeapon::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* 
         if (IsValid(Spawn))
         {
             Spawn->Damaged(Damage);
+            SetWeaponCollision(false);
         }
     }
 }
