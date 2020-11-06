@@ -69,7 +69,7 @@ void ABaseCharacter::BeginPlay()
 	Super::BeginPlay();
 	LoadDataAssets();
 	UCharacterMovementComponent* Movement = GetCharacterMovement();
-	Movement->JumpZVelocity = UKismetMathLibrary::Sqrt(-2 * JumpHeight * Movement->GetGravityZ());
+	Movement->JumpZVelocity = UKismetMathLibrary::Sqrt(-2 * JumpHeight * Movement->GetGravityZ() * GravityScale);
 	Movement->AirControl = AirControl;
 	Movement->MaxWalkSpeed = WalkSpeed;
 	Movement->RotationRate = RotationRate;
