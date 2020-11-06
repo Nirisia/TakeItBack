@@ -84,6 +84,8 @@ void ABaseCharacter::BeginPlay()
 	Movement->MaxWalkSpeed = WalkSpeed;
 	Movement->RotationRate = RotationRate;
 	Movement->GravityScale = GravityScale;
+
+	CurrentLife = MaxLife;
 }
 
 // Called every frame
