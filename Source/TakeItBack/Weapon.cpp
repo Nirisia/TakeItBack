@@ -6,6 +6,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "BaseCharacter.h"
 #include "DA_Weapon.h"
+#include "EnemySpawner.h"
 #include "PlayerCharacter.h"
 #include "Engine.h"
 #include "Engine/Engine.h"
@@ -126,6 +127,14 @@ void AWeapon::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* 
 
             GEngine->AddOnScreenDebugMessage(10,1.0f,FColor::Red,FString::Printf(TEXT("%p"),Enemy));
             LoadPower(Enemy->MyTakeDamage(Damage));
+        }
+    }
+    else if (OtherActor->ActorHasTag("Spawn"))
+    {
+        AEnemySpawner* Spawn = Cast<AEnemySpawner>(OtherActor);
+        if (IsValid(Spawn))
+        {
+            Spawn->Damaged(Damage);
         }
     }
 }

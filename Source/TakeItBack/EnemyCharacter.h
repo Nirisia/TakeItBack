@@ -19,15 +19,19 @@ class TAKEITBACK_API AEnemyCharacter : public ABaseCharacter
 
 	
 	
-	public:
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
         float Timer = 0;
            
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float AttackDelay = 2;
+
+	UPROPERTY()
+	class AEnemySpawner* Spawner = nullptr;
 	
 	AEnemyCharacter();
 	virtual void Attack() override;
+	virtual void Die() override;
 
 protected:
 	virtual void BeginPlay() override;

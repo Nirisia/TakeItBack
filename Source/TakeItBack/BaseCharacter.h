@@ -56,7 +56,8 @@ public:
     virtual void LoadDataAssets();
 	
 	ABaseCharacter();
-
+	virtual void Die();
+	
 	UFUNCTION(BlueprintCallable)
 	virtual void Attack();
 	

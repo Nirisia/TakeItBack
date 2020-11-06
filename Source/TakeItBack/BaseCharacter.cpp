@@ -30,6 +30,14 @@ ABaseCharacter::ABaseCharacter()
 	CharacterData = CreateDefaultSubobject<UDA_BaseCharacter>("CharacterData");
 }
 
+void ABaseCharacter::Die()
+{
+	bIsDead = true;
+	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
+	GetMesh()->SetCollisionProfileName("Ragdoll");
+	GetMesh()->SetAllBodiesSimulatePhysics(true);
+}
+
 void ABaseCharacter::Attack()
 {
 	
@@ -43,11 +51,7 @@ int ABaseCharacter::MyTakeDamage(int Damage)
 		CurrentLife -= Damage;
 		if(CurrentLife <= 0)
 		{
-			bIsDead = true;
-			GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
-			GetMesh()->SetCollisionProfileName("Ragdoll");
-			GetMesh()->SetAllBodiesSimulatePhysics(true);
-			//Die()
+			Die();
 			return Damage + CurrentLife;
 		}
 		return Damage;
