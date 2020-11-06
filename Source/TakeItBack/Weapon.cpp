@@ -80,16 +80,6 @@ void AWeapon::LoadPower(int InflictedDamage)
     }
 }
 
-void AWeapon::UnloadPower(int DamageTaken)
-{
-    Power -= DamageTaken * LosePower;
-
-    if (Power < 0)
-    {
-        Power = 0;
-    }
-}
-
 void AWeapon::SetWeaponCollision(bool bGenerateOverlap)
 {
     BoxComponent->SetGenerateOverlapEvents(bGenerateOverlap);

@@ -76,9 +76,6 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void LoadPower(int InflictedDamage);
-	
-	UFUNCTION(BlueprintCallable)
-	virtual void UnloadPower(int DamageTaken);
 
 	UFUNCTION(BlueprintCallable)
 	void SetWeaponCollision(bool bGenerateOverlap);
