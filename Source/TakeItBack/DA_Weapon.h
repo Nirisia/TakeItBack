@@ -39,10 +39,6 @@ class TAKEITBACK_API UDA_Weapon : public UDataAsset
 	UPROPERTY(EditAnywhere, Category="Stats")
 	float WinPower = 1.f;
 
-	/* Ratio of power lost by damage received */
-	UPROPERTY(EditAnywhere, Category="Stats")
-	float LosePower = 1.f;
-
 	UPROPERTY(EditAnywhere, Category="Mesh")
 	class UStaticMesh* Mesh;
 

@@ -123,8 +123,7 @@ void AWeapon::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* 
             //Cast<APlayerController>(GetParentCharacter()->GetController())->PlayDynamicForceFeedback(
               //  0.2f, 0.3f, false, true, false, true);
 
-            GEngine->AddOnScreenDebugMessage(10,1.0f,FColor::Red,FString::Printf(TEXT("%p"),Enemy));
-            LoadPower(Enemy->MyTakeDamage(Damage));
+            LoadPower(Enemy->MyTakeDamage(Damage) * WinPower);
         }
     }
 }

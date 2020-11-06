@@ -19,10 +19,8 @@ void AMainPlayerController::LoadDataAssets()
 {
     if(ControllerData)
     {
-        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("ControllerDataLoaded"));
         if (PlayerCameraManager)
         {
-            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("CameraDataLoaded"));
             PlayerCameraManager->ViewPitchMin = ControllerData->ViewPitchMin;
             PlayerCameraManager->ViewPitchMax = ControllerData->ViewPitchMax;
             PlayerCameraManager->GetCameraRotation() = ControllerData->CameraRotation;
