@@ -258,3 +258,11 @@ void APlayerCharacter::Heal(float HealPercent)
         CurrentLife = MaxLife;
     }
 }
+
+void APlayerCharacter::Die()
+{
+    Super::Die();
+    bCanChangeWeapon = false;
+    bCanSpecialAttack = false;
+    bCanDefend = false;
+}

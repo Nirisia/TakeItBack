@@ -34,9 +34,10 @@ ABaseCharacter::ABaseCharacter()
 void ABaseCharacter::Die()
 {
 	bIsDead = true;
-	GetCapsuleComponent()->SetCollisionProfileName("NoCollision");
-	GetMesh()->SetCollisionProfileName("Ragdoll");
-	GetMesh()->SetAllBodiesSimulatePhysics(true);
+	GetCharacterMovement()->MaxWalkSpeed = 0.f;
+	GetCharacterMovement()->RotationRate = FRotator(0);
+	GetCharacterMovement()->SetJumpAllowed(false);
+	bCanAttack = false;
 }
 
 void ABaseCharacter::Attack()

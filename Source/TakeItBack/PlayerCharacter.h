@@ -137,13 +137,14 @@ public:
 	void StopDefense();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	AWeapon* GetCurrentWeapon();
+	class AWeapon* GetCurrentWeapon();
 
 	virtual void SetWeaponCollision(bool bGenerateOverlap) override;
 
 	UFUNCTION(BlueprintCallable)
 	void Heal(float HealPercent);
-	
+
+	virtual void Die() override;
 	UFUNCTION()
 	void SetShieldMesh(class UStaticMesh* ShieldMesh);
 };
