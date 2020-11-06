@@ -16,6 +16,12 @@
 #include "Perception/AISense_Sight.h"
 #include "Kismet/KismetMathLibrary.h"
 
+void APlayerCharacter::LoadWeaponStats()
+{
+    GetCharacterMovement()->GravityScale = GravityScale * GetCurrentWeapon()->GravityScaleCoef;
+    GetCharacterMovement()->MaxWalkSpeed = WalkSpeed * GetCurrentWeapon()->WalkSpeedCoef;
+}
+
 void APlayerCharacter::LoadDataAssets()
 {
     Super::LoadDataAssets();
@@ -83,9 +89,10 @@ void APlayerCharacter::BeginPlay()
     Super::BeginPlay();
 
     LoadDataAssets();
-    
+
+    LoadWeaponStats();
     // Configure character movement
-    GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
+    GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...
 }
 
 void APlayerCharacter::MoveForward(float Value)
@@ -172,10 +179,13 @@ void APlayerCharacter::SwapMeshes()
         Shield->AttachToComponent(Shield->GetAttachParent(), FAttachmentTransformRules::KeepRelativeTransform,
                                   "backpackShield02");
     }
+    LoadWeaponStats();
     bCanAttack = true;
     bCanDefend = true;
     bCanChangeWeapon = true;
     bCanSpecialAttack = true;
+
+    
 }
 
 void APlayerCharacter::Attack()
