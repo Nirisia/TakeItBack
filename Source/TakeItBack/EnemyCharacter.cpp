@@ -2,6 +2,7 @@
 
 
 #include "EnemyCharacter.h"
+#include "EnemySpawner.h"
 #include "Engine/Engine.h"
 
 AEnemyCharacter::AEnemyCharacter()
@@ -32,6 +33,15 @@ void AEnemyCharacter::Attack()
         {
             Timer = GetWorld()->GetTimeSeconds();
         }
+    }
+}
+
+void AEnemyCharacter::Die()
+{
+    Super::Die();
+    if (Spawner)
+    {
+        Spawner->OnEnemyDie(this);
     }
 }
 
