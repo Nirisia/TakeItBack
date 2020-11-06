@@ -115,6 +115,7 @@ void AWeapon::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* 
             if (IsValid(Enemy))
             {
                 LoadPower(Enemy->MyTakeDamage(Damage, WeaponType) * WinPower);
+                SetWeaponCollision(false);
             }
         }
     }
@@ -124,6 +125,7 @@ void AWeapon::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* 
         if (IsValid(Spawn))
         {
             Spawn->Damaged(Damage);
+            SetWeaponCollision(false);
         }
     }
 }

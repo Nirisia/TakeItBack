@@ -49,6 +49,7 @@ void AAxe::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* Oth
             if (IsValid(Enemy))
             {
                 Enemy->MyTakeDamage(Damage, WeaponType);
+                SetWeaponCollision(false);
             }
         }
     }
