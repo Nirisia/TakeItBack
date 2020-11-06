@@ -38,6 +38,9 @@ class TAKEITBACK_API AAxe : public AWeapon
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float FireStormWalkSpeedCoef = 0.25f;
+
+	UPROPERTY()
+	float ActiveFOV = 100.f;
 	
 	virtual void SpecialAttack() override;
 

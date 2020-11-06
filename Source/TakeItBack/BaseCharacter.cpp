@@ -13,6 +13,7 @@ void ABaseCharacter::LoadDataAssets()
 {
 	if (CharacterData)
 	{
+		MaxLife = CharacterData->MaxLife;
 		JumpHeight = CharacterData->JumpHeight;
 		AirControl = CharacterData->AirControl;
 		WalkSpeed = CharacterData->WalkSpeed;

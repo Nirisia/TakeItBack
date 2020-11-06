@@ -17,18 +17,23 @@ class TAKEITBACK_API UDA_Sword : public UDA_Weapon
 	GENERATED_BODY()
 
 	public:
+	/* Speed at which the character is launched with ShieldMeteor */
 	UPROPERTY(EditAnywhere, Category="Stats")
 	float LaunchSpeed = 1000.f;
 
+	/* Maximum time the character spend in slow motion while at apex of the jump */
 	UPROPERTY(EditAnywhere, Category="Stats")
 	float MaxAirTime = 4.f;
 
+	/* Percentage of the default character speed while in air for ShieldMeteor  */
 	UPROPERTY(EditAnywhere, Category="Stats")
 	float MeteorShieldAirControl = 0.05f;
-	
+
+	/* Gravity scale applied to the player while in slowmo*/
 	UPROPERTY(EditAnywhere, Category="Stats")
 	float MeteorShieldGravityScale = 0.25f;
-	
+
+	/* Maximum jump height of the player with ShieldMeteor */
 	UPROPERTY(EditAnywhere, Category="Stats")
 	float MeteorShieldJumpHeight = 500.f;
 	
@@ -37,5 +42,12 @@ class TAKEITBACK_API UDA_Sword : public UDA_Weapon
 
 	UPROPERTY(EditAnywhere, Category="Stats")
 	class UAnimMontage* ShieldAnim;
-	
+
+	/* FOV used during ShieldMeteor */
+	UPROPERTY(EditAnywhere, Category="Camera")
+	float ActiveFOV = 80.f;
+
+	/* Horizontal offset of the camera during ShieldCamera. Positive is on right, negative on left */
+	UPROPERTY(EditAnywhere, Category="Camera")
+	float SM_RightOffset = 300.f;
 };

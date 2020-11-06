@@ -29,6 +29,11 @@ public:
 		return FollowCamera;
 	}
 
+	class USpringArmComponent* GetCameraBoom() const
+	{
+		return CameraBoom;
+	}
+
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon", meta = (AllowPrivateAccess = "true"))
 	class UChildActorComponent* Sword;
@@ -41,12 +46,7 @@ private:
 
 	virtual void LoadDataAssets() override;	
 
-	UPROPERTY()
-	float CameraElapsedTime;
-
 public:
-	virtual void Tick(float DeltaTime) override;
-
 	class UAIPerceptionStimuliSourceComponent* Stimulus;
 	void SetupStimulus();
 	
@@ -93,7 +93,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool keys = false;
 	
-protected:
+public:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
 
@@ -139,7 +139,6 @@ protected:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	AWeapon* GetCurrentWeapon();
 
-public:
 	virtual void SetWeaponCollision(bool bGenerateOverlap) override;
 
 	UFUNCTION(BlueprintCallable)
@@ -147,9 +146,4 @@ public:
 	
 	UFUNCTION()
 	void SetShieldMesh(class UStaticMesh* ShieldMesh);
-	
-protected:
-	// APawn interface
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	// End of APawn interface
 };

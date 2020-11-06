@@ -18,18 +18,20 @@ class TAKEITBACK_API UDA_Player : public UDA_BaseCharacter
 	GENERATED_BODY()
 
 	public:
-	UPROPERTY(EditAnywhere, Category="Stats")
-	int MaxLife = 200;
 
+	/* Speed when changing weapon. Percentage of default animation PlayRate */
 	UPROPERTY(EditAnywhere, Category="Stats")
 	float ChangeWeaponSpeed = 1.0f;
 
+	/* Speed when attacking. Percentage of default WalkSpeed */
 	UPROPERTY(EditAnywhere, Category="Stats")
 	float AttackSpeedCoeff = 0.7f;
 
+	/* !DEPRECATED! Maximum stack gained with special attacks */
 	UPROPERTY(EditAnywhere, Category="Stats")
 	int StackLimit = 8;
 
+	
 	UPROPERTY(EditAnywhere, Category="Controls")
 	float BaseTurnRate = 45.f;
 

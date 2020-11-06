@@ -9,6 +9,7 @@
 #include "Engine.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "EnemyCharacter.h"
+#include "MainPlayerController.h"
 #include "Engine/Engine.h"
 
 AAxe::AAxe() : Super() {}
@@ -88,6 +89,7 @@ void AAxe::LoadDataAssets()
         FireStormTime = AxeData->FireStormTime;
         FireStormTurnRate = AxeData->FireStormTurnRate;
         FireStormWalkSpeedCoef = AxeData->FireStormWalkSpeedCoef;
+        ActiveFOV = AxeData->ActiveFOV;
     }
 }
 
@@ -115,7 +117,7 @@ void AAxe::Tick(float DeltaTime)
 
             auto PlayerCharacterMovement = PlayerCharacter->GetCharacterMovement();
 
-            auto PlayerController = Cast<APlayerController>(PlayerCharacter->GetController());
+            auto PlayerController = Cast<AMainPlayerController>(PlayerCharacter->GetController());
             PlayerController->PlayDynamicForceFeedback(
                 UKismetMathLibrary::Cos(ElapsedTime * UKismetMathLibrary::GetPI()), -1.f, true, true, true, true,
                 EDynamicForceFeedbackAction::Update, ForceFeedbackHandle);
@@ -129,6 +131,9 @@ void AAxe::Tick(float DeltaTime)
             PlayerCharacter->bCanAttack = true;
             PlayerCharacter->bCanSpecialAttack = true;
             PlayerCharacter->bCanChangeWeapon = true;
+
+
+            PlayerCharacter->GetFollowCamera()->SetFieldOfView(PlayerController->BaseFOV);
 
             MeshComponent->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
 
@@ -163,6 +168,8 @@ void AAxe::FireStorm_Implementation()
         PlayerCharacter->bCanAttack = false;
         PlayerCharacter->bCanSpecialAttack = false;
         PlayerCharacter->bCanChangeWeapon = false;
+
+        PlayerCharacter->GetFollowCamera()->SetFieldOfView(ActiveFOV);
 
         SetWeaponCollision(true);
 

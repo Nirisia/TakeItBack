@@ -5,6 +5,7 @@
 #include "BaseCharacter.h"
 #include "DA_Sword.h"
 #include "Engine.h"
+#include "MainPlayerController.h"
 #include "PlayerCharacter.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -26,6 +27,8 @@ void ASword::LoadDataAssets()
             ParentPlayerCharacter->SetShieldMesh(SwordData->ShieldMesh);
         }
         ShieldAnim = SwordData->ShieldAnim;
+        ActiveFOV = SwordData->ActiveFOV;
+        SM_RightOffset = SwordData->SM_RightOffset;
     }
 }
 
@@ -62,6 +65,7 @@ void ASword::Defense()
 void ASword::ShieldMeteorLaunch()
 {
     APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
+    auto PlayerController = Cast<AMainPlayerController>(PlayerCharacter->GetController());
 
     FVector LaunchVelocity = PlayerCharacter->GetFollowCamera()->GetForwardVector();
     if (LaunchVelocity.Z > 0)
@@ -71,7 +75,7 @@ void ASword::ShieldMeteorLaunch()
     LaunchVelocity *= LaunchSpeed;
     PlayerCharacter->LaunchCharacter(LaunchVelocity, true, true);
     UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.f);
-    PlayerCharacter->GetFollowCamera()->SetFieldOfView(90.f);
+    PlayerCharacter->GetFollowCamera()->SetFieldOfView(PlayerController->BaseFOV);
     PlayerCharacter->GetCharacterMovement()->GravityScale = PlayerCharacter->GravityScale;
     PlayerCharacter->GetCharacterMovement()->AirControl = PlayerCharacter->AirControl;
 
@@ -143,7 +147,8 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
             {
                 PlayerCharacter->GetCharacterMovement()->GravityScale = MeteorShieldGravityScale;
                 UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.25f);
-                PlayerCharacter->GetFollowCamera()->SetFieldOfView(80.f);
+                PlayerCharacter->GetFollowCamera()->SetFieldOfView(ActiveFOV);
+                PlayerCharacter->GetCameraBoom()->SocketOffset.Y = SM_RightOffset;
 
                 FPredictProjectilePathParams PredictParams;
 
@@ -160,12 +165,12 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
                 ActorsToIgnore.Add(PlayerCharacter);
 
                 PredictParams.LaunchVelocity = LaunchVelocity;
-                PredictParams.TraceChannel = ECC_WorldDynamic;
-                PredictParams.TraceChannel = ECC_WorldStatic;
+                PredictParams.TraceChannel = ECC_Pawn;
                 PredictParams.bTraceWithChannel = true;
                 PredictParams.bTraceWithCollision = true;
                 PredictParams.ActorsToIgnore = ActorsToIgnore;
                 PredictParams.DrawDebugType = EDrawDebugTrace::ForOneFrame;
+                PredictParams.ProjectileRadius = 10.f;
 
                 FPredictProjectilePathResult PredictResult;
 
@@ -181,6 +186,7 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
             }
             else
             {
+                PlayerCharacter->GetCameraBoom()->SocketOffset.Y = 0.f;
                 ShieldMeteorLaunch();
             }
         }

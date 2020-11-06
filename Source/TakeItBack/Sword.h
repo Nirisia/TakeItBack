@@ -43,6 +43,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float MeteorShieldJumpHeight = 500.f;
 
+	UPROPERTY()
+	float ActiveFOV = 80.f;
+
+	UPROPERTY()
+	float SM_RightOffset = 300.f;
+	
 	virtual void LightAttack() override;
 	virtual void SpecialAttack() override;
 	virtual void Defense() override;
