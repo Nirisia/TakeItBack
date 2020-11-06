@@ -38,23 +38,17 @@ void AAxe::Defense()
 void AAxe::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
                            int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-    if (OtherActor->ActorHasTag("Enemy"))
+    if (OtherActor == GetParentActor()) return;
+    
+    Super::AttackCollision(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+    if(bIsSpecialAttackActive)
     {
-        ABaseCharacter* Enemy = Cast<ABaseCharacter>(OtherActor);
-        if (Enemy != nullptr)
+        if (OtherActor->ActorHasTag("Enemy") || OtherActor->ActorHasTag("Player"))
         {
-            Cast<APlayerController>(GetParentCharacter()->GetController())->PlayDynamicForceFeedback(
-                0.2f, 0.3f, false, true, false, true);
-
-            LoadPower(Enemy->MyTakeDamage(Damage + BonusStack * DamageBonus * Damage));
-           
-            if (Enemy->bIsDead)
+            ABaseCharacter* Enemy = Cast<ABaseCharacter>(OtherActor);
+            if (IsValid(Enemy))
             {
-                USkeletalMeshComponent* EnemyMesh = Enemy->GetMesh();
-                FVector Direction = Enemy->GetActorLocation() - GetParentCharacter()->GetActorLocation();
-                Direction.Z *= -1;
-                Direction.Normalize();
-                EnemyMesh->AddImpulseToAllBodiesBelow(Direction * 500, EnemyMesh->GetBoneName(0), true);
+                Enemy->MyTakeDamage(Damage, WeaponType);
             }
         }
     }

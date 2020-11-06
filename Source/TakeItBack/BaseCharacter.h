@@ -4,8 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Weapon.h"
 #include "BaseCharacter.generated.h"
+
+UENUM()
+enum class EWeaponResistance : uint8
+{
+	None,
+    Axe,
+    Sword
+};
 
 UCLASS()
 class TAKEITBACK_API ABaseCharacter : public ACharacter
@@ -20,6 +27,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int CurrentLife;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float ResistanceCoeff;
+
+	UPROPERTY(EditAnywhere)
+	EWeaponResistance Resistance;
 
 	/** Walkspeed of the Character, in meters per seconds */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -62,7 +75,7 @@ public:
 	virtual void Attack();
 	
 	UFUNCTION(BlueprintCallable)
-	virtual int MyTakeDamage(int Damage);
+	virtual int MyTakeDamage(int Damage, EWeaponResistance WeaponType = EWeaponResistance::None);
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void SetWeaponCollision(bool bGenerateOverlap);

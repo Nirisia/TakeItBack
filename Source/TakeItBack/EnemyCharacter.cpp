@@ -3,6 +3,7 @@
 
 #include "EnemyCharacter.h"
 #include "EnemySpawner.h"
+#include "Weapon.h"
 #include "Engine/Engine.h"
 
 AEnemyCharacter::AEnemyCharacter()
@@ -18,6 +19,11 @@ AEnemyCharacter::AEnemyCharacter()
 void AEnemyCharacter::SetWeaponCollision(bool bGenerateOverlap)
 {
     Cast<AWeapon>(Weapon->GetChildActor())->SetWeaponCollision(bGenerateOverlap);
+}
+
+void AEnemyCharacter::LoadDataAssets()
+{
+    Super::LoadDataAssets();
 }
 
 void AEnemyCharacter::Attack()

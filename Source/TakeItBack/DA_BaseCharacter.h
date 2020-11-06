@@ -3,6 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+
+#include "BaseCharacter.h"
 #include "Engine/DataAsset.h"
 #include "DA_BaseCharacter.generated.h"
 
@@ -35,6 +38,13 @@ class TAKEITBACK_API UDA_BaseCharacter : public UDataAsset
 	/* Speed percentage of the character while in air */
 	UPROPERTY(EditAnywhere, Category="Movement")
 	float AirControl = 0.2f;
+
+	UPROPERTY(EditAnywhere, Category="Stats")
+	EWeaponResistance Resistance;
+
+	/* Percentage of damage applied to the character if resistant*/
+	UPROPERTY(EditAnywhere, Category="Stats")
+	float ResistanceCoeff = 0.5f;
 
 	/* Gravity scale applied to the character*/
 	UPROPERTY(EditAnywhere, Category="Movement")
