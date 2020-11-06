@@ -44,6 +44,8 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon", meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* Shield;
 
+	void LoadWeaponStats();
+
 	virtual void LoadDataAssets() override;	
 
 public:

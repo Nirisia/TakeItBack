@@ -36,6 +36,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsSpecialAttackActive = false;
 
+	UPROPERTY(VisibleAnywhere, Category="Stats")
+	float WalkSpeedCoef = 1.0f;
+
+	UPROPERTY(VisibleAnywhere,Category="Stats")
+	float GravityScaleCoef = 1.0f;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float AtkSpeed = 1.f;
 

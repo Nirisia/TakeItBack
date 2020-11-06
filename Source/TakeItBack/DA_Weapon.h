@@ -25,6 +25,14 @@ class TAKEITBACK_API UDA_Weapon : public UDataAsset
 	UPROPERTY(EditAnywhere, Category="Stats")
 	int Damage = 9;
 
+	/* Coefficient of default walkspeed used when this weapon is equipped */
+	UPROPERTY(EditAnywhere, Category="Stats")
+	float WalkSpeedCoef = 1.0f;
+
+	/* Coefficient of default gravity scale used when this weapon is equipped */
+	UPROPERTY(EditAnywhere,Category="Stats")
+	float GravityScaleCoef = 1.0f;
+
 	/* Attack speed of the weapon. Percentage of default animation PlayRate */
 	UPROPERTY(EditAnywhere, Category="Stats")
 	float AtkSpeed = 1.f;

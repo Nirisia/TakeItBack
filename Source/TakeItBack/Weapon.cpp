@@ -92,6 +92,8 @@ void AWeapon::LoadDataAssets()
     {
         MaxPower = WeaponData->MaxPower;
         Damage = WeaponData->Damage;
+        WalkSpeedCoef = WeaponData->WalkSpeedCoef;
+        GravityScaleCoef = WeaponData->GravityScaleCoef;
         AtkSpeed = WeaponData->AtkSpeed;
         AtkSpeedBonus = WeaponData->AtkSpeedBonus;
         DamageBonus = WeaponData->DamageBonus;
