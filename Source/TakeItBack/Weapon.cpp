@@ -105,7 +105,6 @@ void AWeapon::LoadDataAssets()
         AtkSpeedBonus = WeaponData->AtkSpeedBonus;
         DamageBonus = WeaponData->DamageBonus;
         WinPower = WeaponData->WinPower;
-        LosePower = WeaponData->LosePower;
         MeshComponent->SetStaticMesh(WeaponData->Mesh);
         AttacksAnim = WeaponData->AttacksAnim;
     }

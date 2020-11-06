@@ -49,9 +49,6 @@ public:
 	float WinPower;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	float LosePower;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class UStaticMeshComponent* MeshComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
