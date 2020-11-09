@@ -85,11 +85,6 @@ void ASword::ShieldMeteorLaunch()
     PlayerCharacter->bCanChangeWeapon = true;
     PlayerCharacter->bCanDefend = true;
     Power = 0;
-
-    if (BonusStack < 8)
-    {
-        BonusStack++;
-    }
 }
 
 void ASword::BeginPlay()

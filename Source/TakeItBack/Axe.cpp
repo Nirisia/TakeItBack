@@ -18,11 +18,6 @@ void AAxe::SpecialAttack()
 {
     FireStorm();
     Power = 0;
-
-    if (BonusStack < 8)
-    {
-        BonusStack++;
-    }
 }
 
 void AAxe::Defense()
@@ -49,7 +44,6 @@ void AAxe::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* Oth
             if (IsValid(Enemy))
             {
                 Enemy->MyTakeDamage(Damage, WeaponType);
-                SetWeaponCollision(false);
             }
         }
     }
@@ -135,6 +129,7 @@ void AAxe::Tick(float DeltaTime)
             SetWeaponCollision(false);
 
             bIsSpecialAttackActive = false;
+            return;
         }
 
         GetParentCharacter()->AddActorWorldRotation(FRotator(0.f, FireStormTurnRate * DeltaTime, 0.f));
