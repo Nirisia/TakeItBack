@@ -79,7 +79,13 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void SetWeaponCollision(bool bGenerateOverlap);
+
+	UFUNCTION(BlueprintCallable)
+	virtual void ValidateAttack();
 	
+	UFUNCTION(BlueprintCallable)
+	virtual void ResetCombo();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

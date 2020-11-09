@@ -15,7 +15,7 @@ class TAKEITBACK_API UBTTAttack : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()
 
-	UBTTAttack(FObjectInitializer const& object_initializer);
-	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& owner_comp, uint8* node_memory) override;
+	UBTTAttack(FObjectInitializer const& ObjectInitializer);
+	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	
 };

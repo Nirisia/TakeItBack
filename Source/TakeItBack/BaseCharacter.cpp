@@ -33,6 +33,7 @@ ABaseCharacter::ABaseCharacter()
 
 void ABaseCharacter::Die()
 {
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	bIsDead = true;
 	GetCharacterMovement()->MaxWalkSpeed = 0.f;
 	GetCharacterMovement()->RotationRate = FRotator(0);
@@ -71,6 +72,20 @@ int ABaseCharacter::MyTakeDamage(int Damage, EWeaponResistance WeaponType)
 
 void ABaseCharacter::SetWeaponCollision(bool bGenerateOverlap)
 {
+}
+
+void ABaseCharacter::ValidateAttack()
+{
+	if (bIsDead) return;
+	bCanAttack = true;
+}
+
+void ABaseCharacter::ResetCombo()
+{
+	if (bIsDead) return;
+	bCanAttack = true;
+	GetCharacterMovement()->RotationRate = RotationRate;
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 }
 
 // Called when the game starts or when spawned

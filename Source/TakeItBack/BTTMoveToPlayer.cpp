@@ -4,11 +4,9 @@
 #include "BTTMoveToPlayer.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Runtime/NavigationSystem/Public/NavigationSystem.h"
-#include "BehaviorTree/Blackboard/BlackboardKeyType.h"
-#include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
-#include "WarriorController.h"
+#include "MainAIController.h"
 
 UBTTMoveToPlayer::UBTTMoveToPlayer(FObjectInitializer const& ObjectInitializer)
 {
@@ -18,16 +16,16 @@ UBTTMoveToPlayer::UBTTMoveToPlayer(FObjectInitializer const& ObjectInitializer)
 EBTNodeResult::Type UBTTMoveToPlayer::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
     ACharacter* const Player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-    auto const cont = Cast<AWarriorController>(OwnerComp.GetAIOwner());
+    AAIController* const AIController = Cast<AAIController>(OwnerComp.GetAIOwner());
 
     FVector const PlayerLocation = Player->GetActorLocation();
-    FVector Dir = (PlayerLocation - cont->GetPawn()->GetActorLocation());
-    float Fact = Dir.Size() - Radius;
-    Dir.Normalize();
-    FVector loc = Dir * Fact + cont->GetPawn()->GetActorLocation();
+    FVector Direction = (PlayerLocation - AIController->GetPawn()->GetActorLocation());
+    const float Fact = Direction.Size() - Radius;
+    Direction.Normalize();
+    const FVector TargetLocation = Direction * Fact + AIController->GetPawn()->GetActorLocation();
     
-    OwnerComp.GetAIOwner()->MoveToLocation(loc);
-    cont->GetBlackboard()->SetValueAsVector("Follow", loc);
+    OwnerComp.GetAIOwner()->MoveToLocation(TargetLocation);
+    AIController->GetBlackboardComponent()->SetValueAsVector("Follow", TargetLocation);
 
     FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
     return EBTNodeResult::Succeeded;

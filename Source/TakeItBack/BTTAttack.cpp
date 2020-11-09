@@ -6,28 +6,23 @@
 #include "EnemyCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Runtime/NavigationSystem/Public/NavigationSystem.h"
-#include "BehaviorTree/Blackboard/BlackboardKeyType.h"
-#include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
-#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
-#include "GameFramework/Character.h"
-#include "WarriorController.h"
+#include "MainAIController.h"
 
-UBTTAttack::UBTTAttack(FObjectInitializer const& object_initializer)
+UBTTAttack::UBTTAttack(FObjectInitializer const& ObjectInitializer)
 {
     NodeName = TEXT("Attack");
 }
 
-EBTNodeResult::Type UBTTAttack::ExecuteTask(UBehaviorTreeComponent& owner_comp, uint8* node_memory)
+EBTNodeResult::Type UBTTAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-    ACharacter* const player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-    auto const cont = Cast<AWarriorController>(owner_comp.GetAIOwner());
-    AEnemyCharacter* Enemy = Cast<AEnemyCharacter>(cont->GetPawn());
+    AAIController* const AIController = Cast<AAIController>(OwnerComp.GetAIOwner());
+    AEnemyCharacter* Enemy = Cast<AEnemyCharacter>(AIController->GetPawn());
 
-    if (cont->GetBlackboard()->GetValueAsFloat("DistanceToPlayer") < 150)
+    if (AIController->GetBlackboardComponent()->GetValueAsFloat("DistanceToPlayer") < 150)
     {
         Enemy->Attack();
     }
 
-    FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);
+    FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
     return EBTNodeResult::Succeeded;
 }

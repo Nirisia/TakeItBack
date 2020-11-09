@@ -37,9 +37,9 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void SetWeaponCollision(bool bGenerateOverlap) override;
 	
-	UFUNCTION(BlueprintCallable)
-    void ValidateAttack();
+
 
 public:
+	virtual void ResetCombo() override;
 	virtual void LoadDataAssets() override;
 };

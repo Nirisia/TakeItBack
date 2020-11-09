@@ -21,6 +21,12 @@ void AEnemyCharacter::SetWeaponCollision(bool bGenerateOverlap)
     Cast<AWeapon>(Weapon->GetChildActor())->SetWeaponCollision(bGenerateOverlap);
 }
 
+void AEnemyCharacter::ResetCombo()
+{
+    Super::ResetCombo();
+    Cast<AWeapon>(Weapon->GetChildActor())->ResetCombo();
+}
+
 void AEnemyCharacter::LoadDataAssets()
 {
     Super::LoadDataAssets();
@@ -37,6 +43,7 @@ void AEnemyCharacter::Attack()
         CurrentWeapon->LightAttack();
         if(CurrentWeapon->AtkCount >= CurrentWeapon->AttacksAnim.Num())
         {
+            CurrentWeapon->AtkCount = 0;
             Timer = GetWorld()->GetTimeSeconds();
         }
     }
@@ -49,11 +56,6 @@ void AEnemyCharacter::Die()
     {
         Spawner->OnEnemyDie(this);
     }
-}
-
-void AEnemyCharacter::ValidateAttack()
-{
-    bCanAttack = true;
 }
 
 void AEnemyCharacter::BeginPlay()
