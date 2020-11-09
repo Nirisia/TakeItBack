@@ -14,7 +14,6 @@
 #include "Engine/Engine.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Sight.h"
-#include "Kismet/KismetMathLibrary.h"
 
 void APlayerCharacter::LoadWeaponStats()
 {
@@ -203,16 +202,11 @@ void APlayerCharacter::Attack()
     }
 }
 
-void APlayerCharacter::ValidateAttack()
-{
-    //GetCharacterMovement()->RotationRate = FRotator(0.f, RotationSpeed, 0.f);
-    bCanAttack = true;
-}
-
 void APlayerCharacter::ResetCombo()
 {
+    if (bIsDead) return;
+    Super::ResetCombo();
     GetCurrentWeapon()->ResetCombo();
-    bCanAttack = true;
     bCanDefend = true;
     bCanSpecialAttack = true;
     bCanChangeWeapon = true;

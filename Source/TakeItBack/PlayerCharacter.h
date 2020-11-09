@@ -124,11 +124,7 @@ public:
 	
 	virtual void Attack() override;
 	
-	UFUNCTION(BlueprintCallable)
-	void ValidateAttack();
-	
-	UFUNCTION(BlueprintCallable)
-	void ResetCombo();
+	virtual void ResetCombo() override;
 
 	UFUNCTION(BlueprintCallable)
 	void SpecialAttack();
