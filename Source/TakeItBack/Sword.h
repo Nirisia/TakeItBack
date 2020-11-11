@@ -19,6 +19,9 @@ class TAKEITBACK_API ASword : public AWeapon
 	bool bIsLaunched;
 
 	UPROPERTY()
+	bool bApexReached = false;
+
+	UPROPERTY()
 	float LaunchSpeed = 1000.f;
 
 	UPROPERTY()
@@ -47,7 +50,7 @@ public:
 	float ActiveFOV = 80.f;
 
 	UPROPERTY()
-	float SM_RightOffset = 300.f;
+	FVector SM_CameraOffset = FVector(0.f, 300.f, 0.f);
 	
 	virtual void LightAttack() override;
 	virtual void SpecialAttack() override;

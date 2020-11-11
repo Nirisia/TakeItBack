@@ -49,5 +49,5 @@ class TAKEITBACK_API UDA_Sword : public UDA_Weapon
 
 	/* Horizontal offset of the camera during ShieldCamera. Positive is on right, negative on left */
 	UPROPERTY(EditAnywhere, Category="Camera")
-	float SM_RightOffset = 300.f;
+	FVector SM_CameraOffset = FVector(0.f, 300.f, 0.f);
 };

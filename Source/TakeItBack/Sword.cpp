@@ -28,7 +28,7 @@ void ASword::LoadDataAssets()
         }
         ShieldAnim = SwordData->ShieldAnim;
         ActiveFOV = SwordData->ActiveFOV;
-        SM_RightOffset = SwordData->SM_RightOffset;
+        SM_CameraOffset = SwordData->SM_CameraOffset;
     }
 }
 
@@ -76,6 +76,7 @@ void ASword::ShieldMeteorLaunch()
     PlayerCharacter->LaunchCharacter(LaunchVelocity, true, true);
     UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.f);
     PlayerCharacter->GetFollowCamera()->SetFieldOfView(PlayerController->BaseFOV);
+    PlayerCharacter->GetCameraBoom()->SocketOffset -= SM_CameraOffset;
     PlayerCharacter->GetCharacterMovement()->GravityScale = PlayerCharacter->GravityScale;
     PlayerCharacter->GetCharacterMovement()->AirControl = PlayerCharacter->AirControl;
 
@@ -126,6 +127,7 @@ void ASword::ShieldMeteor_Implementation()
             PlayerCharacter->bCanChangeWeapon = false;
             PlayerCharacter->bCanDefend = false;
             bIsSpecialAttackActive = true;
+            bApexReached = false;
             ElapsedTime = 0.f;
         }
     }
@@ -140,10 +142,14 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
         {
             if (ElapsedTime < MaxAirTime)
             {
-                PlayerCharacter->GetCharacterMovement()->GravityScale = MeteorShieldGravityScale;
-                UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.25f);
-                PlayerCharacter->GetFollowCamera()->SetFieldOfView(ActiveFOV);
-                PlayerCharacter->GetCameraBoom()->SocketOffset.Y = SM_RightOffset;
+                if (!bApexReached)
+                {
+                    PlayerCharacter->GetCharacterMovement()->GravityScale = MeteorShieldGravityScale;
+                    UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.25f);
+                    PlayerCharacter->GetFollowCamera()->SetFieldOfView(ActiveFOV);
+                    PlayerCharacter->GetCameraBoom()->SocketOffset += SM_CameraOffset;
+                    bApexReached = true;
+                }
 
                 FPredictProjectilePathParams PredictParams;
 
@@ -181,7 +187,6 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
             }
             else
             {
-                PlayerCharacter->GetCameraBoom()->SocketOffset.Y = 0.f;
                 ShieldMeteorLaunch();
             }
         }
@@ -218,7 +223,6 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
                 }
             }
         }
-
         bIsLaunched = false;
     }
 }
