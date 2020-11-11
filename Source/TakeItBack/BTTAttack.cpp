@@ -17,10 +17,10 @@ EBTNodeResult::Type UBTTAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, u
 {
     AAIController* const AIController = Cast<AAIController>(OwnerComp.GetAIOwner());
     AEnemyCharacter* Enemy = Cast<AEnemyCharacter>(AIController->GetPawn());
-
-    if (AIController->GetBlackboardComponent()->GetValueAsFloat("DistanceToPlayer") < 150)
+    const UBlackboardComponent* AIBlackBoard = AIController->GetBlackboardComponent();
+    if (AIBlackBoard->GetValueAsFloat("DistanceToPlayer") < AIBlackBoard->GetValueAsFloat("DistanceToAttack"))
     {
-        Enemy->Attack();
+       Enemy->Attack();
     }
 
     FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
