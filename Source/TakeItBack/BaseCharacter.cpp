@@ -51,20 +51,31 @@ int ABaseCharacter::MyTakeDamage(int Damage, EWeaponResistance WeaponType)
 	if (CurrentLife > 0)
 	{
 		bImpact = true;
+		int InflictedDamage;
 		if (WeaponType == Resistance)
 		{
-			CurrentLife -= Damage * ResistanceCoeff;
+			InflictedDamage = Damage * ResistanceCoeff;
 		}
+		
+ 	// TODO: Variables
+ 		// else if (WeaponType != EWeaponResistance::None)
+ 		// {
+ 		// 	InflictedDamage = Damage * WeaknessCoeff;
+ 		// }
+		
 		else
 		{
-			CurrentLife -= Damage;
+			InflictedDamage = Damage;
 		}
+
+		CurrentLife -= InflictedDamage;
+		
 		if(CurrentLife <= 0)
 		{
 			Die();
-			return Damage + CurrentLife;
+			return InflictedDamage + CurrentLife;
 		}
-		return Damage;
+		return InflictedDamage;
 	}
 	return 0;	
 
