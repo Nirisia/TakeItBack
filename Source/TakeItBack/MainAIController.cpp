@@ -58,10 +58,6 @@ void AMainAIController::OnPossess(APawn* P)
     {
         RunBehaviorTree(Btree);
         Blackboard = GetBlackboardComponent();
-        if (Blackboard)
-        {
-            Blackboard->SetValueAsFloat("DistanceToAttack", DistanceToAttack);
-        }
     }
 }
 
@@ -90,6 +86,7 @@ void AMainAIController::Tick(float DeltaSeconds)
             float Distance = Enemy->GetDistanceTo(Player);
             Blackboard->SetValueAsFloat("DistanceToPlayer", Distance);
             Blackboard->SetValueAsBool("CanAttack", Enemy->bCanAttack);
+            Blackboard->SetValueAsFloat("DistanceToAttack", DistanceToAttack);
         }
     }
     else
