@@ -98,6 +98,7 @@ void AAxe::RollEnd()
 
 void AAxe::Tick(float DeltaTime)
 {
+    Super::Tick(DeltaTime);
     if (bIsSpecialAttackActive)
     {
         if (ElapsedTime > FireStormTime)
