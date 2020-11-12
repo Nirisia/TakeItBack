@@ -39,21 +39,21 @@ class TAKEITBACK_API AAxe : public AWeapon
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float FireStormWalkSpeedCoef = 0.25f;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float FireStormDamage = 10.f;
+
 	UPROPERTY()
 	float ActiveFOV = 100.f;
 	
 	virtual void SpecialAttack() override;
 
-	virtual void Defense() override;
-
-	virtual void AttackCollision(UPrimitiveComponent* OverlappedComponent,
-		AActor* OtherActor, UPrimitiveComponent* OtherComp,
-		int32 OtherBodyIndex, bool bFromSweep,
-		const FHitResult& SweepResult) override;
-	
+	virtual void Defense() override;	
 	UFUNCTION(BlueprintNativeEvent)
 	void FireStorm();
 
+
+	virtual void LoadPower(int InflictedDamage) override;
+	virtual int GetCurrentDamage() override;
 	UFUNCTION(BlueprintNativeEvent)
 	void Roll();
 

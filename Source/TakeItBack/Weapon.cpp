@@ -19,7 +19,7 @@ AWeapon::AWeapon()
     MeshComponent->SetupAttachment(RootComponent);
     MeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
     SetRootComponent(MeshComponent);
-    
+
     BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
     BoxComponent->SetupAttachment(MeshComponent);
     BoxComponent->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
@@ -28,16 +28,18 @@ AWeapon::AWeapon()
 
 void AWeapon::LightAttack()
 {
-    if (AtkCount >= AttacksAnim.Num())
+    if (AtkCount >= Attacks.Num())
     {
         AtkCount = 0;
     }
-    if (AttacksAnim.Num() != 0)
-        GetParentCharacter()->PlayAnimMontage(AttacksAnim[AtkCount], AtkSpeed);
+    if (Attacks.Num() != 0)
+        GetParentCharacter()->PlayAnimMontage(Attacks[AtkCount].AnimMontage, AtkSpeed);
     AtkCount++;
 }
 
-void AWeapon::SpecialAttack() {}
+void AWeapon::SpecialAttack()
+{
+}
 
 void AWeapon::Defense()
 {
@@ -85,20 +87,23 @@ void AWeapon::SetWeaponCollision(bool bGenerateOverlap)
     BoxComponent->SetGenerateOverlapEvents(bGenerateOverlap);
 }
 
+int AWeapon::GetCurrentDamage()
+{
+    if (AtkCount == 0) return 0;
+    return Attacks[AtkCount - 1].Damage;
+}
+
 void AWeapon::LoadDataAssets()
 {
     if (WeaponData)
     {
         MaxPower = WeaponData->MaxPower;
-        Damage = WeaponData->Damage;
         WalkSpeedCoef = WeaponData->WalkSpeedCoef;
         GravityScaleCoef = WeaponData->GravityScaleCoef;
         AtkSpeed = WeaponData->AtkSpeed;
-        AtkSpeedBonus = WeaponData->AtkSpeedBonus;
-        DamageBonus = WeaponData->DamageBonus;
         WinPower = WeaponData->WinPower;
         MeshComponent->SetStaticMesh(WeaponData->Mesh);
-        AttacksAnim = WeaponData->AttacksAnim;
+        Attacks = WeaponData->Attacks;
         WeaponType = WeaponData->WeaponType;
     }
 }
@@ -108,25 +113,20 @@ void AWeapon::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* 
                               const FHitResult& SweepResult)
 {
     if (OtherActor == GetParentActor()) return;
-    if (!bIsSpecialAttackActive)
+    if (OtherActor->ActorHasTag("Enemy") || OtherActor->ActorHasTag("Player"))
     {
-        if (OtherActor->ActorHasTag("Enemy") || OtherActor->ActorHasTag("Player"))
+        ABaseCharacter* Enemy = Cast<ABaseCharacter>(OtherActor);
+        if (IsValid(Enemy))
         {
-            ABaseCharacter* Enemy = Cast<ABaseCharacter>(OtherActor);
-            if (IsValid(Enemy))
-            {
-                LoadPower(Enemy->MyTakeDamage(Damage, WeaponType) * WinPower);
-                SetWeaponCollision(false);
-            }
+            LoadPower(Enemy->MyTakeDamage(GetCurrentDamage(), WeaponType) * WinPower);
         }
-        else if (OtherActor->ActorHasTag("Spawn"))
+    }
+    else if (OtherActor->ActorHasTag("Spawn"))
+    {
+        AEnemySpawner* Spawn = Cast<AEnemySpawner>(OtherActor);
+        if (IsValid(Spawn))
         {
-            AEnemySpawner* Spawn = Cast<AEnemySpawner>(OtherActor);
-            if (IsValid(Spawn))
-            {
-                Spawn->MyTakeDamage(Damage);
-                SetWeaponCollision(false);
-            }
+            Spawn->MyTakeDamage(GetCurrentDamage());
         }
     }
 }

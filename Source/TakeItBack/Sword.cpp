@@ -34,17 +34,6 @@ void ASword::LoadDataAssets()
 
 ASword::ASword() : Super() {}
 
-void ASword::LightAttack()
-{
-    if (AtkCount >= AttacksAnim.Num())
-    {
-        AtkCount = 0;
-    }
-
-    GetParentCharacter()->PlayAnimMontage(AttacksAnim[AtkCount], AtkSpeed + BonusStack * AtkSpeedBonus * AtkSpeed);
-    AtkCount++;
-}
-
 void ASword::SpecialAttack()
 {
     ShieldMeteor();

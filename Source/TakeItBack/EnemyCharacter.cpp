@@ -41,7 +41,7 @@ void AEnemyCharacter::Attack()
         bCanAttack = false;
         AWeapon* CurrentWeapon =  Cast<AWeapon>(Weapon->GetChildActor());
         CurrentWeapon->LightAttack();
-        if(CurrentWeapon->AtkCount >= CurrentWeapon->AttacksAnim.Num())
+        if(CurrentWeapon->AtkCount >= CurrentWeapon->Attacks.Num())
         {
             CurrentWeapon->AtkCount = 0;
             Timer = GetWorld()->GetTimeSeconds();

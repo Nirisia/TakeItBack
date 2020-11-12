@@ -9,6 +9,7 @@
 #include "Engine.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "EnemyCharacter.h"
+#include "EnemySpawner.h"
 #include "MainPlayerController.h"
 #include "Engine/Engine.h"
 
@@ -30,23 +31,15 @@ void AAxe::Defense()
     }
 }
 
-void AAxe::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-                           int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AAxe::LoadPower(int InflictedDamage)
 {
-    if (OtherActor == GetParentActor()) return;
-    
-    Super::AttackCollision(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
-    if(bIsSpecialAttackActive)
-    {
-        if (OtherActor->ActorHasTag("Enemy") || OtherActor->ActorHasTag("Player"))
-        {
-            ABaseCharacter* Enemy = Cast<ABaseCharacter>(OtherActor);
-            if (IsValid(Enemy))
-            {
-                Enemy->MyTakeDamage(Damage, WeaponType);
-            }
-        }
-    }
+    if (bIsSpecialAttackActive) return;
+    Super::LoadPower(InflictedDamage);
+}
+
+int AAxe::GetCurrentDamage()
+{
+    return (bIsSpecialAttackActive)? FireStormDamage : Super::GetCurrentDamage();
 }
 
 void AAxe::Roll_Implementation() {}

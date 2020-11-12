@@ -33,6 +33,9 @@ class TAKEITBACK_API UDA_Axe : public UDA_Weapon
 	UPROPERTY(EditAnywhere, Category="Stats")
 	float FireStormWalkSpeedCoef = 0.25f;
 
+	UPROPERTY(EditAnywhere, Category="Stats")
+	float FireStormDamage = 10.f;
+	
 	/* FOV used during FireStorm */
 	UPROPERTY(EditAnywhere, Category="Camera")
 	float ActiveFOV = 100.f;

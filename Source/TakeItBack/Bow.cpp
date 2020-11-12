@@ -25,7 +25,7 @@ void ABow::ShootArrow()
     AArrow* ShotArrow = GetWorld()->SpawnActor<AArrow>(Arrow.Get(), SpawnLocation, GetParentActor()->GetActorForwardVector().Rotation(), SpawnParam);
     if (ShotArrow)
     {
-        ShotArrow->SetDamage(Damage);
+        ShotArrow->SetDamage(GetCurrentDamage());
     }
 }
 

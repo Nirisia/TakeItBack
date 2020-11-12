@@ -52,7 +52,6 @@ public:
 	UPROPERTY()
 	FVector SM_CameraOffset = FVector(0.f, 300.f, 0.f);
 	
-	virtual void LightAttack() override;
 	virtual void SpecialAttack() override;
 	virtual void Defense() override;
 

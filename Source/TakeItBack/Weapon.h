@@ -4,9 +4,8 @@
 
 #include "CoreMinimal.h"
 
-
-
 #include "BaseCharacter.h"
+#include "DA_Weapon.h"
 #include "Engine/StaticMesh.h"
 #include "Weapon.generated.h"
 
@@ -28,9 +27,6 @@ public:
 	int Power;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	int Damage;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int BonusStack = 0;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -46,12 +42,6 @@ public:
 	float AtkSpeed = 1.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	float AtkSpeedBonus;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	float DamageBonus;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float WinPower;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -64,7 +54,7 @@ public:
 	class UBoxComponent* BoxComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	TArray<class UAnimMontage*> AttacksAnim;
+	TArray<FWeaponAttack> Attacks;
 	
 	UPROPERTY()
     int AtkCount = 0;
@@ -88,6 +78,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetWeaponCollision(bool bGenerateOverlap);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	virtual int GetCurrentDamage();
 
 	UFUNCTION(BlueprintCallable)
 	virtual void LoadDataAssets();

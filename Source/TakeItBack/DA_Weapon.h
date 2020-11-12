@@ -8,6 +8,18 @@
 #include "Engine/DataAsset.h"
 #include "DA_Weapon.generated.h"
 
+USTRUCT(BlueprintType)
+struct FWeaponAttack
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly)
+	class UAnimMontage* AnimMontage;
+
+	UPROPERTY(EditDefaultsOnly)
+	float Damage;
+};
+
 /**
  * 
  */
@@ -21,10 +33,6 @@ class TAKEITBACK_API UDA_Weapon : public UDataAsset
 	UPROPERTY(EditAnywhere, Category="Stats")
 	int MaxPower = 300;
 
-	/* Base Damage of the weapon */
-	UPROPERTY(EditAnywhere, Category="Stats")
-	int Damage = 9;
-
 	/* Coefficient of default walkspeed used when this weapon is equipped */
 	UPROPERTY(EditAnywhere, Category="Stats")
 	float WalkSpeedCoef = 1.0f;
@@ -36,14 +44,6 @@ class TAKEITBACK_API UDA_Weapon : public UDataAsset
 	/* Attack speed of the weapon. Percentage of default animation PlayRate */
 	UPROPERTY(EditAnywhere, Category="Stats")
 	float AtkSpeed = 1.f;
-
-	/* !DEPRECATED! Bonus Speed gained with special attack stack. Percentage of Default AtkSpeed. */
-	UPROPERTY(EditAnywhere, Category="Stats")
-	float AtkSpeedBonus = 1.f;
-
-	/* !DEPRECATED! Bonus Damage gained with special attack stack. Percentage of Default Damage. */
-	UPROPERTY(EditAnywhere, Category="Stats")
-	float DamageBonus = 1.f;
 
 	/* Ratio of power won by damage inflicted */
 	UPROPERTY(EditAnywhere, Category="Stats")
@@ -57,5 +57,5 @@ class TAKEITBACK_API UDA_Weapon : public UDataAsset
 
 	/* Total combos are defined by the number of animations in this array */
 	UPROPERTY(EditAnywhere, Category="Animations")
-	TArray<class UAnimMontage*> AttacksAnim;
+	TArray<FWeaponAttack> Attacks;
 };
