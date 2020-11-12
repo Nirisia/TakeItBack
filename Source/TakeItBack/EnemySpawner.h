@@ -3,16 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "DA_Spawner.h"
 #include "GameFramework/Actor.h"
 #include "EnemySpawner.generated.h"
-
-USTRUCT()
-struct FWave
-{
-	GENERATED_BODY()
-	TArray<TSubclassOf<class AEnemyCharacter>> EnemyList;
-    float Timer;
-};
 
 UCLASS()
 class TAKEITBACK_API AEnemySpawner : public AActor
@@ -27,30 +21,36 @@ public:
 
 	void OnEnemyDie(class AEnemyCharacter* DeadEnemy);
 
-	void Damaged(int Damage);
-	
-	UPROPERTY(EditAnywhere, Category="Stats")
-	TArray<TSubclassOf<class AEnemyCharacter>> EnemyList;
+	void MyTakeDamage(int Damage);
 
-	//UPROPERTY(EditAnywhere, Category="Stats")
-	//TArray<FWave> WaveList;
+	UPROPERTY(EditAnywhere, Category="Stats")
+	TArray<FWave> WaveList;
 
 	UPROPERTY(EditAnywhere, Category="Stats")
 	int Life;
 
-	UPROPERTY(EditAnywhere, Category="Stats")
-	bool IsActive;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Stats")
+	bool bIsActive;
 
 	UPROPERTY(EditAnywhere, Category="Stats")
-	bool IsLoop;
+	bool bIsLoop;
 
 	UPROPERTY(EditAnywhere, Category="Stats")
-	float TimeBetweenWave;
+	int MaxEnemyAlive;
 
+	UPROPERTY()
+	int CurrentWaveIndex = 0;
+
+	UPROPERTY()
+	float DistanceToStopSpawn = 300.f;
+
+	UPROPERTY()
+	float DistanceToActivate = 3000.f;
+	
 	UPROPERTY()
 	float TimerWave = 0;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="DataAssets", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="DataAssets", meta = (AllowPrivateAccess = "true"))
 	class UDA_Spawner* SpawnerData;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Stats", meta = (AllowPrivateAccess = "true"))
@@ -59,12 +59,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Stats", meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* Mesh;
 
+	class ABaseCharacter* PlayerCharacter;
+
 private:
 	UFUNCTION(BlueprintCallable)
     virtual void LoadDataAssets();
 	
 	UPROPERTY()
-	TArray<AEnemyCharacter*> EnemySpawned;
+	TArray<AEnemyCharacter*> SpawnedList;
 	
 protected:
 	// Called when the game starts or when spawned

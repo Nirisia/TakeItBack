@@ -8,6 +8,18 @@
 
 #include "DA_Spawner.generated.h"
 
+USTRUCT()
+struct FWave
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AEnemyCharacter> Enemy;
+
+	UPROPERTY(EditDefaultsOnly)
+	float Timer;
+};
+
 /**
  * 
  */
@@ -18,27 +30,27 @@ class TAKEITBACK_API UDA_Spawner : public UDataAsset
 
 	public:
 	
-	UPROPERTY(EditAnywhere, Category="Stats")
-	TArray<TSubclassOf<class AEnemyCharacter>> EnemyList;
+	// UPROPERTY(EditAnywhere, Category="Stats")
+	// TArray<TSubclassOf<class AEnemyCharacter>> EnemyList;
 	
-	//UPROPERTY(EditAnywhere, Category="Stats")
-	//TArray<TArray<TSubclassOf<class AEnemyCharacter>>> WaveList;
+	UPROPERTY(EditAnywhere, Category="Stats")
+	TArray<FWave> WaveList;
 
 	UPROPERTY(EditAnywhere, Category="Stats")
 	int Life;
 
 	UPROPERTY(EditAnywhere, Category="Stats")
-	bool IsActive;
-
-	UPROPERTY(EditAnywhere, Category="Stats")
 	bool IsLoop;
 
 	UPROPERTY(EditAnywhere, Category="Stats")
-	float TimeBetweenWave;
+	int MaxEnemyAlive = 5;
 
+	UPROPERTY(EditAnywhere, Category="Stats")
+	float DistanceToStopSpawn = 300.f;
+
+	UPROPERTY(EditAnywhere, Category="Stats")
+	float DistanceToActivate = 3000.f;
+	
 	UPROPERTY(EditAnywhere, Category="Stats")
 	class UStaticMesh* Mesh;
-
-	UPROPERTY(EditAnywhere, Category="Stats")
-	FBox Target;
 };
