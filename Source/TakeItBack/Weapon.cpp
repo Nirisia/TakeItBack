@@ -9,7 +9,6 @@
 #include "EnemySpawner.h"
 #include "PlayerCharacter.h"
 #include "Engine.h"
-#include "Engine/Engine.h"
 
 // Sets default values
 AWeapon::AWeapon()
@@ -125,9 +124,9 @@ void AWeapon::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* 
             AEnemySpawner* Spawn = Cast<AEnemySpawner>(OtherActor);
             if (IsValid(Spawn))
             {
-                Spawn->Damaged(Damage);
+                Spawn->MyTakeDamage(Damage);
                 SetWeaponCollision(false);
-            }     
+            }
         }
     }
 }
