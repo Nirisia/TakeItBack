@@ -9,7 +9,6 @@
 #include "EnemySpawner.h"
 #include "PlayerCharacter.h"
 #include "Engine.h"
-#include "Engine/Engine.h"
 
 // Sets default values
 AWeapon::AWeapon()
@@ -120,16 +119,17 @@ void AWeapon::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* 
                 SetWeaponCollision(false);
             }
         }
-    }
-    else if (OtherActor->ActorHasTag("Spawn"))
-    {
-        AEnemySpawner* Spawn = Cast<AEnemySpawner>(OtherActor);
-        if (IsValid(Spawn))
+        else if (OtherActor->ActorHasTag("Spawn"))
         {
-            Spawn->Damaged(Damage);
-            SetWeaponCollision(false);
+            AEnemySpawner* Spawn = Cast<AEnemySpawner>(OtherActor);
+            if (IsValid(Spawn))
+            {
+                Spawn->MyTakeDamage(Damage);
+                SetWeaponCollision(false);
+            }
         }
     }
+
 }
 
 void AWeapon::ResetCombo()
