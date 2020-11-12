@@ -18,11 +18,14 @@ void ABow::LightAttack()
 void ABow::ShootArrow()
 {
     FActorSpawnParameters SpawnParam;
-    SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+    SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
     SpawnParam.Owner = GetParentActor();
     ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetParentActor());
     const FVector SpawnLocation = BaseCharacter->GetMesh()->GetSocketLocation("RightWeaponShield");
     AArrow* ShotArrow = GetWorld()->SpawnActor<AArrow>(Arrow.Get(), SpawnLocation, GetParentActor()->GetActorForwardVector().Rotation(), SpawnParam);
-    ShotArrow->SetDamage(Damage);
+    if (ShotArrow)
+    {
+        ShotArrow->SetDamage(Damage);
+    }
 }
 
