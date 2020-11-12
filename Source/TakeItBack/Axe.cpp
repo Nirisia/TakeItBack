@@ -79,6 +79,7 @@ void AAxe::LoadDataAssets()
         FireStormTurnRate = AxeData->FireStormTurnRate;
         FireStormWalkSpeedCoef = AxeData->FireStormWalkSpeedCoef;
         ActiveFOV = AxeData->ActiveFOV;
+        RollMaxSpeed = AxeData->RollMaxSpeed;
     }
 }
 
