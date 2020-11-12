@@ -77,6 +77,8 @@ void ASword::ShieldMeteorLaunch()
     UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.f);
     PlayerCharacter->GetFollowCamera()->SetFieldOfView(PlayerController->BaseFOV);
     PlayerCharacter->GetCameraBoom()->SocketOffset -= SM_CameraOffset;
+    PlayerCharacter->BaseTurnRate *= 0.25f;
+    PlayerCharacter->BaseLookUpRate *= 0.25f;
     PlayerCharacter->GetCharacterMovement()->GravityScale = PlayerCharacter->GravityScale;
     PlayerCharacter->GetCharacterMovement()->AirControl = PlayerCharacter->AirControl;
 
@@ -144,6 +146,9 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
             {
                 if (!bApexReached)
                 {
+                    PlayerCharacter->GetCharacterMovement()->Velocity.Z = 0.f;
+                    PlayerCharacter->BaseTurnRate /= 0.25f;
+                    PlayerCharacter->BaseLookUpRate /= 0.25f;
                     PlayerCharacter->GetCharacterMovement()->GravityScale = MeteorShieldGravityScale;
                     UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.25f);
                     PlayerCharacter->GetFollowCamera()->SetFieldOfView(ActiveFOV);
@@ -171,7 +176,7 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
                 PredictParams.bTraceWithCollision = true;
                 PredictParams.ActorsToIgnore = ActorsToIgnore;
                 PredictParams.DrawDebugType = EDrawDebugTrace::ForOneFrame;
-                PredictParams.ProjectileRadius = 10.f;
+                PredictParams.ProjectileRadius = PlayerCharacter->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
 
                 FPredictProjectilePathResult PredictResult;
 
