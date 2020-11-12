@@ -30,11 +30,25 @@ class TAKEITBACK_API AMainAIController : public AAIController
 	void SetupPerceptionSystem();
 
 	private:
+
+	UFUNCTION()
+	void LoadDataAssets();
 	
-	UPROPERTY(EditDefaultsOnly, BluePrintReadWrite, Category = "AI", meta = (AllowprivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BluePrintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
 	class UBehaviorTree* Btree;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "DataAsset", meta = (AllowPrivateAccess = "true"))
+	class UDA_AIController* ControllerData;
 
 	class ABaseCharacter* Player;
 
 	class UBlackboardComponent* Blackboard;
+
+	float DistanceToAttack = 150.f;
+
+	float SightRadius = 1000.f;
+	float LoseSightRadius = 1050.f;;
+	float PeripheralVisionAngleDegrees = 360.f;
+	float AutoSuccessRangeFromLastSeenLocation = 900.f;
+
 };

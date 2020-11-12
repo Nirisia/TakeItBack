@@ -2,6 +2,8 @@
 
 
 #include "MainAIController.h"
+
+#include "DA_AIController.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -24,6 +26,29 @@ AMainAIController::AMainAIController() : Super()
 void AMainAIController::BeginPlay()
 {
     Super::BeginPlay();
+    LoadDataAssets();
+
+    FAISenseID Id = UAISense::GetSenseID(UAISense_Sight::StaticClass());
+ 
+    if (!Id.IsValid())
+    {
+        UE_LOG(LogTemp, Error, TEXT("Wrong Sense ID"));
+        return;
+    }
+ 
+    // GetPerception() = AIController->GetPerceptionComponent()
+    const auto Config = GetPerceptionComponent()->GetSenseConfig(Id);
+    if (Config)
+    {
+        SightConfig = Cast<UAISenseConfig_Sight>(Config);
+        SightConfig->SightRadius = SightRadius;
+        SightConfig->LoseSightRadius = LoseSightRadius;
+        SightConfig->PeripheralVisionAngleDegrees = PeripheralVisionAngleDegrees;
+        SightConfig->AutoSuccessRangeFromLastSeenLocation = AutoSuccessRangeFromLastSeenLocation;
+    }
+
+ 
+    GetPerceptionComponent()->RequestStimuliListenerUpdate();
 }
 
 void AMainAIController::OnPossess(APawn* P)
@@ -39,7 +64,7 @@ void AMainAIController::OnPossess(APawn* P)
 void AMainAIController::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
-	
+
     AEnemyCharacter* Enemy = Cast<AEnemyCharacter>(GetPawn());
     if (Player && Enemy)
     {
@@ -47,20 +72,21 @@ void AMainAIController::Tick(float DeltaSeconds)
         {
             UnPossess();
         }
-        
+
         Blackboard = GetBlackboardComponent();
-        if(Blackboard)
+        if (Blackboard)
         {
-            if(Blackboard->GetValueAsBool("CanSeePlayer"))
+            if (Blackboard->GetValueAsBool("CanSeePlayer"))
             {
                 FRotator NewRotation = (Player->GetActorLocation() - Enemy->GetActorLocation()).Rotation();
                 NewRotation.Pitch = 0.f;
                 SetControlRotation(NewRotation);
             }
-            
+
             float Distance = Enemy->GetDistanceTo(Player);
             Blackboard->SetValueAsFloat("DistanceToPlayer", Distance);
             Blackboard->SetValueAsBool("CanAttack", Enemy->bCanAttack);
+            Blackboard->SetValueAsFloat("DistanceToAttack", DistanceToAttack);
         }
     }
     else
@@ -80,7 +106,7 @@ void AMainAIController::Tick(float DeltaSeconds)
 
 void AMainAIController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus)
 {
-    if(Cast<APlayerCharacter>(Actor) && Blackboard)
+    if (Cast<APlayerCharacter>(Actor) && Blackboard)
     {
         Blackboard->SetValueAsBool("CanSeePlayer", Stimulus.WasSuccessfullySensed());
     }
@@ -88,16 +114,15 @@ void AMainAIController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimul
 
 void AMainAIController::SetupPerceptionSystem()
 {
-    
     //Create and initialise sight configuration object
     SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
     PerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component"));
     SetPerceptionComponent(*PerceptionComponent);
-    SightConfig->SightRadius = 1000.f;
-    SightConfig->LoseSightRadius = SightConfig->SightRadius + 50.f;
-    SightConfig->PeripheralVisionAngleDegrees = 360.f;
+    SightConfig->SightRadius = SightRadius;
+    SightConfig->LoseSightRadius = LoseSightRadius;
+    SightConfig->PeripheralVisionAngleDegrees = PeripheralVisionAngleDegrees;
     SightConfig->SetMaxAge(5.f);
-    SightConfig->AutoSuccessRangeFromLastSeenLocation = 900.f;
+    SightConfig->AutoSuccessRangeFromLastSeenLocation = AutoSuccessRangeFromLastSeenLocation;
     SightConfig->DetectionByAffiliation.bDetectEnemies = true;
     SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
     SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
@@ -106,4 +131,16 @@ void AMainAIController::SetupPerceptionSystem()
     GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation());
     GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AMainAIController::OnTargetDetected);
     GetPerceptionComponent()->ConfigureSense(*SightConfig);
+}
+
+void AMainAIController::LoadDataAssets()
+{
+    if (ControllerData)
+    {
+        DistanceToAttack = ControllerData->DistanceToAttack;
+        SightRadius = ControllerData->SightRadius;
+        LoseSightRadius = ControllerData->LoseSightRadius;
+        PeripheralVisionAngleDegrees = ControllerData->PeripheralVisionAngleDegrees;
+        AutoSuccessRangeFromLastSeenLocation = ControllerData->AutoSuccessRangeFromLastSeenLocation;
+    }
 }
