@@ -5,6 +5,7 @@
 
 #include "DA_Player.h"
 #include "Axe.h"
+#include "Checkpoint.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -269,4 +270,23 @@ void APlayerCharacter::Die()
     bCanChangeWeapon = false;
     bCanSpecialAttack = false;
     bCanDefend = false;
+}
+
+void APlayerCharacter::Revive()
+{
+    Super::Revive();
+    bCanChangeWeapon = true;
+    bCanSpecialAttack = true;
+    bCanDefend = true;
+    Cast<AWeapon>(Axe->GetChildActor())->Power = 0;
+    Cast<AWeapon>(Sword->GetChildActor())->Power = 0;
+}
+
+void APlayerCharacter::Respawn()
+{
+    if(Checkpoint)
+    {
+        SetActorLocation(Checkpoint->GetRespawnLocation(), false, nullptr, ETeleportType::ResetPhysics);
+        Revive();
+    }
 }

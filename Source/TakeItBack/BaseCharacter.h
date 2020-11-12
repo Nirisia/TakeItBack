@@ -62,14 +62,19 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsDead = false;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="DataAssets", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="DataAssets", meta = (AllowPrivateAccess = "true"))
 	class UDA_BaseCharacter* CharacterData;
 
 	UFUNCTION(BlueprintCallable)
     virtual void LoadDataAssets();
 	
 	ABaseCharacter();
+	
+	UFUNCTION(BlueprintCallable)
 	virtual void Die();
+
+	UFUNCTION(BlueprintCallable)
+    virtual void Revive();
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void Attack();
