@@ -33,12 +33,24 @@ ABaseCharacter::ABaseCharacter()
 
 void ABaseCharacter::Die()
 {
+	CurrentLife = 0;
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	bIsDead = true;
 	GetCharacterMovement()->MaxWalkSpeed = 0.f;
 	GetCharacterMovement()->RotationRate = FRotator(0);
 	GetCharacterMovement()->SetJumpAllowed(false);
 	bCanAttack = false;
+}
+
+void ABaseCharacter::Revive()
+{
+	CurrentLife = MaxLife;
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	bIsDead = false;
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	GetCharacterMovement()->RotationRate = RotationRate;
+	GetCharacterMovement()->SetJumpAllowed(true);
+	bCanAttack = true;
 }
 
 void ABaseCharacter::Attack()

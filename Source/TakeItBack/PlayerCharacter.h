@@ -94,8 +94,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool keys = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class ACheckpoint* Checkpoint;
 	
-public:
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
 
@@ -143,6 +145,12 @@ public:
 	void Heal(float HealPercent);
 
 	virtual void Die() override;
+	virtual void Revive() override;
+
+	
+	UFUNCTION(BlueprintCallable)
+	void Respawn();
+	
 	UFUNCTION()
 	void SetShieldMesh(class UStaticMesh* ShieldMesh);
 };
