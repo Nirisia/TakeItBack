@@ -41,13 +41,13 @@ public:
 	UPROPERTY()
 	int CurrentWaveIndex = 0;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	float DistanceToStopSpawn = 300.f;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	float DistanceToActivate = 3000.f;
 	
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	float TimerWave = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="DataAssets", meta = (AllowPrivateAccess = "true"))
