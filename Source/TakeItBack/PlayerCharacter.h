@@ -141,10 +141,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void StopDefense();
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	class AWeapon* GetCurrentWeapon();
-
-	virtual void SetWeaponCollision(bool bGenerateOverlap) override;
+	virtual class AWeapon* GetCurrentWeapon() override;
 
 	UFUNCTION(BlueprintCallable)
 	void SetInvulnerable(bool bInvunerable);

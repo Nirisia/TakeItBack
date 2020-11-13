@@ -35,11 +35,10 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	virtual void SetWeaponCollision(bool bGenerateOverlap) override;
-	
 
 
 public:
+	virtual AWeapon* GetCurrentWeapon() override;
 	virtual void ResetCombo() override;
 	virtual void LoadDataAssets() override;
 };

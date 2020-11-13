@@ -52,6 +52,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class UBoxComponent* BoxComponent;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UParticleSystem* ParticleSystem;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TArray<FWeaponAttack> Attacks;

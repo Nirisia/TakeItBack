@@ -261,11 +261,6 @@ void APlayerCharacter::SetShieldMesh(UStaticMesh* ShieldMesh)
     Shield->SetStaticMesh(ShieldMesh);
 }
 
-void APlayerCharacter::SetWeaponCollision(bool bGenerateOverlap)
-{
-    GetCurrentWeapon()->SetWeaponCollision(bGenerateOverlap);
-}
-
 void APlayerCharacter::SetInvulnerable(bool bInvunerable)
 {
     bInvulnerable = bInvunerable;

@@ -57,9 +57,6 @@ public:
 	bool bCanAttack = true;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	bool bImpact = false;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsDead = false;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="DataAssets", meta = (AllowPrivateAccess = "true"))
@@ -84,6 +81,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void SetWeaponCollision(bool bGenerateOverlap);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	virtual class AWeapon* GetCurrentWeapon();
 
 	UFUNCTION(BlueprintCallable)
 	virtual void ValidateAttack();

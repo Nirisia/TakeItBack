@@ -16,9 +16,9 @@ AEnemyCharacter::AEnemyCharacter()
     Weapon->SetRelativeRotation(FRotator(0.f, 90.f, 90.f));
 }
 
-void AEnemyCharacter::SetWeaponCollision(bool bGenerateOverlap)
+AWeapon* AEnemyCharacter::GetCurrentWeapon()
 {
-    Cast<AWeapon>(Weapon->GetChildActor())->SetWeaponCollision(bGenerateOverlap);
+    return Cast<AWeapon>(Weapon->GetChildActor());
 }
 
 void AEnemyCharacter::ResetCombo()

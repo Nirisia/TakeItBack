@@ -5,6 +5,7 @@
 
 #include "DA_BaseCharacter.h"
 #include "Engine.h"
+#include "Weapon.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -62,7 +63,7 @@ int ABaseCharacter::MyTakeDamage(int Damage, EWeaponResistance WeaponType)
 {
 	if (CurrentLife > 0)
 	{
-		bImpact = true;
+		ResetCombo();
 		int InflictedDamage;
 		if (WeaponType == Resistance)
 		{
@@ -95,6 +96,15 @@ int ABaseCharacter::MyTakeDamage(int Damage, EWeaponResistance WeaponType)
 
 void ABaseCharacter::SetWeaponCollision(bool bGenerateOverlap)
 {
+	if (GetCurrentWeapon())
+	{
+		GetCurrentWeapon()->SetWeaponCollision(bGenerateOverlap);
+	}
+}
+
+AWeapon* ABaseCharacter::GetCurrentWeapon()
+{
+	return nullptr;
 }
 
 void ABaseCharacter::ValidateAttack()
@@ -109,6 +119,7 @@ void ABaseCharacter::ResetCombo()
 	bCanAttack = true;
 	GetCharacterMovement()->RotationRate = RotationRate;
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	SetWeaponCollision(false);
 }
 
 // Called when the game starts or when spawned
