@@ -33,7 +33,6 @@ void AMainPlayerController::LoadDataAssets()
         }
         TimeBeforeAutoCamera = ControllerData->TimeBeforeAutoCamera;
         BaseFOV = ControllerData->CameraFOV;
-        SetControlRotation(ControllerData->InitialControllerRotation);
         AutoCameraSensitivity = ControllerData->AutoCameraSensitivity;
     }
 }
@@ -84,6 +83,7 @@ void AMainPlayerController::BeginPlay()
     Super::BeginPlay();
     SetupInputComponent();
     LoadDataAssets();
+    SetControlRotation(GetControlRotation() + InitialControllerRotation);
 }
 
 void AMainPlayerController::SetupInputComponent()

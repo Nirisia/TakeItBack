@@ -19,6 +19,9 @@ class TAKEITBACK_API AMainPlayerController : public APlayerController
 
 	UPROPERTY()
 	float AutoCameraSensitivity;
+
+	UPROPERTY()
+	FRotator InitialControllerRotation;
 	
 	UPROPERTY(EditDefaultsOnly, Category="DataAssets")
 	class UDA_PlayerController* ControllerData;
