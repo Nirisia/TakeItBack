@@ -90,7 +90,6 @@ void AEnemySpawner::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    TimerWave += DeltaTime;
     if (!PlayerCharacter)
     {
         PlayerCharacter = Cast<ABaseCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
@@ -103,8 +102,7 @@ void AEnemySpawner::Tick(float DeltaTime)
 
         bIsActive = (Distance <= DistanceToActivate) && (Distance >= DistanceToStopSpawn);
 
-        if (!bIsActive) TimerWave = 0;
-        
+
         if (bIsActive && CurrentWaveIndex < WaveList.Num() && SpawnedList.Num() < MaxEnemyAlive)
         {
             if (TimerWave >= WaveList[CurrentWaveIndex].Timer)
@@ -118,5 +116,7 @@ void AEnemySpawner::Tick(float DeltaTime)
         {
             CurrentWaveIndex = 0;
         }
+
+        TimerWave += DeltaTime;
     }
 }
