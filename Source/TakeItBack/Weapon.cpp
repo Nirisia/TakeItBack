@@ -113,20 +113,25 @@ void AWeapon::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* 
                               const FHitResult& SweepResult)
 {
     if (OtherActor == GetParentActor()) return;
-    if (OtherActor->ActorHasTag("Enemy") || OtherActor->ActorHasTag("Player"))
+    ABaseCharacter* Character = Cast<ABaseCharacter>(OtherActor);
+    if (Character)
     {
-        ABaseCharacter* Enemy = Cast<ABaseCharacter>(OtherActor);
-        if (IsValid(Enemy))
+        
+        if (IsValid(Character))
         {
-            LoadPower(Enemy->MyTakeDamage(GetCurrentDamage(), WeaponType) * WinPower);
+            LoadPower(Character->MyTakeDamage(GetCurrentDamage(), WeaponType) * WinPower);
+            return;
         }
     }
-    else if (OtherActor->ActorHasTag("Spawn"))
+    
+    AEnemySpawner* Spawn = Cast<AEnemySpawner>(OtherActor);
+    if (OtherActor->ActorHasTag("Spawn"))
     {
-        AEnemySpawner* Spawn = Cast<AEnemySpawner>(OtherActor);
+        
         if (IsValid(Spawn))
         {
             Spawn->MyTakeDamage(GetCurrentDamage());
+            return;
         }
     }
 }
