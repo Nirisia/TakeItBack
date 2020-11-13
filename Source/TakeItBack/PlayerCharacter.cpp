@@ -18,8 +18,12 @@
 
 void APlayerCharacter::LoadWeaponStats()
 {
-    GetCharacterMovement()->GravityScale = GravityScale * GetCurrentWeapon()->GravityScaleCoef;
-    GetCharacterMovement()->MaxWalkSpeed = WalkSpeed * GetCurrentWeapon()->WalkSpeedCoef;
+    auto Weapon = GetCurrentWeapon();
+    if (Weapon)
+    {
+        GetCharacterMovement()->GravityScale = GravityScale * GetCurrentWeapon()->GravityScaleCoef;
+        GetCharacterMovement()->MaxWalkSpeed = WalkSpeed * GetCurrentWeapon()->WalkSpeedCoef;
+    }
 }
 
 void APlayerCharacter::LoadDataAssets()
@@ -93,6 +97,12 @@ void APlayerCharacter::BeginPlay()
     LoadWeaponStats();
     // Configure character movement
     GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...
+}
+
+int APlayerCharacter::MyTakeDamage(int Damage, EWeaponResistance WeaponType)
+{
+    if (bInvulnerable) return 0;
+    return Super::MyTakeDamage(Damage, WeaponType);
 }
 
 void APlayerCharacter::MoveForward(float Value)
@@ -227,11 +237,13 @@ void APlayerCharacter::SpecialAttack()
 
 void APlayerCharacter::Defense()
 {
+    SetInvulnerable(true);
     GetCurrentWeapon()->Defense();   
 }
 
 void APlayerCharacter::StopDefense()
 {
+    SetInvulnerable(false);
     GetCurrentWeapon()->StopDefense();
 }
 
@@ -252,6 +264,11 @@ void APlayerCharacter::SetShieldMesh(UStaticMesh* ShieldMesh)
 void APlayerCharacter::SetWeaponCollision(bool bGenerateOverlap)
 {
     GetCurrentWeapon()->SetWeaponCollision(bGenerateOverlap);
+}
+
+void APlayerCharacter::SetInvulnerable(bool bInvunerable)
+{
+    bInvulnerable = bInvunerable;
 }
 
 void APlayerCharacter::Heal(float HealPercent)

@@ -44,6 +44,7 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon", meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* Shield;
 
+	UFUNCTION(BlueprintCallable)
 	void LoadWeaponStats();
 
 	virtual void LoadDataAssets() override;	
@@ -76,6 +77,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bCanDefend = true;
 
+	bool bInvulnerable = false;
+
+	virtual int MyTakeDamage(int Damage, EWeaponResistance WeaponType) override;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bCanChangeWeapon = true;
 
@@ -140,6 +145,9 @@ public:
 	class AWeapon* GetCurrentWeapon();
 
 	virtual void SetWeaponCollision(bool bGenerateOverlap) override;
+
+	UFUNCTION(BlueprintCallable)
+	void SetInvulnerable(bool bInvunerable);
 
 	UFUNCTION(BlueprintCallable)
 	void Heal(float HealPercent);
