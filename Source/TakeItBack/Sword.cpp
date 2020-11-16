@@ -106,11 +106,10 @@ void ASword::ShieldMeteor_Implementation()
         }
         else if (!PlayerCharacter->GetCharacterMovement()->IsFalling())
         {
-            Cast<APlayerController>(GetParentCharacter()->GetController())->PlayDynamicForceFeedback(
-                0.05f, 0.3f, false, true, false, true);
-
-            FVector LaunchVelocity = 	FVector(0.f);
-            LaunchVelocity.Z = UKismetMathLibrary::Sqrt(-2 * MeteorShieldJumpHeight * PlayerCharacter->GetCharacterMovement()->GetGravityZ());
+            FVector LaunchVelocity = FVector(0.f);
+            LaunchVelocity.Z = UKismetMathLibrary::Sqrt(
+                -2 * MeteorShieldJumpHeight * PlayerCharacter->GetCharacterMovement()->GetGravityZ() * PlayerCharacter->
+                GravityScale);
 
             PlayerCharacter->LaunchCharacter(LaunchVelocity, true, true);
             PlayerCharacter->GetCharacterMovement()->AirControl = MeteorShieldAirControl;
