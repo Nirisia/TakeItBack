@@ -135,10 +135,12 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
             {
                 if (!bApexReached)
                 {
+                    OnShieldMeteorApex();
                     PlayerCharacter->GetCharacterMovement()->Velocity.Z = 0.f;
                     PlayerCharacter->BaseTurnRate /= 0.25f;
                     PlayerCharacter->BaseLookUpRate /= 0.25f;
                     PlayerCharacter->GetCharacterMovement()->GravityScale = MeteorShieldGravityScale;
+                    // TODO: Expose time dilation
                     UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.25f);
                     PlayerCharacter->GetFollowCamera()->SetFieldOfView(ActiveFOV);
                     PlayerCharacter->GetCameraBoom()->SocketOffset += SM_CameraOffset;
@@ -173,22 +175,22 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
                 UGameplayStatics::PredictProjectilePath(GetWorld(), PredictParams, PredictResult);
 
                 DrawDebugSphere(GetWorld(), PredictResult.HitResult.Location,
-                    100, 12, FColor::Red,
-                    false, 0, 0, 10);
+                                100, 12, FColor::Red,
+                                false, 0, 0, 10);
 
 
                 ElapsedTime += DeltaTime / 0.25f;
             }
             else
             {
+                OnShieldMeteorStart();
                 ShieldMeteorLaunch();
             }
         }
     }
     if (bIsLaunched && !PlayerCharacter->GetCharacterMovement()->IsFalling())
     {
-        Cast<APlayerController>(GetParentCharacter()->GetController())->PlayDynamicForceFeedback(
-            1.0f, 0.5f, true, true, true, true);
+        OnShieldMeteorImpact();
 
         TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
         ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
@@ -206,6 +208,7 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
             ABaseCharacter* Enemy = Cast<ABaseCharacter>(OutActors[i]);
             if (Enemy)
             {
+                // TODO: Expose damage variable
                 Enemy->MyTakeDamage(100);
                 if (Enemy->bIsDead)
                 {

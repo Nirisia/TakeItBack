@@ -64,6 +64,7 @@ void AArrow::OnHit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 		ABaseCharacter* Character = Cast<ABaseCharacter>(OtherActor);
 		if (Character)
 		{
+			OnHitArrow();
 			Character->MyTakeDamage(Damage);
 		}
 		Destroy();

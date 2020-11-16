@@ -27,6 +27,9 @@ public:
 	// Sets default values for this actor's properties
 	AArrow();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnHitArrow();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

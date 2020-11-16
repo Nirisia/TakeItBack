@@ -8,10 +8,8 @@
 #include "DA_Axe.h"
 #include "Engine.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "EnemyCharacter.h"
 #include "EnemySpawner.h"
 #include "MainPlayerController.h"
-#include "Engine/Engine.h"
 
 AAxe::AAxe() : Super() {}
 
@@ -102,10 +100,9 @@ void AAxe::Tick(float DeltaTime)
 
             auto PlayerCharacterMovement = PlayerCharacter->GetCharacterMovement();
 
+            OnFireStormEnd();
+
             auto PlayerController = Cast<AMainPlayerController>(PlayerCharacter->GetController());
-            PlayerController->PlayDynamicForceFeedback(
-                UKismetMathLibrary::Cos(ElapsedTime * UKismetMathLibrary::GetPI()), -1.f, true, true, true, true,
-                EDynamicForceFeedbackAction::Update, ForceFeedbackHandle);
 
             PlayerCharacterMovement->MaxWalkSpeed = PlayerCharacter->WalkSpeed;
             PlayerCharacterMovement->RotationRate = PlayerCharacter->RotationRate;
@@ -140,6 +137,7 @@ void AAxe::FireStorm_Implementation()
     {
         ElapsedTime = 0.f;
         APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
+        OnFireStormStart();
         auto PlayerCharacterMovement = PlayerCharacter->GetCharacterMovement();
 
         MeshComponent->SetRelativeRotation(FRotator(-80.f, -180.f, 0.f));
@@ -147,9 +145,6 @@ void AAxe::FireStorm_Implementation()
 
         PlayerCharacterMovement->MaxWalkSpeed = FireStormWalkSpeedCoef * PlayerCharacter->WalkSpeed;
         PlayerCharacterMovement->RotationRate = FRotator(0.0f, 0.0f, 0.0f);
-        auto PlayerController = Cast<APlayerController>(GetParentCharacter()->GetController());
-        ForceFeedbackHandle = PlayerController->PlayDynamicForceFeedback(1.0f, -1.f, true, true, true, true);
-
         PlayerCharacter->bCanDefend = false;
         PlayerCharacter->bCanAttack = false;
         PlayerCharacter->bCanSpecialAttack = false;

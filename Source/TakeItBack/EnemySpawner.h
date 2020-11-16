@@ -59,7 +59,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Stats", meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* Mesh;
 
+	UPROPERTY()
 	class ABaseCharacter* PlayerCharacter;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnSpawned(FTransform EnemyTransform);
 
 private:
 	UFUNCTION(BlueprintCallable)

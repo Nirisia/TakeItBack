@@ -27,6 +27,8 @@ public:
     UFUNCTION(BlueprintCallable)
     FVector GetRespawnLocation();
 
+    UFUNCTION(BlueprintImplementableEvent)
+    void OnEnter();
 
 protected:
     // Called when the game starts or when spawned

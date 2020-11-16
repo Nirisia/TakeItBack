@@ -38,6 +38,7 @@ void AEnemySpawner::SpawnWave(int Index)
     SpawnedEnemy->SpawnDefaultController();
     SpawnedEnemy->Spawner = this;
 
+    OnSpawned(SpawnedEnemy->GetTransform());
     SpawnedList.Add(SpawnedEnemy);
 }
 

@@ -19,8 +19,6 @@ class TAKEITBACK_API AAxe : public AWeapon
 	UPROPERTY()
 	float ElapsedTime = 0.f;
 
-	FDynamicForceFeedbackHandle ForceFeedbackHandle;
-
 	public:
 	AAxe();
 
@@ -67,4 +65,10 @@ class TAKEITBACK_API AAxe : public AWeapon
 	UFUNCTION(BlueprintCallable)
 	void RollEnd();
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnFireStormStart();
+	
+	UFUNCTION(BlueprintImplementableEvent)
+    void OnFireStormEnd();
 };

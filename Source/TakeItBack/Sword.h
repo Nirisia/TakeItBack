@@ -64,6 +64,14 @@ public:
 	UFUNCTION()
 	void ShieldMeteorLaunch();
 
+	UFUNCTION(BlueprintImplementableEvent)
+    void OnShieldMeteorStart();
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnShieldMeteorImpact();
+
+	UFUNCTION(BlueprintImplementableEvent)
+    void OnShieldMeteorApex();
 
 protected:
 	virtual void BeginPlay() override;

@@ -48,6 +48,7 @@ void ACheckpoint::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	auto Player = Cast<APlayerCharacter>(OtherActor);
 	if (Player)
 	{
+		OnEnter();
 		Player->Checkpoint = this;
 	}
 }
