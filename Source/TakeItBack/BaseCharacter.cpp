@@ -82,6 +82,7 @@ int ABaseCharacter::MyTakeDamage(int Damage, EWeaponResistance WeaponType)
 		}
 
 		CurrentLife -= InflictedDamage;
+		LaunchCharacter(-GetActorForwardVector()*ReceiveVelocity*(InflictedDamage/KnockbackCoeffDmg), false, false);
 		
 		if(CurrentLife <= 0)
 		{

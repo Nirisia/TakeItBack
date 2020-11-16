@@ -23,6 +23,12 @@ class TAKEITBACK_API UDA_BaseCharacter : public UDataAsset
 	UPROPERTY(EditAnywhere, Category="Stats")
 	int MaxLife = 200;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Knockback")
+	float ReceiveVelocity = 100.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Knockback")
+	int KnockbackCoeffDmg = 10.f;
+
 	/* Default Walking Speed of the character */
 	UPROPERTY(EditAnywhere, Category="Movement")
 	int WalkSpeed = 600.f;

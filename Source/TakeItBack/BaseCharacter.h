@@ -29,6 +29,12 @@ public:
 	int CurrentLife;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float ReceiveVelocity = 100.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int KnockbackCoeffDmg = 10.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float ResistanceCoeff;
 
 	UPROPERTY(EditAnywhere)
