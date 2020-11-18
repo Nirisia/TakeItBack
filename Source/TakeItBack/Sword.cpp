@@ -108,8 +108,7 @@ void ASword::ShieldMeteor_Implementation()
         {
             FVector LaunchVelocity = FVector(0.f);
             LaunchVelocity.Z = UKismetMathLibrary::Sqrt(
-                -2 * MeteorShieldJumpHeight * PlayerCharacter->GetCharacterMovement()->GetGravityZ() * PlayerCharacter->
-                GravityScale);
+                -2 * MeteorShieldJumpHeight * PlayerCharacter->GetCharacterMovement()->GetGravityZ());
 
             PlayerCharacter->LaunchCharacter(LaunchVelocity, true, true);
             PlayerCharacter->GetCharacterMovement()->AirControl = MeteorShieldAirControl;
@@ -167,6 +166,7 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
                 PredictParams.ActorsToIgnore = ActorsToIgnore;
                 PredictParams.DrawDebugType = EDrawDebugTrace::ForOneFrame;
                 PredictParams.ProjectileRadius = PlayerCharacter->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+                PredictParams.OverrideGravityZ = PlayerCharacter->GetCharacterMovement()->GetGravityZ() / PlayerCharacter->GetCharacterMovement()->GravityScale;
 
                 FPredictProjectilePathResult PredictResult;
 
