@@ -135,6 +135,7 @@ void AAxe::FireStorm_Implementation()
 {
     if (!bIsSpecialAttackActive)
     {
+        bIsSpecialAttackActive = true;
         ElapsedTime = 0.f;
         APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
         OnFireStormStart();
@@ -154,6 +155,5 @@ void AAxe::FireStorm_Implementation()
 
         SetWeaponCollision(true);
 
-        bIsSpecialAttackActive = true;
     }
 }
