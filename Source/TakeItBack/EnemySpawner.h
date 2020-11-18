@@ -21,7 +21,7 @@ public:
 
 	void OnEnemyDie(class AEnemyCharacter* DeadEnemy);
 
-	void MyTakeDamage(int Damage);
+	int MyTakeDamage(int Damage);
 
 	UPROPERTY(EditAnywhere, Category="Stats")
 	TArray<FWave> WaveList;

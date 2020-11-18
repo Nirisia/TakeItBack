@@ -53,16 +53,15 @@ void AEnemySpawner::OnEnemyDie(AEnemyCharacter* DeadEnemy)
     }
 }
 
-void AEnemySpawner::MyTakeDamage(int Damaged)
+int AEnemySpawner::MyTakeDamage(int Damaged)
 {
-    if (Life > 0)
-    {
-        Life -= Damaged;
-    }
+    Life -= Damaged;
     if (Life <= 0)
     {
         Destroy();
+        return Damaged + Life;
     }
+    return Damaged;
 }
 
 void AEnemySpawner::LoadDataAssets()
