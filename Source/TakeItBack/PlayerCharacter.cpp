@@ -268,6 +268,7 @@ void APlayerCharacter::SetInvulnerable(bool bInvunerable)
 
 void APlayerCharacter::Heal(float HealPercent)
 {
+    OnHeal();
     CurrentLife += MaxLife * HealPercent;
         
     if(CurrentLife > MaxLife)

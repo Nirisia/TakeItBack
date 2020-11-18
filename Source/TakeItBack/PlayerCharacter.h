@@ -55,6 +55,9 @@ public:
 	
 	APlayerCharacter();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnHeal();
+
 
 protected:
 	virtual void BeginPlay() override;
