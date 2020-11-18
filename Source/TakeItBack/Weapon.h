@@ -100,10 +100,10 @@ public:
 			bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnEnemyHit(FVector HitLocation, float InflictedDamage, bool IsSpecialAttackActive);
+	void OnEnemyHit(float InflictedDamage, bool IsSpecialAttackActive);
 
 	UFUNCTION(BlueprintImplementableEvent)
-    void OnSpawnerHit(FVector HitLocation, float InflictedDamage, bool IsSpecialAttackActive);
+    void OnSpawnerHit(float InflictedDamage, bool IsSpecialAttackActive);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnWeaponToggleCollision(bool bGenerateOverlap);

@@ -122,7 +122,7 @@ void AWeapon::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* 
         {
             const float InflictedDamage = Character->MyTakeDamage(GetCurrentDamage(), WeaponType);
             
-            OnEnemyHit(MeshComponent->GetSocketTransform("Hit").GetLocation(), InflictedDamage, bIsSpecialAttackActive);
+            OnEnemyHit(InflictedDamage, bIsSpecialAttackActive);
             LoadPower(InflictedDamage * WinPower);
             return;
         }
@@ -134,8 +134,8 @@ void AWeapon::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* 
         
         if (IsValid(Spawn))
         {
-            const float InflictedDamage = Character->MyTakeDamage(GetCurrentDamage(), WeaponType);
-            OnSpawnerHit(SweepResult.Location, InflictedDamage, bIsSpecialAttackActive);
+            const float InflictedDamage = Spawn->MyTakeDamage(GetCurrentDamage());
+            OnSpawnerHit(InflictedDamage, bIsSpecialAttackActive);
             Spawn->MyTakeDamage(InflictedDamage);
             return;
         }
