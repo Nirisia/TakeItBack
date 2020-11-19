@@ -43,7 +43,6 @@ void AEnemyCharacter::Attack()
         CurrentWeapon->LightAttack();
         if(CurrentWeapon->AtkCount >= CurrentWeapon->Attacks.Num())
         {
-            CurrentWeapon->AtkCount = 0;
             Timer = GetWorld()->GetTimeSeconds();
         }
     }
