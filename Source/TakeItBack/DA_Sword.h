@@ -36,6 +36,15 @@ class TAKEITBACK_API UDA_Sword : public UDA_Weapon
 	/* Maximum jump height of the player with ShieldMeteor */
 	UPROPERTY(EditAnywhere, Category="Stats")
 	float MeteorShieldJumpHeight = 500.f;
+
+	UPROPERTY(EditAnywhere, Category="Stats")
+	float MeteorShieldDamage = 100;
+
+	UPROPERTY(EditAnywhere, Category="Stats")
+	float MeteorShieldTimeDilation = 0.25f;
+
+	UPROPERTY(EditAnywhere, Category="Stats")
+	float MeteorShieldRadius;
 	
 	UPROPERTY(EditAnywhere, Category="Mesh")
 	class UStaticMesh* ShieldMesh;

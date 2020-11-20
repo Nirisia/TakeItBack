@@ -27,6 +27,15 @@ class TAKEITBACK_API ASword : public AWeapon
 	UPROPERTY()
 	float ElapsedTime;
 
+	UPROPERTY()
+	float MeteorShieldDamage = 100;
+
+	UPROPERTY()
+	float MeteorShieldTimeDilation = 0.25f;
+
+	UPROPERTY()
+	float MeteorShieldRadius = 150.f;
+
 public:
 	virtual void LoadDataAssets() override;
 	ASword();

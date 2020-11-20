@@ -21,6 +21,9 @@ void ASword::LoadDataAssets()
         MeteorShieldAirControl = SwordData->MeteorShieldAirControl;
         MeteorShieldGravityScale = SwordData->MeteorShieldGravityScale;
         MeteorShieldJumpHeight = SwordData->MeteorShieldJumpHeight;
+        MeteorShieldDamage = SwordData->MeteorShieldDamage;
+        MeteorShieldTimeDilation = SwordData->MeteorShieldTimeDilation;
+        MeteorShieldRadius = SwordData->MeteorShieldRadius;
         APlayerCharacter* ParentPlayerCharacter = Cast<APlayerCharacter>(GetParentActor());
         if (ParentPlayerCharacter)
         {
@@ -66,8 +69,8 @@ void ASword::ShieldMeteorLaunch()
     UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.f);
     PlayerCharacter->GetFollowCamera()->SetFieldOfView(PlayerController->BaseFOV);
     PlayerCharacter->GetCameraBoom()->SocketOffset -= SM_CameraOffset;
-    PlayerCharacter->BaseTurnRate *= 0.25f;
-    PlayerCharacter->BaseLookUpRate *= 0.25f;
+    PlayerCharacter->BaseTurnRate *= MeteorShieldTimeDilation;
+    PlayerCharacter->BaseLookUpRate *= MeteorShieldTimeDilation;
     PlayerCharacter->GetCharacterMovement()->GravityScale = PlayerCharacter->GravityScale;
     PlayerCharacter->GetCharacterMovement()->AirControl = PlayerCharacter->AirControl;
 
@@ -106,6 +109,7 @@ void ASword::ShieldMeteor_Implementation()
         }
         else if (!PlayerCharacter->GetCharacterMovement()->IsFalling())
         {
+            OnShieldMeteorStart();
             FVector LaunchVelocity = FVector(0.f);
             LaunchVelocity.Z = UKismetMathLibrary::Sqrt(
                 -2 * MeteorShieldJumpHeight * PlayerCharacter->GetCharacterMovement()->GetGravityZ());
@@ -135,11 +139,10 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
                 {
                     OnShieldMeteorApex();
                     PlayerCharacter->GetCharacterMovement()->Velocity.Z = 0.f;
-                    PlayerCharacter->BaseTurnRate /= 0.25f;
-                    PlayerCharacter->BaseLookUpRate /= 0.25f;
+                    PlayerCharacter->BaseTurnRate /= MeteorShieldTimeDilation;
+                    PlayerCharacter->BaseLookUpRate /= MeteorShieldTimeDilation;
                     PlayerCharacter->GetCharacterMovement()->GravityScale = MeteorShieldGravityScale;
-                    // TODO: Expose time dilation
-                    UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.25f);
+                    UGameplayStatics::SetGlobalTimeDilation(GetWorld(), MeteorShieldTimeDilation);
                     PlayerCharacter->GetFollowCamera()->SetFieldOfView(ActiveFOV);
                     PlayerCharacter->GetCameraBoom()->SocketOffset += SM_CameraOffset;
                     bApexReached = true;
@@ -177,12 +180,10 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
                                 100, 12, FColor::Red,
                                 false, 0, 0, 10);
 
-
-                ElapsedTime += DeltaTime / 0.25f;
+                ElapsedTime += DeltaTime / MeteorShieldTimeDilation;
             }
             else
             {
-                OnShieldMeteorStart();
                 ShieldMeteorLaunch();
             }
         }
@@ -199,7 +200,7 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
 
         TArray<class AActor*> OutActors;
 
-        UKismetSystemLibrary::SphereOverlapActors(GetWorld(), PlayerCharacter->GetActorLocation(), 150, ObjectTypes,
+        UKismetSystemLibrary::SphereOverlapActors(GetWorld(), PlayerCharacter->GetActorLocation(), MeteorShieldRadius, ObjectTypes,
                                                   nullptr, ActorsToIgnore, OutActors);
 
         for (int i = 0; i < OutActors.Num(); i++)
@@ -207,16 +208,7 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
             ABaseCharacter* Enemy = Cast<ABaseCharacter>(OutActors[i]);
             if (Enemy)
             {
-                // TODO: Expose damage variable
-                Enemy->MyTakeDamage(100);
-                if (Enemy->bIsDead)
-                {
-                    USkeletalMeshComponent* EnemyMesh = Enemy->GetMesh();
-                    FVector Direction = Enemy->GetActorLocation() - PlayerCharacter->GetActorLocation();
-                    Direction.Z *= -1;
-                    Direction.Normalize();
-                    EnemyMesh->AddImpulseToAllBodiesBelow(Direction * 1000, EnemyMesh->GetBoneName(0), true);
-                }
+                Enemy->MyTakeDamage(MeteorShieldDamage);
             }
         }
         bIsLaunched = false;
