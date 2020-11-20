@@ -34,6 +34,8 @@ void APlayerCharacter::LoadDataAssets()
     {
         ChangeWeaponSpeed = PlayerData->ChangeWeaponSpeed;
         StackLimit = PlayerData->StackLimit;
+        BaseTurnRate = PlayerData->BaseTurnRate;
+        BaseLookUpRate = PlayerData->BaseLookUpRate;
     }
 }
 
@@ -46,7 +48,6 @@ void APlayerCharacter::SetupStimulus()
 
 APlayerCharacter::APlayerCharacter() : Super()
 {
-
     // Set size for collision capsule
     GetCapsuleComponent()->InitCapsuleSize(42.f, 86.0f);
 
