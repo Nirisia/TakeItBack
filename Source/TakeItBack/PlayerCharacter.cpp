@@ -6,6 +6,7 @@
 #include "DA_Player.h"
 #include "Axe.h"
 #include "Checkpoint.h"
+#include "TakeItBackGameInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -135,12 +136,29 @@ void APlayerCharacter::MoveRight(float Value)
 
 void APlayerCharacter::TurnAtRate(float Rate)
 {
-    AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+    UTakeItBackGameInstance* GameInstance = Cast<UTakeItBackGameInstance>(GetGameInstance());
+    if (GameInstance && GameInstance->bInverseXAxis)
+    {
+        AddControllerYawInput(-Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+
+    }
+    else
+    {
+        AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+    }
 }
 
 void APlayerCharacter::LookUpAtRate(float Rate)
 {
-    AddControllerPitchInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+    UTakeItBackGameInstance* GameInstance = Cast<UTakeItBackGameInstance>(GetGameInstance());
+    if (GameInstance && GameInstance->bInverseYAxis)
+    {
+        AddControllerPitchInput(-Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+    }
+    else
+    {
+        AddControllerPitchInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+    }
 }
 
 void APlayerCharacter::ChangeWeapon()
