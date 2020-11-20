@@ -40,7 +40,7 @@ AArrow::AArrow()
 void AArrow::BeginPlay()
 {
 	Super::BeginPlay();
-	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AArrow::OnHit);
+	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AArrow::OnBeginOverlap);
 
 }
 
@@ -55,7 +55,7 @@ void AArrow::SetDamage(int NewDamage)
 	Damage = NewDamage;
 }
 
-void AArrow::OnHit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+void AArrow::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
                    UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
                    const FHitResult& SweepResult)
 {
@@ -69,5 +69,35 @@ void AArrow::OnHit(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 		}
 		Destroy();
 	}
+}
+
+float AArrow::GetInitialVelocity()
+{
+	return ProjectileMovementComponent->InitialSpeed;
+}
+
+void AArrow::SetVelocity(FVector NewVelocity)
+{
+	ProjectileMovementComponent->Velocity = NewVelocity;
+}
+
+float AArrow::GetInitialVelocity()
+{
+	return ProjectileMovementComponent->InitialSpeed;
+}
+
+void AArrow::SetVelocity(FVector NewVelocity)
+{
+	ProjectileMovementComponent->Velocity = NewVelocity;
+}
+
+float AArrow::GetInitialVelocity()
+{
+	return ProjectileMovementComponent->InitialSpeed;
+}
+
+void AArrow::SetVelocity(FVector NewVelocity)
+{
+	ProjectileMovementComponent->Velocity = NewVelocity;
 }
 
