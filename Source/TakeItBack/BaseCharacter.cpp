@@ -30,6 +30,9 @@ ABaseCharacter::ABaseCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	// Set size for collision capsule
+	GetCapsuleComponent()->InitCapsuleSize(60.f, 86.0f);
 }
 
 void ABaseCharacter::Die()

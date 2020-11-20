@@ -48,8 +48,6 @@ void APlayerCharacter::SetupStimulus()
 
 APlayerCharacter::APlayerCharacter() : Super()
 {
-    // Set size for collision capsule
-    GetCapsuleComponent()->InitCapsuleSize(42.f, 86.0f);
 
     Axe = CreateDefaultSubobject<UChildActorComponent>(TEXT("Axe"));
     Axe->SetupAttachment(Cast<USceneComponent>(GetMesh()), "LeftWeaponShield");
