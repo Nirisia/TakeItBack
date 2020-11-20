@@ -80,24 +80,3 @@ void AArrow::SetVelocity(FVector NewVelocity)
 {
 	ProjectileMovementComponent->Velocity = NewVelocity;
 }
-
-float AArrow::GetInitialVelocity()
-{
-	return ProjectileMovementComponent->InitialSpeed;
-}
-
-void AArrow::SetVelocity(FVector NewVelocity)
-{
-	ProjectileMovementComponent->Velocity = NewVelocity;
-}
-
-float AArrow::GetInitialVelocity()
-{
-	return ProjectileMovementComponent->InitialSpeed;
-}
-
-void AArrow::SetVelocity(FVector NewVelocity)
-{
-	ProjectileMovementComponent->Velocity = NewVelocity;
-}
-
