@@ -6,6 +6,7 @@
 #include "DA_Player.h"
 #include "Axe.h"
 #include "Checkpoint.h"
+#include "MyGameInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -91,6 +92,8 @@ void APlayerCharacter::BeginPlay()
 {
     Super::BeginPlay();
 
+    MyInstance = Cast<UMyGameInstance>(GetGameInstance());
+
     LoadDataAssets();
 
     LoadWeaponStats();
@@ -135,12 +138,19 @@ void APlayerCharacter::MoveRight(float Value)
 
 void APlayerCharacter::TurnAtRate(float Rate)
 {
-    AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+    AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds() * MyInstance->InverseXAxis ? -1.0f:1.0f);
 }
 
 void APlayerCharacter::LookUpAtRate(float Rate)
 {
-    AddControllerPitchInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+    if(MyInstance)
+    {
+        AddControllerYawInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds() * MyInstance->InverseXAxis ? -1.0f:1.0f);
+    }
+    else
+    {
+        AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+    }
 }
 
 void APlayerCharacter::ChangeWeapon()
@@ -193,8 +203,6 @@ void APlayerCharacter::SwapMeshes()
     bCanDefend = true;
     bCanChangeWeapon = true;
     bCanSpecialAttack = true;
-
-    
 }
 
 void APlayerCharacter::Attack()
