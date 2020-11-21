@@ -30,4 +30,7 @@ class TAKEITBACK_API ABow : public AWeapon
 	UFUNCTION(BlueprintCallable)
 	void ShootArrow();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnShootArrow();
+
 };

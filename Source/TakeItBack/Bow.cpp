@@ -31,6 +31,7 @@ void ABow::ShootArrow()
                                                        SpawnParam);
     if (ShotArrow)
     {
+        OnShootArrow();
         ShotArrow->SetDamage(GetCurrentDamage());
         AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(BaseCharacter);
         if (EnemyCharacter)
