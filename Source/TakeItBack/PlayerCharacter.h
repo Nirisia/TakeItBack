@@ -58,6 +58,12 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnHeal();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnChangeWeapon();
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnRespawn();
+
 
 protected:
 	virtual void BeginPlay() override;

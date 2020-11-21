@@ -211,7 +211,7 @@ void APlayerCharacter::SwapMeshes()
     bCanDefend = true;
     bCanChangeWeapon = true;
     bCanSpecialAttack = true;
-
+    OnChangeWeapon();
     
 }
 
@@ -316,6 +316,7 @@ void APlayerCharacter::Respawn()
 {
     if(Checkpoint)
     {
+        OnRespawn();
         SetActorLocation(Checkpoint->GetRespawnLocation(), false, nullptr, ETeleportType::ResetPhysics);
         Revive();
     }
