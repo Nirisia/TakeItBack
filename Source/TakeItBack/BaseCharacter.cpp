@@ -37,6 +37,7 @@ ABaseCharacter::ABaseCharacter()
 
 void ABaseCharacter::Die()
 {
+	OnDie();
 	CurrentLife = 0;
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	bIsDead = true;
@@ -57,6 +58,11 @@ void ABaseCharacter::Revive()
 	bCanAttack = true;
 }
 
+void ABaseCharacter::TriggerFootstep()
+{
+	OnFootstep();
+}
+
 void ABaseCharacter::Attack()
 {
 	
@@ -66,7 +72,6 @@ int ABaseCharacter::MyTakeDamage(int Damage, EWeaponResistance WeaponType)
 {
 	if (CurrentLife > 0)
 	{
-		ResetCombo();
 		int InflictedDamage;
 		if (WeaponType == Resistance)
 		{
@@ -92,6 +97,7 @@ int ABaseCharacter::MyTakeDamage(int Damage, EWeaponResistance WeaponType)
 			Die();
 			return InflictedDamage + CurrentLife;
 		}
+		OnTakeDamage();
 		return InflictedDamage;
 	}
 	return 0;	

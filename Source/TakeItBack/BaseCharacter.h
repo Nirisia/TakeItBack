@@ -72,12 +72,24 @@ public:
     virtual void LoadDataAssets();
 	
 	ABaseCharacter();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnFootstep();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnTakeDamage();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnDie();
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void Die();
 
 	UFUNCTION(BlueprintCallable)
     virtual void Revive();
+
+	UFUNCTION(BlueprintCallable)
+    void TriggerFootstep();
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void Attack();
