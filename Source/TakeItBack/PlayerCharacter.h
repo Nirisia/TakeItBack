@@ -70,11 +70,11 @@ protected:
 	
 public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float BaseTurnRate;
 
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float BaseLookUpRate;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -111,6 +111,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class ACheckpoint* Checkpoint;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UMyGameInstance* MyInstance;
 	
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
