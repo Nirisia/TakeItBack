@@ -125,6 +125,7 @@ void AAxe::Tick(float DeltaTime)
             return;
         }
 
+        OnFireStormTick();
         GetParentCharacter()->AddActorWorldRotation(FRotator(0.f, FireStormTurnRate * DeltaTime, 0.f));
 
         ElapsedTime += DeltaTime;

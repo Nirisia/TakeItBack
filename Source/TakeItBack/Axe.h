@@ -70,5 +70,8 @@ class TAKEITBACK_API AAxe : public AWeapon
 	void OnFireStormStart();
 	
 	UFUNCTION(BlueprintImplementableEvent)
+    void OnFireStormTick();
+	
+	UFUNCTION(BlueprintImplementableEvent)
     void OnFireStormEnd();
 };
