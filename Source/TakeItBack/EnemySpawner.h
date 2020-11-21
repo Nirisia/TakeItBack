@@ -65,6 +65,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnSpawned(FTransform EnemyTransform);
 
+	UFUNCTION(BlueprintImplementableEvent)
+    void OnDie();
+
 private:
 	UFUNCTION(BlueprintCallable)
     virtual void LoadDataAssets();

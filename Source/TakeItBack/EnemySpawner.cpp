@@ -58,6 +58,7 @@ int AEnemySpawner::MyTakeDamage(int Damaged)
     Life -= Damaged;
     if (Life <= 0)
     {
+        OnDie();
         Destroy();
         return Damaged + Life;
     }
