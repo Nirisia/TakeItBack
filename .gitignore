@@ -11,6 +11,7 @@ Build
 # We should not push the assets
 Content/Assets
 Content/Assets.zip
+Content/Movies
 
 # Ignore solution because it's changing *everytime*
 TakeItBack.sln
