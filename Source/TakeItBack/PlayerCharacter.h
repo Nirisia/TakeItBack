@@ -106,14 +106,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UAnimMontage* ChangeWeaponAnim;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool keys = false;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class ACheckpoint* Checkpoint;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	class UMyGameInstance* MyInstance;
 	
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
