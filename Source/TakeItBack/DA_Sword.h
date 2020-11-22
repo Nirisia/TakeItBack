@@ -44,13 +44,22 @@ class TAKEITBACK_API UDA_Sword : public UDA_Weapon
 	float MeteorShieldTimeDilation = 0.25f;
 
 	UPROPERTY(EditAnywhere, Category="Stats")
-	float MeteorShieldRadius;
+	float MeteorShieldRadius = 150.f;
+
+	UPROPERTY(EditAnywhere, Category="Stats")
+	float BlockingSemiAngle = 45.f;
+
+	UPROPERTY(EditAnywhere, Category="Stats")
+	float DefenseAnimSpeed = 1.0f;
 	
 	UPROPERTY(EditAnywhere, Category="Mesh")
 	class UStaticMesh* ShieldMesh;
 
 	UPROPERTY(EditAnywhere, Category="Stats")
 	class UAnimMontage* ShieldAnim;
+
+	UPROPERTY(EditAnywhere, Category="Stats")
+	class UAnimMontage* ShieldHitAnim;
 
 	/* FOV used during ShieldMeteor */
 	UPROPERTY(EditAnywhere, Category="Camera")

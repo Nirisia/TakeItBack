@@ -88,7 +88,7 @@ public:
 
 	bool bInvulnerable = false;
 
-	virtual int MyTakeDamage(int Damage, EWeaponResistance WeaponType) override;
+	virtual int MyTakeDamage(int Damage, EWeaponResistance WeaponType, FVector Direction) override;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bCanChangeWeapon = true;

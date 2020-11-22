@@ -99,9 +99,9 @@ void APlayerCharacter::BeginPlay()
     GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...
 }
 
-int APlayerCharacter::MyTakeDamage(int Damage, EWeaponResistance WeaponType)
+int APlayerCharacter::MyTakeDamage(int Damage, EWeaponResistance WeaponType, FVector Direction)
 {
-    if (bInvulnerable) return 0;
+    if (!GetCurrentWeapon()->CanTakeDamage()) return 0;
     return Super::MyTakeDamage(Damage, WeaponType);
 }
 
@@ -254,13 +254,11 @@ void APlayerCharacter::SpecialAttack()
 
 void APlayerCharacter::Defense()
 {
-    SetInvulnerable(true);
     GetCurrentWeapon()->Defense();   
 }
 
 void APlayerCharacter::StopDefense()
 {
-    SetInvulnerable(false);
     GetCurrentWeapon()->StopDefense();
 }
 

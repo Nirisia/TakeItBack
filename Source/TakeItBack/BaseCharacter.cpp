@@ -68,17 +68,18 @@ void ABaseCharacter::Attack()
 	
 }
 
-int ABaseCharacter::MyTakeDamage(int Damage, EWeaponResistance WeaponType)
+int ABaseCharacter::MyTakeDamage(int Damage, EWeaponResistance WeaponType, FVector AttackLocation)
 {
+	if (!GetCurrentWeapon()->CanTakeDamage(AttackLocation - GetActorLocation())) return 0;
 	if (CurrentLife > 0)
 	{
 		int InflictedDamage;
-		if (WeaponType == Resistance)
+		if (WeaponType != EWeaponResistance::None && WeaponType == Resistance)
 		{
 			InflictedDamage = Damage * ResistanceCoeff;
 		}
 		
- 	// TODO: Variables
+ 		// TODO: Variables
  		// else if (WeaponType != EWeaponResistance::None)
  		// {
  		// 	InflictedDamage = Damage * WeaknessCoeff;

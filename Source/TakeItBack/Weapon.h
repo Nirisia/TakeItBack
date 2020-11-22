@@ -85,6 +85,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	virtual int GetCurrentDamage();
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+    virtual bool CanTakeDamage(FVector Direction = FVector::ZeroVector);
+
 	UFUNCTION(BlueprintCallable)
 	virtual void LoadDataAssets();
 	

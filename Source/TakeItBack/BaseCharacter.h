@@ -95,7 +95,7 @@ public:
 	virtual void Attack();
 	
 	UFUNCTION(BlueprintCallable)
-	virtual int MyTakeDamage(int Damage, EWeaponResistance WeaponType = EWeaponResistance::None);
+	virtual int MyTakeDamage(int Damage, EWeaponResistance WeaponType = EWeaponResistance::None, FVector AttackLocation = FVector::ZeroVector);
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void SetWeaponCollision(bool bGenerateOverlap);

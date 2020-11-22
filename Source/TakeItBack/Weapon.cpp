@@ -94,6 +94,11 @@ int AWeapon::GetCurrentDamage()
     return Attacks[AtkCount - 1].Damage;
 }
 
+bool AWeapon::CanTakeDamage(FVector Direction)
+{
+    return true;
+}
+
 void AWeapon::LoadDataAssets()
 {
     if (WeaponData)
@@ -120,10 +125,10 @@ void AWeapon::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* 
         
         if (IsValid(Character))
         {
-            const float InflictedDamage = Character->MyTakeDamage(GetCurrentDamage(), WeaponType);
-            
+            const float InflictedDamage = Character->MyTakeDamage(GetCurrentDamage(), WeaponType, GetParentCharacter()->GetActorLocation());
             OnEnemyHit(InflictedDamage, bIsSpecialAttackActive);
             LoadPower(InflictedDamage * WinPower);
+            if (!bIsSpecialAttackActive) SetWeaponCollision(false);
             return;
         }
     }

@@ -24,18 +24,23 @@ void ASword::LoadDataAssets()
         MeteorShieldDamage = SwordData->MeteorShieldDamage;
         MeteorShieldTimeDilation = SwordData->MeteorShieldTimeDilation;
         MeteorShieldRadius = SwordData->MeteorShieldRadius;
+        BlockingSemiAngle = SwordData->BlockingSemiAngle;
+        DefenseAnimSpeed = SwordData->DefenseAnimSpeed;
         APlayerCharacter* ParentPlayerCharacter = Cast<APlayerCharacter>(GetParentActor());
         if (ParentPlayerCharacter)
         {
             ParentPlayerCharacter->SetShieldMesh(SwordData->ShieldMesh);
         }
         ShieldAnim = SwordData->ShieldAnim;
+        ShieldHitAnim = SwordData->ShieldHitAnim;
         ActiveFOV = SwordData->ActiveFOV;
         SM_CameraOffset = SwordData->SM_CameraOffset;
     }
 }
 
-ASword::ASword() : Super() {}
+ASword::ASword() : Super()
+{
+}
 
 void ASword::SpecialAttack()
 {
@@ -50,8 +55,15 @@ void ASword::Defense()
         Super::Defense();
         PlayerCharacter->GetCharacterMovement()->MaxWalkSpeed = 0.f;
         PlayerCharacter->GetCharacterMovement()->RotationRate = (FRotator(0));
-        PlayerCharacter->PlayAnimMontage(ShieldAnim);
+        PlayerCharacter->PlayAnimMontage(ShieldAnim, DefenseAnimSpeed);
+        bIsBlocking = true;
     }
+}
+
+void ASword::StopDefense()
+{
+    Super::StopDefense();
+    bIsBlocking = false;
 }
 
 void ASword::ShieldMeteorLaunch()
@@ -80,6 +92,20 @@ void ASword::ShieldMeteorLaunch()
     PlayerCharacter->bCanChangeWeapon = true;
     PlayerCharacter->bCanDefend = true;
     Power = 0;
+}
+
+bool ASword::CanTakeDamage(FVector Direction)
+{
+    Direction.Normalize();
+    if (bIsBlocking &&
+        FVector::DotProduct(Direction, GetParentActor()->GetActorForwardVector()) >=
+        UKismetMathLibrary::DegCos(BlockingSemiAngle))
+    {
+        if(IsValid(ShieldHitAnim))
+            GetParentCharacter()->PlayAnimMontage(ShieldHitAnim);
+        return false;
+    }
+    return true;
 }
 
 void ASword::BeginPlay()
@@ -169,7 +195,8 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
                 PredictParams.ActorsToIgnore = ActorsToIgnore;
                 PredictParams.DrawDebugType = EDrawDebugTrace::ForOneFrame;
                 PredictParams.ProjectileRadius = PlayerCharacter->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
-                PredictParams.OverrideGravityZ = PlayerCharacter->GetCharacterMovement()->GetGravityZ() / PlayerCharacter->GetCharacterMovement()->GravityScale;
+                PredictParams.OverrideGravityZ = PlayerCharacter->GetCharacterMovement()->GetGravityZ() /
+                    PlayerCharacter->GetCharacterMovement()->GravityScale;
 
                 FPredictProjectilePathResult PredictResult;
 
@@ -200,7 +227,8 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
 
         TArray<class AActor*> OutActors;
 
-        UKismetSystemLibrary::SphereOverlapActors(GetWorld(), PlayerCharacter->GetActorLocation(), MeteorShieldRadius, ObjectTypes,
+        UKismetSystemLibrary::SphereOverlapActors(GetWorld(), PlayerCharacter->GetActorLocation(), MeteorShieldRadius,
+                                                  ObjectTypes,
                                                   nullptr, ActorsToIgnore, OutActors);
 
         for (int i = 0; i < OutActors.Num(); i++)

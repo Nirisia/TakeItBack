@@ -36,12 +36,24 @@ class TAKEITBACK_API ASword : public AWeapon
 	UPROPERTY()
 	float MeteorShieldRadius = 150.f;
 
+	UPROPERTY()
+	bool bIsBlocking;
+
+	UPROPERTY()
+	float BlockingSemiAngle;
+
+	UPROPERTY()
+	float DefenseAnimSpeed;
+
 public:
 	virtual void LoadDataAssets() override;
 	ASword();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class UAnimMontage* ShieldAnim;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UAnimMontage* ShieldHitAnim;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float MaxAirTime = 4;
@@ -63,6 +75,7 @@ public:
 	
 	virtual void SpecialAttack() override;
 	virtual void Defense() override;
+	virtual void StopDefense() override;
 
 	UFUNCTION(BlueprintNativeEvent)
 	void ShieldMeteor();
@@ -82,6 +95,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
     void OnShieldMeteorApex();
 
+	virtual bool CanTakeDamage(FVector Direction) override;
 protected:
 	virtual void BeginPlay() override;
 public:
