@@ -68,6 +68,7 @@ void ASword::StopDefense()
 
 void ASword::ShieldMeteorLaunch()
 {
+    OnShieldMeteorLaunch();
     APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
     auto PlayerController = Cast<AMainPlayerController>(PlayerCharacter->GetController());
 

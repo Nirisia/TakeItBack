@@ -61,6 +61,7 @@ void ABaseCharacter::Revive()
 
 void ABaseCharacter::Stun()
 {
+	OnStun();
 	ResetCombo();
 	if (IsValid(StunAnim))
 	{
@@ -75,6 +76,7 @@ void ABaseCharacter::Stun()
 
 void ABaseCharacter::EndStun()
 {
+	OnEndStun();
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 	GetCharacterMovement()->RotationRate = RotationRate;
 	GetCharacterMovement()->SetJumpAllowed(true);

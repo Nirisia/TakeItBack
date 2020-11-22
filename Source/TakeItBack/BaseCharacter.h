@@ -84,6 +84,12 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnDie();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnStun();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnEndStun();
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void Die();

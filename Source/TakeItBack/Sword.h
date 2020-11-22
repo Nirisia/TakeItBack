@@ -93,6 +93,9 @@ public:
 	void OnShieldMeteorImpact();
 
 	UFUNCTION(BlueprintImplementableEvent)
+	void OnShieldMeteorLaunch();
+
+	UFUNCTION(BlueprintImplementableEvent)
     void OnShieldMeteorApex();
 
 	virtual bool CanTakeDamage(FVector Direction) override;

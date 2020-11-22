@@ -79,14 +79,8 @@ void AAxe::RollEnd()
 {
     APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
     UCharacterMovementComponent* PlayerMovement = PlayerCharacter->GetCharacterMovement();
-    PlayerMovement->MaxWalkSpeed = PlayerCharacter->WalkSpeed;
-    PlayerMovement->RotationRate = PlayerCharacter->RotationRate;
+    StopDefense();
     PlayerMovement->SetJumpAllowed(true);
-    PlayerCharacter->bCanAttack = true;
-    PlayerCharacter->bCanChangeWeapon = true;
-    PlayerCharacter->bCanSpecialAttack = true;
-    PlayerCharacter->bCanDefend = true;
-    
 }
 
 void AAxe::Tick(float DeltaTime)

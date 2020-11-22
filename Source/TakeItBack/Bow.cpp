@@ -43,11 +43,8 @@ void ABow::ShootArrow()
             FVector PlayerLocation = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
 
             UGameplayStatics::SuggestProjectileVelocity(GetWorld(), NewVelocity, ShotArrow->GetActorLocation(),
-                                                        PlayerLocation, ShotArrow->GetInitialVelocity(), false, 0, 0, ESuggestProjVelocityTraceOption::DoNotTrace);
-            GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Blue,
-                                             FString::Printf(
-                                                 TEXT("x:%f, y:%f, z:%f"), NewVelocity.X, NewVelocity.Y,
-                                                 NewVelocity.Z));
+                                                        PlayerLocation, ShotArrow->GetInitialVelocity(), false, 0, 0,
+                                                        ESuggestProjVelocityTraceOption::DoNotTrace);
             ShotArrow->SetVelocity(NewVelocity);
         }
     }
