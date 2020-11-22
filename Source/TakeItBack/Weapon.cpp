@@ -28,6 +28,7 @@ AWeapon::AWeapon()
 
 void AWeapon::LightAttack()
 {
+    OnAttack();
     if (AtkCount >= Attacks.Num())
     {
         AtkCount = 0;

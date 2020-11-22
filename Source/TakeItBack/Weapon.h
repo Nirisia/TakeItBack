@@ -110,6 +110,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnWeaponToggleCollision(bool bGenerateOverlap);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnAttack();
 	
 protected:
 	// Called when the game starts or when spawned
