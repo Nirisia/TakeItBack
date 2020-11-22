@@ -22,7 +22,7 @@ AWeapon::AWeapon()
 
     BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
     BoxComponent->SetupAttachment(MeshComponent);
-    BoxComponent->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
+    BoxComponent->SetCollisionProfileName(TEXT("Weapon"));
     BoxComponent->SetGenerateOverlapEvents(false);
 }
 

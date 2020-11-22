@@ -17,7 +17,7 @@
 
 void AMainPlayerController::LoadDataAssets()
 {
-    if(ControllerData)
+    if (ControllerData)
     {
         if (PlayerCameraManager)
         {
@@ -25,7 +25,6 @@ void AMainPlayerController::LoadDataAssets()
             PlayerCameraManager->ViewPitchMax = ControllerData->ViewPitchMax;
             PlayerCameraManager->GetCameraRotation() = ControllerData->CameraRotation;
         }
-        APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetCharacter());
         if (PlayerCharacter)
         {
             PlayerCharacter->GetCameraBoom()->CameraLagSpeed = ControllerData->CameraLagSpeed;
@@ -39,25 +38,27 @@ void AMainPlayerController::LoadDataAssets()
 
 void AMainPlayerController::CameraTick(float DeltaSeconds)
 {
-    APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetCharacter());
     if (PlayerCharacter)
     {
-        if (GetCharacter()->GetCharacterMovement()->IsFalling() || GetInputAxisValue("LookUpRate") || GetInputAxisValue("TurnRate"))
+        if (GetCharacter()->GetCharacterMovement()->IsFalling() || GetInputAxisValue("LookUpRate") ||
+            GetInputAxisValue("TurnRate"))
         {
             CameraElapsedTime = 0.f;
         }
-    
+
         if (CameraElapsedTime > TimeBeforeAutoCamera)
         {
-            const float Ratio = UKismetMathLibrary::SafeDivide(PlayerCharacter->GetVelocity().Size(), PlayerCharacter->GetCharacterMovement()->MaxWalkSpeed);
+            const float Ratio = UKismetMathLibrary::SafeDivide(PlayerCharacter->GetVelocity().Size(),
+                                                               PlayerCharacter->GetCharacterMovement()->MaxWalkSpeed);
             FVector CameraForward = PlayerCharacter->GetFollowCamera()->GetForwardVector();
             CameraForward.Normalize();
 
             FVector ActorForward = PlayerCharacter->GetActorForwardVector();
             ActorForward.Normalize();
-        
+
             const FVector InputVector = FVector::CrossProduct(CameraForward, ActorForward);
-            const FRotator NewRotation = GetControlRotation().Add(0, InputVector.Z * Ratio * AutoCameraSensitivity, 0.f);
+            const FRotator NewRotation = GetControlRotation().
+                Add(0, InputVector.Z * Ratio * AutoCameraSensitivity, 0.f);
             SetControlRotation(NewRotation);
         }
         else
@@ -67,10 +68,128 @@ void AMainPlayerController::CameraTick(float DeltaSeconds)
     }
 }
 
+void AMainPlayerController::InvalidateInput()
+{
+    InputBuffer.bIsValid = false;
+}
+
+void AMainPlayerController::BufferInput(EInputType InputType)
+{
+    InputBuffer.Type = InputType;
+    InputBuffer.bIsValid = true;
+}
+
+void AMainPlayerController::Attack()
+{
+    if (PlayerCharacter && PlayerCharacter->bCanAttack)
+    {
+        PlayerCharacter->Attack();
+        if (InputBuffer.Type == EInputType::Attack && InputBuffer.bIsValid == true) InputBuffer.bIsValid = false;
+    }
+    else
+    {
+        InputBuffer.Type = EInputType::Attack;
+        InputBuffer.bIsValid = true;
+    }
+}
+
+void AMainPlayerController::SpecialAttack()
+{
+    if (PlayerCharacter && PlayerCharacter->bCanSpecialAttack)
+    {
+        PlayerCharacter->SpecialAttack();
+        if (InputBuffer.Type == EInputType::SpecialAttack && InputBuffer.bIsValid == true) InputBuffer.bIsValid = false;
+    }
+    else
+    {
+        InputBuffer.Type = EInputType::SpecialAttack;
+        InputBuffer.bIsValid = true;
+    }
+}
+
+void AMainPlayerController::ChangeWeapon()
+{
+    if (PlayerCharacter && PlayerCharacter->bCanChangeWeapon)
+    {
+        PlayerCharacter->ChangeWeapon();
+        if (InputBuffer.Type == EInputType::ChangeWeapon && InputBuffer.bIsValid == true) InputBuffer.bIsValid = false;
+    }
+    else
+    {
+        InputBuffer.Type = EInputType::ChangeWeapon;
+        InputBuffer.bIsValid = true;
+    }
+}
+
+void AMainPlayerController::Defense()
+{
+    if (PlayerCharacter && PlayerCharacter->bCanDefend)
+    {
+        PlayerCharacter->Defense();
+        if (InputBuffer.Type == EInputType::Defense && InputBuffer.bIsValid == true) InputBuffer.bIsValid = false;
+    }
+    else
+    {
+        InputBuffer.Type = EInputType::Defense;
+        InputBuffer.bIsValid = true;
+    }
+}
+
+void AMainPlayerController::Jump()
+{
+    if (PlayerCharacter && PlayerCharacter->CanJump())
+    {
+        PlayerCharacter->Jump();
+        if (InputBuffer.Type == EInputType::Jump && InputBuffer.bIsValid == true) InputBuffer.bIsValid = false;
+    }
+    else
+    {
+        InputBuffer.Type = EInputType::Jump;
+        InputBuffer.bIsValid = true;
+    }
+}
+
+void AMainPlayerController::TryConsumeInput()
+{
+    if (InputBuffer.bIsValid == true)
+    {
+        switch (InputBuffer.Type)
+        {
+        case EInputType::Attack:
+            Attack();
+            return;
+        case EInputType::SpecialAttack:
+            SpecialAttack();
+            return;
+        case EInputType::Defense:
+            Defense();
+            return;
+        case EInputType::ChangeWeapon:
+            ChangeWeapon();
+            return;
+        case EInputType::Jump:
+            Jump();
+            return;
+        case None:
+        default:
+            return;
+        }
+    }
+}
+
 void AMainPlayerController::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
     CameraTick(DeltaSeconds);
+    if (!PlayerCharacter)
+    {
+        PlayerCharacter = Cast<APlayerCharacter>(GetCharacter());
+        SetupInputComponent();
+    }
+    if (InputBuffer.bIsValid)
+    {
+        TryConsumeInput();
+    }
 }
 
 AMainPlayerController::AMainPlayerController() : Super()
@@ -81,19 +200,19 @@ AMainPlayerController::AMainPlayerController() : Super()
 void AMainPlayerController::BeginPlay()
 {
     Super::BeginPlay();
+    PlayerCharacter = Cast<APlayerCharacter>(GetCharacter());
     SetupInputComponent();
     LoadDataAssets();
     SetControlRotation(GetControlRotation() + InitialControllerRotation);
 }
 
 void AMainPlayerController::SetupInputComponent()
-{    
+{
     Super::SetupInputComponent();
     // Set up gameplay key bindings
-    APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetCharacter());
     if (PlayerCharacter && InputComponent)
     {
-        InputComponent->BindAction("Jump", IE_Pressed, PlayerCharacter, &APlayerCharacter::Jump);
+        InputComponent->BindAction("Jump", IE_Pressed, this, &AMainPlayerController::Jump);
         InputComponent->BindAction("Jump", IE_Released, PlayerCharacter, &APlayerCharacter::StopJumping);
 
         InputComponent->BindAxis("MoveForward", PlayerCharacter, &APlayerCharacter::MoveForward);
@@ -107,11 +226,11 @@ void AMainPlayerController::SetupInputComponent()
         InputComponent->BindAxis("LookUp", PlayerCharacter, &APawn::AddControllerPitchInput);
         InputComponent->BindAxis("LookUpRate", PlayerCharacter, &APlayerCharacter::LookUpAtRate);
 
-        InputComponent->BindAction("Defense", IE_Pressed, PlayerCharacter, &APlayerCharacter::Defense);
+        InputComponent->BindAction("Defense", IE_Pressed, this, &AMainPlayerController::Defense);
         //PlayerInputComponent->BindAction("Defense", IE_Released, this, &APlayerCharacter::StopDefense);
 
-        InputComponent->BindAction("Attack", IE_Pressed, PlayerCharacter, &APlayerCharacter::Attack);
-        InputComponent->BindAction("SpecialAttack", IE_Pressed, PlayerCharacter, &APlayerCharacter::SpecialAttack);
-        InputComponent->BindAction("ChangeWeapon", IE_Pressed, PlayerCharacter, &APlayerCharacter::ChangeWeapon);
+        InputComponent->BindAction("Attack", IE_Pressed, this, &AMainPlayerController::Attack);
+        InputComponent->BindAction("SpecialAttack", IE_Pressed, this, &AMainPlayerController::SpecialAttack);
+        InputComponent->BindAction("ChangeWeapon", IE_Pressed, this, &AMainPlayerController::ChangeWeapon);
     }
 }
