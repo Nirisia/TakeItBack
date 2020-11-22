@@ -59,7 +59,7 @@ public:
 	void OnHeal();
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnChangeWeapon();
+	void OnChangeWeapon(bool IsAxe);
 	
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnRespawn();

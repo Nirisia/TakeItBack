@@ -211,7 +211,7 @@ void APlayerCharacter::SwapMeshes()
     bCanDefend = true;
     bCanChangeWeapon = true;
     bCanSpecialAttack = true;
-    OnChangeWeapon();
+    OnChangeWeapon(bIsAxe);
     
 }
 
@@ -302,6 +302,7 @@ void APlayerCharacter::Die()
     bCanChangeWeapon = false;
     bCanSpecialAttack = false;
     bCanDefend = false;
+    GetCurrentWeapon()->bIsSpecialAttackActive = false;
 }
 
 void APlayerCharacter::Revive()
