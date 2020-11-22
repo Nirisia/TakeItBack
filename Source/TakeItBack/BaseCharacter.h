@@ -35,7 +35,10 @@ public:
 	int KnockbackCoeffDmg = 10.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float ResistanceCoeff;
+	float ResistanceCoeff = 0.5f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float WeaknessCoeff = 1.2f;
 
 	UPROPERTY(EditAnywhere)
 	EWeaponResistance Resistance;
@@ -80,7 +83,7 @@ public:
 	void OnFootstep();
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnTakeDamage();
+	void OnTakeDamage(float InflictedDamage);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnDie();

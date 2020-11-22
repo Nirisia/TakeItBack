@@ -52,6 +52,10 @@ class TAKEITBACK_API UDA_BaseCharacter : public UDataAsset
 	UPROPERTY(EditAnywhere, Category="Stats")
 	float ResistanceCoeff = 0.5f;
 
+	/* Percentage of damage applied to the character if resistant*/
+	UPROPERTY(EditAnywhere, Category="Stats")
+	float WeaknessCoeff = 1.2f;
+
 	/* Gravity scale applied to the character*/
 	UPROPERTY(EditAnywhere, Category="Movement")
 	float GravityScale = 1.f;

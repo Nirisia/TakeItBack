@@ -23,6 +23,7 @@ void ABaseCharacter::LoadDataAssets()
 		GetMesh()->SetSkeletalMesh(CharacterData->CharacterMesh);
 		Resistance = CharacterData->Resistance;
 		ResistanceCoeff = CharacterData->ResistanceCoeff;
+		WeaknessCoeff = CharacterData->WeaknessCoeff;
 		StunAnim = CharacterData->StunAnim;
 	}
 }
@@ -104,11 +105,10 @@ int ABaseCharacter::MyTakeDamage(int Damage, EWeaponResistance WeaponType, FVect
 			InflictedDamage = Damage * ResistanceCoeff;
 		}
 		
- 		// TODO: Variables
- 		// else if (WeaponType != EWeaponResistance::None)
- 		// {
- 		// 	InflictedDamage = Damage * WeaknessCoeff;
- 		// }
+ 		else if (Resistance != EWeaponResistance::None)
+ 		{
+ 			InflictedDamage = Damage * WeaknessCoeff;
+ 		}
 		
 		else
 		{
@@ -123,7 +123,7 @@ int ABaseCharacter::MyTakeDamage(int Damage, EWeaponResistance WeaponType, FVect
 			Die();
 			return InflictedDamage + CurrentLife;
 		}
-		OnTakeDamage();
+		OnTakeDamage(InflictedDamage);
 		return InflictedDamage;
 	}
 	return 0;	
