@@ -196,8 +196,8 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
                 PredictParams.ActorsToIgnore = ActorsToIgnore;
                 PredictParams.DrawDebugType = EDrawDebugTrace::ForOneFrame;
                 PredictParams.ProjectileRadius = PlayerCharacter->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
-                PredictParams.OverrideGravityZ = PlayerCharacter->GetCharacterMovement()->GetGravityZ() /
-                    PlayerCharacter->GetCharacterMovement()->GravityScale;
+                PredictParams.OverrideGravityZ = PlayerCharacter->GetCharacterMovement()->GetGravityZ() *
+                   PlayerCharacter->GravityScale / PlayerCharacter->GetCharacterMovement()->GravityScale;
 
                 FPredictProjectilePathResult PredictResult;
 
