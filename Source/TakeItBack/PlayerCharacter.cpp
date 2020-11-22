@@ -226,6 +226,8 @@ void APlayerCharacter::Attack()
         GetCurrentWeapon()->LightAttack();
 
         GetCharacterMovement()->MaxWalkSpeed = AttackSpeedCoeff * WalkSpeed;
+
+        //TODO: Add coefficient
         GetCharacterMovement()->RotationRate = RotationRate;
     }
 }
@@ -308,6 +310,22 @@ void APlayerCharacter::Revive()
     bCanDefend = true;
     Cast<AWeapon>(Axe->GetChildActor())->Power = 0;
     Cast<AWeapon>(Sword->GetChildActor())->Power = 0;
+}
+
+void APlayerCharacter::Stun()
+{
+    Super::Stun();
+    bCanChangeWeapon = false;
+    bCanSpecialAttack = false;
+    bCanDefend = false;
+}
+
+void APlayerCharacter::EndStun()
+{
+    Super::EndStun();
+    bCanChangeWeapon = true;
+    bCanSpecialAttack = true;
+    bCanDefend = true;
 }
 
 void APlayerCharacter::Respawn()

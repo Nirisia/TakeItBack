@@ -68,6 +68,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="DataAssets", meta = (AllowPrivateAccess = "true"))
 	class UDA_BaseCharacter* CharacterData;
 
+	UPROPERTY(EditAnywhere, Category="Anim")
+	class UAnimMontage* StunAnim;
+
 	UFUNCTION(BlueprintCallable)
     virtual void LoadDataAssets();
 	
@@ -87,6 +90,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
     virtual void Revive();
+
+	UFUNCTION(BlueprintCallable)
+    virtual void Stun();
+
+	UFUNCTION(BlueprintCallable)
+    virtual void EndStun();
 
 	UFUNCTION(BlueprintCallable)
     void TriggerFootstep();

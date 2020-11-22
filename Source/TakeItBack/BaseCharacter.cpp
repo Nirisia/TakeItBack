@@ -23,6 +23,7 @@ void ABaseCharacter::LoadDataAssets()
 		GetMesh()->SetSkeletalMesh(CharacterData->CharacterMesh);
 		Resistance = CharacterData->Resistance;
 		ResistanceCoeff = CharacterData->ResistanceCoeff;
+		StunAnim = CharacterData->StunAnim;
 	}
 }
 // Sets default values
@@ -39,7 +40,7 @@ void ABaseCharacter::Die()
 {
 	OnDie();
 	CurrentLife = 0;
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCapsuleComponent()->SetCollisionProfileName("DeadPawn");
 	bIsDead = true;
 	GetCharacterMovement()->MaxWalkSpeed = 0.f;
 	GetCharacterMovement()->RotationRate = FRotator(0);
@@ -50,8 +51,30 @@ void ABaseCharacter::Die()
 void ABaseCharacter::Revive()
 {
 	CurrentLife = MaxLife;
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	GetCapsuleComponent()->SetCollisionProfileName("Pawn");
 	bIsDead = false;
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	GetCharacterMovement()->RotationRate = RotationRate;
+	GetCharacterMovement()->SetJumpAllowed(true);
+	bCanAttack = true;
+}
+
+void ABaseCharacter::Stun()
+{
+	ResetCombo();
+	if (IsValid(StunAnim))
+	{
+		PlayAnimMontage(StunAnim);
+	}
+	GetCharacterMovement()->MaxWalkSpeed = 0.f;
+	GetCharacterMovement()->RotationRate = FRotator(0);
+	GetCharacterMovement()->SetJumpAllowed(false);
+	bCanAttack = false;
+
+}
+
+void ABaseCharacter::EndStun()
+{
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 	GetCharacterMovement()->RotationRate = RotationRate;
 	GetCharacterMovement()->SetJumpAllowed(true);

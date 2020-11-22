@@ -58,4 +58,7 @@ class TAKEITBACK_API UDA_BaseCharacter : public UDataAsset
 
 	UPROPERTY(EditAnywhere, Category="Mesh")
 	class USkeletalMesh* CharacterMesh;
+
+	UPROPERTY(EditAnywhere, Category="Anim")
+	class UAnimMontage* StunAnim;
 };

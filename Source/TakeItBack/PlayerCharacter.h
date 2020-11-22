@@ -158,6 +158,8 @@ public:
 	virtual void Die() override;
 	virtual void Revive() override;
 
+	virtual void Stun() override;
+	virtual void EndStun() override;
 	
 	UFUNCTION(BlueprintCallable)
 	void Respawn();

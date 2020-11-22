@@ -128,6 +128,7 @@ void AWeapon::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* 
             const float InflictedDamage = Character->MyTakeDamage(GetCurrentDamage(), WeaponType, GetParentCharacter()->GetActorLocation());
             OnEnemyHit(InflictedDamage, bIsSpecialAttackActive);
             LoadPower(InflictedDamage * WinPower);
+            if (InflictedDamage == 0) GetParentCharacter()->Stun();
             if (!bIsSpecialAttackActive) SetWeaponCollision(false);
             return;
         }
