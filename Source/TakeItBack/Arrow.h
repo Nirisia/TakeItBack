@@ -28,7 +28,10 @@ public:
 	AArrow();
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnHitArrow();
+	void OnCharacterHitArrow(int InflictedDamage);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnEnvironmentHitArrow();
 
 protected:
 	// Called when the game starts or when spawned
