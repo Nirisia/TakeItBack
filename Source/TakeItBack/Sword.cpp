@@ -40,6 +40,11 @@ void ASword::LoadDataAssets()
 
 ASword::ASword() : Super()
 {
+    SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
+    SphereComponent->SetupAttachment(MeshComponent);
+    SphereComponent->SetCollisionProfileName(TEXT("Weapon"));
+    SphereComponent->SetGenerateOverlapEvents(false);
+    SphereComponent->SetSphereRadius(150.f);
 }
 
 void ASword::SpecialAttack()
@@ -114,6 +119,8 @@ void ASword::BeginPlay()
     Super::BeginPlay();
 
     LoadDataAssets();
+
+    SphereComponent->SetSphereRadius(MeteorShieldRadius);
 }
 
 void ASword::Tick(float DeltaTime)

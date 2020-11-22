@@ -72,6 +72,9 @@ public:
 
 	UPROPERTY()
 	FVector SM_CameraOffset = FVector(0.f, 300.f, 0.f);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class USphereComponent* SphereComponent;
 	
 	virtual void SpecialAttack() override;
 	virtual void Defense() override;
