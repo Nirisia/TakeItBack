@@ -4,6 +4,7 @@
 #include "EnemyCharacter.h"
 #include "EnemySpawner.h"
 #include "Weapon.h"
+#include "Components/CapsuleComponent.h"
 #include "Engine/Engine.h"
 
 AEnemyCharacter::AEnemyCharacter()
@@ -11,6 +12,8 @@ AEnemyCharacter::AEnemyCharacter()
     MaxLife = 100;
     CurrentLife = 100;
 
+    GetCapsuleComponent()->SetCollisionProfileName("EnemyPawn");
+    
     Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
     Weapon->SetupAttachment(Cast<USceneComponent>(GetMesh()), "RightWeaponShield");
     Weapon->SetRelativeRotation(FRotator(0.f, 90.f, 90.f));
