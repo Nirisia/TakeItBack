@@ -96,7 +96,11 @@ void ABaseCharacter::Attack()
 
 int ABaseCharacter::MyTakeDamage(int Damage, EWeaponResistance WeaponType, FVector AttackLocation)
 {
-	if (!GetCurrentWeapon()->CanTakeDamage(AttackLocation - GetActorLocation())) return 0;
+	if (!GetCurrentWeapon()->CanTakeDamage(AttackLocation - GetActorLocation()))
+	{
+		OnTakeDamage(0);
+		return 0;
+	}
 	if (CurrentLife > 0)
 	{
 		int InflictedDamage;
