@@ -44,6 +44,7 @@ void AWeapon::SpecialAttack()
 
 void AWeapon::Defense()
 {
+    OnDefense();
     auto PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
     if (PlayerCharacter)
     {
@@ -58,6 +59,7 @@ void AWeapon::Defense()
 
 void AWeapon::StopDefense()
 {
+    OnStopDefense();
     const auto PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
     if (PlayerCharacter)
     {

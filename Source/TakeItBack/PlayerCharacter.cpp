@@ -254,13 +254,11 @@ void APlayerCharacter::SpecialAttack()
 
 void APlayerCharacter::Defense()
 {
-    OnDefense();
     GetCurrentWeapon()->Defense();   
 }
 
 void APlayerCharacter::StopDefense()
 {
-    OnStopDefense();
     GetCurrentWeapon()->StopDefense();
 }
 

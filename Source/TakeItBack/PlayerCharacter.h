@@ -64,12 +64,6 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnRespawn();
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void OnDefense();
-	
-	UFUNCTION(BlueprintImplementableEvent)
-    void OnStopDefense();
-
 protected:
 	virtual void BeginPlay() override;
 	
