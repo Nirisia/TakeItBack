@@ -25,6 +25,8 @@ void ABaseCharacter::LoadDataAssets()
 		ResistanceCoeff = CharacterData->ResistanceCoeff;
 		WeaknessCoeff = CharacterData->WeaknessCoeff;
 		StunAnim = CharacterData->StunAnim;
+		KnockbackCoeffDmg = CharacterData->KnockbackCoeffDmg;
+		ReceiveVelocity = CharacterData->ReceiveVelocity;
 	}
 }
 // Sets default values
