@@ -54,7 +54,10 @@ class TAKEITBACK_API UDA_Sword : public UDA_Weapon
 	
 	UPROPERTY(EditAnywhere, Category="Mesh")
 	class UStaticMesh* ShieldMesh;
-
+	
+	UPROPERTY(EditAnywhere, Category="Mesh")
+	class UStaticMesh* MeteorShieldAimMesh;
+	
 	UPROPERTY(EditAnywhere, Category="Stats")
 	class UAnimMontage* ShieldAnim;
 

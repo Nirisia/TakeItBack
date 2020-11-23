@@ -35,6 +35,7 @@ void ASword::LoadDataAssets()
         ShieldHitAnim = SwordData->ShieldHitAnim;
         ActiveFOV = SwordData->ActiveFOV;
         SM_CameraOffset = SwordData->SM_CameraOffset;
+        MeteorShieldAimMesh->SetStaticMesh(SwordData->MeteorShieldAimMesh);
     }
 }
 
@@ -45,6 +46,12 @@ ASword::ASword() : Super()
     SphereComponent->SetCollisionProfileName(TEXT("Weapon"));
     SphereComponent->SetGenerateOverlapEvents(false);
     SphereComponent->SetSphereRadius(150.f);
+
+    MeteorShieldAimMesh = CreateDefaultSubobject<UStaticMeshComponent>("MeteorShieldAimMesh");
+    MeteorShieldAimMesh->SetupAttachment(MeshComponent);
+    MeteorShieldAimMesh->SetCollisionProfileName(TEXT("NoCollision"));
+    MeteorShieldAimMesh->SetGenerateOverlapEvents(false);
+    MeteorShieldAimMesh->SetVisibility(false);
 }
 
 void ASword::SpecialAttack()
@@ -74,6 +81,7 @@ void ASword::StopDefense()
 void ASword::ShieldMeteorLaunch()
 {
     OnShieldMeteorLaunch();
+    MeteorShieldAimMesh->SetVisibility(false);
     APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetParentCharacter());
     auto PlayerController = Cast<AMainPlayerController>(PlayerCharacter->GetController());
 
@@ -103,6 +111,7 @@ void ASword::ShieldMeteorLaunch()
 bool ASword::CanTakeDamage(FVector Direction)
 {
     Direction.Normalize();
+    
     if (bIsBlocking &&
         FVector::DotProduct(Direction, GetParentActor()->GetActorForwardVector()) >=
         UKismetMathLibrary::DegCos(BlockingSemiAngle))
@@ -201,7 +210,7 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
                 PredictParams.bTraceWithChannel = true;
                 PredictParams.bTraceWithCollision = true;
                 PredictParams.ActorsToIgnore = ActorsToIgnore;
-                PredictParams.DrawDebugType = EDrawDebugTrace::ForOneFrame;
+                //PredictParams.DrawDebugType = EDrawDebugTrace::ForOneFrame;
                 PredictParams.ProjectileRadius = PlayerCharacter->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
                 PredictParams.OverrideGravityZ = PlayerCharacter->GetCharacterMovement()->GetGravityZ() *
                    PlayerCharacter->GravityScale / PlayerCharacter->GetCharacterMovement()->GravityScale;
@@ -211,9 +220,8 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
 
                 UGameplayStatics::PredictProjectilePath(GetWorld(), PredictParams, PredictResult);
 
-                DrawDebugSphere(GetWorld(), PredictResult.HitResult.Location,
-                                100, 12, FColor::Red,
-                                false, 0, 0, 10);
+                MeteorShieldAimMesh->SetWorldLocation(PredictResult.HitResult.ImpactPoint);
+                MeteorShieldAimMesh->SetVisibility(true);
 
                 ElapsedTime += DeltaTime / MeteorShieldTimeDilation;
             }

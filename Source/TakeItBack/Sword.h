@@ -75,6 +75,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class USphereComponent* SphereComponent;
+
+	UPROPERTY(EditAnywhere, Category="Mesh")
+	class UStaticMeshComponent* MeteorShieldAimMesh;
 	
 	virtual void SpecialAttack() override;
 	virtual void Defense() override;
