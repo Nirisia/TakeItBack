@@ -35,11 +35,14 @@ void AEnemySpawner::SpawnWave(int Index)
 
     auto SpawnedEnemy = GetWorld()->SpawnActor<AEnemyCharacter>(WaveList[Index].Enemy.Get(),
                                                                 Target->GetComponentTransform(), SpawnParam);
-    SpawnedEnemy->SpawnDefaultController();
-    SpawnedEnemy->Spawner = this;
+    if (SpawnedEnemy)
+    {
+        SpawnedEnemy->SpawnDefaultController();
+        SpawnedEnemy->Spawner = this;
 
-    OnSpawned(SpawnedEnemy->GetTransform());
-    SpawnedList.Add(SpawnedEnemy);
+        OnSpawned(SpawnedEnemy->GetTransform());
+        SpawnedList.Add(SpawnedEnemy);
+    }
 }
 
 void AEnemySpawner::OnEnemyDie(AEnemyCharacter* DeadEnemy)
