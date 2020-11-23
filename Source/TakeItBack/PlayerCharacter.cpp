@@ -121,6 +121,7 @@ void APlayerCharacter::MoveForward(float Value)
 
 void APlayerCharacter::MoveRight(float Value)
 {
+    if (bIsDead) return;
     if ((Controller != NULL) && (Value != 0.0f))
     {
         // find out which way is right
@@ -217,6 +218,7 @@ void APlayerCharacter::SwapMeshes()
 
 void APlayerCharacter::Attack()
 {
+    if (bIsDead) return;
     if (bCanAttack == true)
     {
         bCanDefend = false;
@@ -246,6 +248,7 @@ void APlayerCharacter::ResetCombo()
 
 void APlayerCharacter::SpecialAttack()
 {
+    if (bIsDead) return;
     if (bCanSpecialAttack && GetCurrentWeapon()->Power == GetCurrentWeapon()->MaxPower)
     {
         GetCurrentWeapon()->SpecialAttack();
@@ -254,11 +257,13 @@ void APlayerCharacter::SpecialAttack()
 
 void APlayerCharacter::Defense()
 {
+    if (bIsDead) return;
     GetCurrentWeapon()->Defense();   
 }
 
 void APlayerCharacter::StopDefense()
 {
+    if (bIsDead) return;
     GetCurrentWeapon()->StopDefense();
 }
 
@@ -313,6 +318,7 @@ void APlayerCharacter::Revive()
 
 void APlayerCharacter::Stun()
 {
+    if (bIsDead) return;
     Super::Stun();
     bCanChangeWeapon = false;
     bCanSpecialAttack = false;
@@ -321,6 +327,7 @@ void APlayerCharacter::Stun()
 
 void APlayerCharacter::EndStun()
 {
+    if (bIsDead) return;
     Super::EndStun();
     bCanChangeWeapon = true;
     bCanSpecialAttack = true;
