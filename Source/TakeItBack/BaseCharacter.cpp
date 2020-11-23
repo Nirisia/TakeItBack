@@ -35,6 +35,7 @@ ABaseCharacter::ABaseCharacter()
 
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(60.f, 86.0f);
+	GetMesh()->SetCollisionProfileName("NoCollision");
 }
 
 void ABaseCharacter::Die()
