@@ -125,6 +125,12 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnAttack();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnDefense();
+	
+	UFUNCTION(BlueprintImplementableEvent)
+    void OnStopDefense();
 	
 protected:
 	// Called when the game starts or when spawned
