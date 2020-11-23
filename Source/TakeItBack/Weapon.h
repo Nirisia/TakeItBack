@@ -41,6 +41,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float AtkSpeed = 1.f;
 
+	UPROPERTY(EditAnywhere, Category="Stats")
+	float AtkWalkSpeedCoeff = 1.f;
+
+	UPROPERTY(EditAnywhere, Category="Stats")
+	float AtkTurnRateCoeff = 1.f;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float WinPower;
 
@@ -87,6 +93,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
     virtual bool CanTakeDamage(FVector Direction = FVector::ZeroVector);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	virtual float GetAtkWalkSpeedCoeff();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+    virtual float GetAtkTurnRateCoeff();
 
 	UFUNCTION(BlueprintCallable)
 	virtual void LoadDataAssets();

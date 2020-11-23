@@ -100,6 +100,16 @@ bool AWeapon::CanTakeDamage(FVector Direction)
     return true;
 }
 
+float AWeapon::GetAtkWalkSpeedCoeff()
+{
+    return AtkWalkSpeedCoeff;
+}
+
+float AWeapon::GetAtkTurnRateCoeff()
+{
+    return AtkTurnRateCoeff;
+}
+
 void AWeapon::LoadDataAssets()
 {
     if (WeaponData)
@@ -112,6 +122,8 @@ void AWeapon::LoadDataAssets()
         MeshComponent->SetStaticMesh(WeaponData->Mesh);
         Attacks = WeaponData->Attacks;
         WeaponType = WeaponData->WeaponType;
+        AtkWalkSpeedCoeff = WeaponData->AtkWalkSpeedCoeff;
+        AtkTurnRateCoeff = WeaponData->AtkTurnRateCoeff;
     }
 }
 
@@ -130,7 +142,7 @@ void AWeapon::AttackCollision(UPrimitiveComponent* OverlappedComponent, AActor* 
             OnEnemyHit(InflictedDamage, bIsSpecialAttackActive);
             LoadPower(InflictedDamage * WinPower);
             if (InflictedDamage == 0) GetParentCharacter()->Stun();
-            if (!bIsSpecialAttackActive) SetWeaponCollision(false);
+            // if (!bIsSpecialAttackActive) SetWeaponCollision(false);
             return;
         }
     }

@@ -99,11 +99,11 @@ void APlayerCharacter::BeginPlay()
     GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...
 }
 
-int APlayerCharacter::MyTakeDamage(int Damage, EWeaponResistance WeaponType, FVector Direction)
-{
-    if (!GetCurrentWeapon()->CanTakeDamage()) return 0;
-    return Super::MyTakeDamage(Damage, WeaponType);
-}
+// int APlayerCharacter::MyTakeDamage(int Damage, EWeaponResistance WeaponType, FVector Direction)
+// {
+//     if (!GetCurrentWeapon()->CanTakeDamage(Direction)) return 0;
+//     return Super::MyTakeDamage(Damage, WeaponType, Direction);
+// }
 
 void APlayerCharacter::MoveForward(float Value)
 {
@@ -225,10 +225,8 @@ void APlayerCharacter::Attack()
         bCanSpecialAttack = false;
         GetCurrentWeapon()->LightAttack();
 
-        GetCharacterMovement()->MaxWalkSpeed = AttackSpeedCoeff * WalkSpeed;
-
-        //TODO: Add coefficient
-        GetCharacterMovement()->RotationRate = RotationRate;
+        GetCharacterMovement()->MaxWalkSpeed = GetCurrentWeapon()->GetAtkWalkSpeedCoeff() * WalkSpeed;
+        GetCharacterMovement()->RotationRate = GetCurrentWeapon()->GetAtkTurnRateCoeff() * RotationRate;
     }
 }
 

@@ -93,7 +93,7 @@ public:
 
 	bool bInvulnerable = false;
 
-	virtual int MyTakeDamage(int Damage, EWeaponResistance WeaponType, FVector Direction) override;
+	// virtual int MyTakeDamage(int Damage, EWeaponResistance WeaponType, FVector Direction) override;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bCanChangeWeapon = true;
@@ -101,9 +101,6 @@ public:
 	/** Speed of the ChangeWeapon Animation, in percentage. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float ChangeWeaponSpeed = 1.0f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	float AttackSpeedCoeff = 0.7f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int StackLimit = 8;

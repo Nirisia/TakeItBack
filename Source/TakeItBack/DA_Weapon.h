@@ -45,6 +45,12 @@ class TAKEITBACK_API UDA_Weapon : public UDataAsset
 	UPROPERTY(EditAnywhere, Category="Stats")
 	float AtkSpeed = 1.f;
 
+	UPROPERTY(EditAnywhere, Category="Stats")
+	float AtkWalkSpeedCoeff = 1.f;
+
+	UPROPERTY(EditAnywhere, Category="Stats")
+	float AtkTurnRateCoeff = 1.f;
+
 	/* Ratio of power won by damage inflicted */
 	UPROPERTY(EditAnywhere, Category="Stats")
 	float WinPower = 1.f;
