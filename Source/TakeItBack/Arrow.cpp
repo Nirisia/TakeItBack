@@ -64,7 +64,7 @@ void AArrow::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 		ABaseCharacter* Character = Cast<ABaseCharacter>(OtherActor);
 		if (Character)
 		{
-			int InflictedDamage = Character->MyTakeDamage(Damage);
+			int InflictedDamage = Character->MyTakeDamage(Damage, EWeaponResistance::None, GetActorLocation());
 			OnCharacterHitArrow(InflictedDamage);
 		}
 		else
