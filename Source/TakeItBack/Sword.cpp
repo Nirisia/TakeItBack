@@ -236,7 +236,7 @@ void ASword::ShieldMeteorTick_Implementation(float DeltaTime)
         OnShieldMeteorImpact();
 
         TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
-        ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
+        ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel4));
 
         TArray<AActor*> ActorsToIgnore;
         ActorsToIgnore.Add(PlayerCharacter);
